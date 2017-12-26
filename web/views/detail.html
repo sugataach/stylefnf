@@ -1,0 +1,985 @@
+<meta view-head property="og:url" content="http://stylefnf.com/#/detail/{{selectedPost._id}}">
+<meta view-head property="og:title" content="{{selectedPost.brand}} {{selectedPost.title}}">
+<meta view-head property="og:description" content="{{selectedPost.description}}">
+<meta view-head property="og:image" content="{{selectedPost.imageUrls[0]}}">
+
+<view-title>{{selectedPost.brand | capitalize}} {{selectedPost.title | capitalize}}</view-title>
+
+
+
+<div class="container">
+
+  <div class="detail-form panel panel-default margin-top">
+
+    <div ng-if="isSold(selectedPost)">
+      <div class="ui icon error message">
+        <i class="remove circle outline icon" style="padding-left: 10px;"></i>
+        <div class="content">
+          <div class="header">
+            Listing Unavailable
+          </div>
+          <p>This listing is no longer available.</p>
+        </div>
+      </div>
+    </div>
+
+    <div ng-if="!isSold(selectedPost)">
+      <div class="ng-cloak ui icon success message ng-class: { 'do-not-show' : isPostCreator(selectedPost) || (!isAvailable(selectedPost)) }" style="box-shadow:none;">
+        <i class="smile icon" style="padding-left: 10px;"></i>
+        <div class="content">
+          <div class="header">
+            Good news! This listing is available.
+          </div>
+          <ul class="list">
+            <li>Quick, make an offer - before someone else comes along.</li>
+            <li>Keep an eye on it - hit the like button.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ng-cloak ui icon error message ng-class: { 'do-not-show' : isPostCreator(selectedPost) || (isAvailable(selectedPost)) || (isBuyer(selectedPost)) }" style="box-shadow:none;">
+        <i class="frown icon" style="padding-left: 10px;"></i>
+        <div class="content">
+          <div class="header">
+            Ah rats, this listing is on hold.
+          </div>
+          <ul class="list">
+            <li>Wanna try anyways? You can still make an offer - but there's no guarantee it'll be accepted.</li>
+            <li>Keep tabs on this item - hit the like button.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div ng-if="isAuthenticated()" class="ng-cloak ui icon info message ng-class: { 'do-not-show' : isPostCreator(selectedPost) || isAvailable(selectedPost) || !isBuyer(selectedPost) }" style="box-shadow:none;">
+        <i class="thumbs outline up icon"></i>
+        <div class="content">
+          <div class="header">
+            Yippie! Your offer has been accepted for this listing.
+          </div>
+          <ul class="list">
+            <li>Message the owner and arrange a meetup.</li>
+            <li>Change your mind? Hit Cancel.</li>
+          </ul>
+        </div>
+        <div class="content pull-right">
+          <button type="button" class="ui button massive blue pull-right" ng-click="showMessage($event)"> 
+            <span>
+              <i class="comment outline icon"></i>
+              Meetup with {{selectedPost.seller.firstName}}
+            </span>
+          </button>
+        </div>
+      </div>    
+
+      <div ng-if="isAuthenticated()" class="ng-cloak ui icon info message ng-class: { 'do-not-show' : !isPostCreator(selectedPost) }" style="box-shadow:none;">
+        <i class="line chart icon"></i>
+        <div class="content">
+          <div class="header">
+            Your listing has been viewed by {{selectedPost.viewedBy.length}} {{selectedPost.viewedBy.length === 1? "person" : "people"}} and has <span style="color:red">{{selectedPost.offers.length}} {{selectedPost.offers.length === 1? "offer" : "offers"}}</span>!
+          </div>
+          <ul class="list">
+            <li>Spice up your listing by adding some creative pictures.</li>
+            <li>Add an informative description to get even more traction.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui stripe community vertical segment">
+      <div class="ui two column center aligned very relaxed stackable grid container">
+        <div class="row">
+          <div class="seven wide column">
+            <div class="detail-carousel">
+
+              <div ng-show="!isEditing" style="min-height:500px;">
+                <a ng-repeat="image_link in selectedPost.imageUrls">
+                  <img class="center-block ui rounded image img-responsive text-center" ng-src="{{image_link}}" style="margin-bottom:10px;box-shadow: 0 1px 3px 0 #d4d4d5,0 0 0 1px #d4d4d5" data-action="zoom">
+                </a>
+              </div>
+
+              <div ng-show="isAuthenticated() && (selectedPost.seller_id === currentUser._id) && isEditing" style="min-height:500px;">
+
+              <div class="fileUpload ui right floated fluid massive button huge trigger-send" style="margin-bottom: 35px;">
+                <span ng-show="uploadingPic">
+                  <i ng-show="uploadingPic" class="notched circle loading icon"></i>
+                  <!-- <span style="color: black; font-weight:bold;">Uploading Photo ({{currProgress}} %)</span> -->
+                </span>
+                <span ng-show="!uploadingPic">
+                  <i class="icons">
+                      <i class="file image outline icon"></i>
+                      <i class=" corner add icon"></i>
+                    </i>
+                  <span style="color: black; font-weight:bold;">Add Photos</span>
+                  <input multiple type="file" class="upload" style="font-size: 120px;" id="images" onchange="angular.element(this).scope().s3Upload(this.files)" accept="image/*"/>
+                </span>
+              </div>
+
+                <div class="ui centred card no-hover" ng-repeat="image_link in selectedPost.imageUrls" style="width:100%">
+                  <a class="image" href="">
+                    <img class="center-block ui rounded image img-responsive text-center" ng-src="{{image_link}}" title="">
+                  </a>
+                  <div class="content">
+                    <div class="ui two column centered grid" style="padding-top: 20px;padding-bottom: 20px;">
+                      <button ng-click="editPhoto(image_link)" class="ui inverted red circular icon button massive" style="font-size:20px">
+                        <i class="paint brush icon"></i>
+                        Edit
+                      </button>
+                      <div class="or" style="padding-left: 70px;"></div>
+                      <button ng-click="deletePhoto(image_link)" class="ui circular negative icon button massive" style="font-size:20px">
+                        <i class="delete icon"></i>
+                          Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="nine wide column">
+            <div class="ui three column grid">
+              <div class="two wide column" style="padding-left: 0px;padding-right: 0px;">
+                <hovercard 
+                  hover-tmpl-url="{{hovercardURL}}"
+                  placement="topleft"
+                  hover-top-amount="-17em"
+                  ng-mouseover="hoverProfileIn(selectedPost.seller)"
+                  ng-mouseleave="hoverProfileOut(selectedPost.seller)"
+                  >
+                  <a class="" ng-href="#/profile/{{selectedPost.seller_id}}" style="text-decoration: none;">
+                    <img class="img-responsive img-rounded" ng-src="{{selectedPost.seller.profilePictures[0]}}" style="max-height:75px;max-width:75px;">
+                    <p style="text-align:center;">{{selectedPost.seller.firstName}}</p>
+                  </a>
+                </hovercard>
+              </div>
+              <div class="left aligned twelve wide column" style="padding-right: 0px;">
+                <div>
+                  <span ng-show="isAuthenticated() && (selectedPost.seller_id === currentUser._id)">
+                    <span ng-show="isEditing" >
+                      <b 
+                        editable-text="selectedPost.title"
+                        class="brand-font"
+                        onbeforesave="checkField($data, 'title')"
+                        onaftersave="updateListing(selectedPost._id, selectedPost.title, 'title')" 
+                        style="" 
+                        blur="submit"
+                        e-form="titleForm">
+                        {{selectedPost.title | capitalize}}
+                        <button class="ui circular red button align-top" ng-click="titleForm.$show()" ng-hide="titleForm.$visible">
+                          Edit Title
+                        </button>
+                      </b>
+                    </span>
+
+                    <b class="brand-font" ng-show="!isEditing">{{selectedPost.title | capitalize}}</b>
+                  </span>
+                  <span class="brand-font" ng-show="!isAuthenticated() || !(selectedPost.seller_id === currentUser._id)" style="font-size:1.0em;">
+                    <b>{{selectedPost.title | capitalize}}</b>
+                  </span>
+                  <span class="brand-font" ng-hide="isEditing" style="cursor: default;">
+                    <i style="color:#91BD09" ng-if="selectedPost.status == 'Available'"class="ion-checkmark-circled" tooltip="{{selectedPost.status}}"></i>
+                    <span style="color:red;font-weight: bold;" ng-if="selectedPost.status == 'Held'" tooltip="{{selectedPost.status}}"> (On Hold)</span>
+                    <i style="color:#A14A40" ng-if="selectedPost.status == 'Sold'"class="ion-alert-circled"></i>
+                  </span>
+                </div>
+                <div>
+                  <span ng-show="isAuthenticated() && (selectedPost.seller_id === currentUser._id)">
+                    <span ng-show="isEditing">
+                      <span 
+                        editable-text="selectedPost.brand" 
+                        class="title-font"
+                        onbeforesave="checkField($data, 'brand')"
+                        blur="submit"
+                        onaftersave="updateListing(selectedPost._id, selectedPost.brand, 'brand')"
+                        e-form="brandForm" 
+                      >
+                        {{selectedPost.brand | capitalize}}
+                        <button class="ui circular inverted red button" ng-click="brandForm.$show()" ng-hide="brandForm.$visible">
+                          Edit Brand
+                        </button>
+                        <i class="warning circle link red icon" tooltip="Required"></i>
+                      </span>
+                    </span>
+
+                    <span class="title-font" ng-show="!isEditing">{{selectedPost.brand | capitalize}}</span>
+                  </span>
+                  <span class="title-font" ng-show="!isAuthenticated() || !(selectedPost.seller_id === currentUser._id)" style="font-size:1.0em;">
+                    {{selectedPost.brand | capitalize}}
+                  </span>
+                </div>
+                <div class="info-list">
+                    <span class="info-list" ng-if="isFashion() && selectedPost.gender">
+                      <i style="" ng-if="selectedPost.gender == 'Women'"class="ion-woman red icon"></i>
+                      <i style="" ng-if="selectedPost.gender == 'Men'"class="ion-man red icon"></i> 
+                      <i style="" ng-if="selectedPost.gender == 'Any' || selectedPost.gender == 'Not set'" class="ion-android-person red icon"></i>
+                      <span ng-show="isEditing">Gender</span> {{selectedPost.gender != "Any"? selectedPost.gender : "Men + Women" | capitalize}}
+                    </span>
+                    <span class="info-list" ng-if="isHomeFurniture()"><i class="ion-home"></i> <span ng-if="isEditing">Room</span> <span>{{selectedPost.room}}</span></span>
+                    <span ng-if="isFashion() || isFurniture()">&nbsp;|&nbsp;</span>
+                    <span class="info-list" ng-if="isFashion() || isHomeFurniture()"><i class="ion-arrow-resize"></i> Size <span>{{selectedPost.size}}</span></span>
+                    <span><i class="ion-asterisk"></i> <span ng-show="isEditing">Condition</span> {{ showCondition() }}</span>
+                    <span>&nbsp;|&nbsp;</span>
+                    <span><i class="calendar icon"></i><span am-time-ago="selectedPost.created"></span></span>
+                </div>
+              </div>
+              <div class="center aligned two wide column" style="padding-left: 0px;padding-right: 0px;">
+
+                <div ng-if="isAuthenticated()" class="" style="margin-top: 5px;">
+                  <button class="circular ui icon button massive ng-class:{ 'red': myLike(selectedPost.likes) }" ng-click="likeSelectedPost(selectedPost)">
+                    <i class="heart icon"></i>
+                  </button>
+                  <h5 class="like-label ng-class:{ 'red': myLike(selectedPost.likes) }" tooltip="{{usersLiked(selectedPost.likes)}}" ng-click="showLiked($event, post)" style="cursor: pointer;">
+                    {{getLikes()}} {{getLikes() === 1? "like" : "likes"}}
+                  </h5>
+                </div>
+                <div ng-if="!isAuthenticated()" style="margin-top: 5px;">
+                  <a class="ui circular icon massive outline button" style="" href=""><i class="like icon"></i></a> 
+                  <h5 ng-if="!isAuthenticated()" class="like-label" style="cursor: pointer;">{{selectedPost.likes.length}} {{selectedPost.likes.length === 1? "like" : "likes"}}</h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="ui two column grid" style="padding-top: 20px;">
+              <div class="seven wide left aligned column">
+                <div class="ui huge statistic">
+                  <div class="label not-price">
+                    <span ng-show="isAuthenticated() && (selectedPost.seller_id === currentUser._id)">
+                      <span ng-show="isEditing">
+                        <h4 
+                          class="retail" 
+                          editable-number="selectedPost.retail" 
+                          onbeforesave="checkField($data, 'retail')"
+                          e-min="1"
+                          e-max="1000000"
+                          blur="submit"
+                          onaftersave="updateListing(selectedPost._id, selectedPost.retail, 'retail')"
+                          e-form="retailForm"
+                        >
+                          <span>$</span>
+                          {{selectedPost.retail - .01}}
+                          
+                          <button style="" class="ui circular inverted red button" ng-click="retailForm.$show()" ng-hide="retailForm.$visible">
+                            Edit Original Price
+                          </button>
+                        </h4>
+                      </span>
+
+                      <span class="retail" ng-show="!isEditing" style="cursor: default;"><span>$</span><span tooltip="Suggested Retail Price" tooltip-placement="right">{{selectedPost.retail - .01}}</span></span>
+                    </span>
+
+                    <span ng-show="!isAuthenticated() || !(selectedPost.seller_id === currentUser._id)">
+                      <span class="retail" style="margin-top:10px;cursor: default;"><span>$</span><span tooltip="Suggested Retail Price" tooltip-placement="right">{{selectedPost.retail - .01}}</span></span>
+                    </span>
+
+                    <span class="savings" ng-show="!isEditing && selectedPost.retail && !isFree()">({{savings}}% off)</span>
+                  
+                  </div>
+                  <div class="value pricebox">
+                    <span ng-show="isAuthenticated() && (selectedPost.seller_id === currentUser._id)">
+                      <span ng-show="isEditing">
+                        <h4 
+                          editable-number="selectedPost.price" 
+                          e-min="0"
+                          e-max="1000000"
+                          onbeforesave="checkField($data, 'price')"
+                          blur="submit"
+                          onaftersave="updateListing(selectedPost._id, selectedPost.price, 'price')"
+                          e-form="priceForm"
+                        >
+                          <span style="font-size: 39px;">$</span>
+                          {{selectedPost.price}}
+                        </h4>
+                        <button style="vertical-align:400%;margin-left:-6px;"class="ui circular red button" ng-click="priceForm.$show()" ng-hide="priceForm.$visible">
+                          Edit Listing Price
+                        </button>
+                        <i class="warning circle link red icon" tooltip="Required" style="font-size:18px;vertical-align:58%;"></i>
+                      </span>
+
+                      <h4 ng-show="!isEditing && !isFree()" style="margin-top:0px;"><span class="dollar-sign">$</span>{{selectedPost.price}}</h4>
+                      <h4 ng-show="!isEditing && isFree()" style="margin-top:0px;font-size: 70px !important;text-transform: capitalize !important;">Free!</h4>
+                    </span>
+
+                    <span ng-show="!isAuthenticated() || !(selectedPost.seller_id === currentUser._id)">
+                      <h4 ng-show="!isFree()" style="margin-top:0px;"><span class="dollar-sign">$</span>{{selectedPost.price}}</h4>
+                      <h4 ng-show="isFree()" style="margin-top:0px;font-size: 70px !important;text-transform: capitalize !important;">Free!</h4>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="nine wide middle aligned column">
+                <div class="ui huge statistic">
+                  <div class="label">
+                    &nbsp;
+                  </div>
+                  <div class="value" style="text-transform: none !important;">
+                    <div ng-if="!isAuthenticated()">
+                      <a href="#/login" class="ui red button massive" style="">Login<i class="icon chevron right"></i></a>
+                    </div>  
+                    
+                    <div class="ui massive buttons" ng-if="isAuthenticated() && !isPostCreator(selectedPost) && !alreadyOffered">
+<!--                       <button ng-click="" tooltip="Coming Soon" class="ui button">
+                        Buy Now
+                      </button> -->
+                      <!-- <div class="or"></div> -->
+                      <!-- <button ng-click="showOffer($event)" class="ui positive button ng-class:{ 'disabled': alreadyOffered }">Place a bid</button> -->
+                      <form name="bidForm" novalidate>
+                        <div class="ui action left icon input" style="width:80%;">
+                          <i class="dollar icon" style="font-size:18px;"></i>
+                          <input ng-model="bid.value" type="number" name="bid" min="0" max="10000" style="width:65%;" required>
+                          <button class="ui green button" ng-disabled="bidForm.$invalid" ng-click="showOffer($event)">
+                            Place Bid
+                          </button>
+                        </div>                        
+                      </form>
+                    </div>
+                    
+                    <div class="ui massive buttons" ng-if="isAuthenticated() && !isPostCreator(selectedPost) && alreadyOffered">
+                      <button ng-click="buyItem(selectedPost)" class="ui button ng-class: {'green' : isBuyer(selectedPost)}" ng-disabled="!isBuyer(selectedPost)">
+                        <i class="shop icon"></i> &nbsp; Pay 
+                      </button>
+                      <div class="or"></div>
+                      <button ng-click="cancelMyOfferMain()" class="ui red button">Cancel My Offer</button>
+                    </div>
+                    
+                    <div ng-if="isAuthenticated() && isPostCreator(selectedPost)">
+
+                      <!-- Split button -->
+                      <div class="btn-group ui buttons ng-class: {'red': isEditing, 'green': !isEditing}" dropdown>
+                        
+                        <button type="button" class="ui button massive" ng-click="changeEditing(selectedPost.offers.length)"> 
+                          <span ng-show="!isEditing">
+                            <i class="lock icon"></i>
+                            Update My Listing
+                          </span>
+                          <span ng-show="isEditing">
+                            <i class="unlock icon"></i>
+                            Save My Listing
+                          </span>
+                        </button>
+
+                        <button type="button" class="ui floating dropdown icon button massive" style="border-left: 1px solid white;" dropdown-toggle>
+                          <span class="caret" style="border-top: 7px solid;border-right: 7px solid transparent;border-left: 7px solid transparent;"></span>
+                          <span class="sr-only">Split button!</span>
+                        </button>
+                        
+                        <ul class="dropdown-menu" role="menu" style="min-width:195px;width:100%">
+
+                          <!-- <li ng-if="!isSold(selectedPost)"><a href="#" ng-click="markAsSold(selectedPost._id)"><i class="ion-close-circled text-danger"></i> Mark as Sold</a></li> -->
+                          
+                          <li ng-if="!isSold(selectedPost)" style="font-size:17px"><a href="#" ng-click="cancelPost(selectedPost._id)"><i class="ion-close-circled text-danger"></i>&nbsp;&nbsp; Remove this Listing</a></li>
+
+                          <li ng-if="!isSold(selectedPost)" style="font-size:17px"><a href="#" ng-click="markAsSold(selectedPost)"><i class="ion-checkmark-circled icon green"></i>&nbsp;&nbsp; Mark as Sold</a></li>
+
+                          <li ng-if="isSold(selectedPost)" style="font-size:17px"><a href="#" ng-click="reactivatePost(selectedPost._id)"><i class="add circle icon green"></i> Reactivate Listing</a></li>
+                        </ul>
+                      
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h2 ng-if="showOffers()" class="ui dividing header left aligned" style="padding-top: 20px;">Offers </h2>
+            <!-- <div ng-if="offers.length > 0" class="ui section divider"></div> -->
+            <div ng-if="showOffers()" class="ui column vertically padded grid">
+                <div class="column">
+                    <table ng-if="offers.length > 0" class="ui celled compact selectable table">
+                      <thead>
+                        <tr>
+                          <th ng-show="isAuthenticated()">Name</th>
+                          <th class="center aligned">Offer</th>
+                          <th ng-show="isAuthenticated() && isPostCreator(selectedPost) && !isSold(selectedPost)" class="center aligned">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody ng-repeat="offer in offers">
+                        <tr class="">
+                          <td ng-show="isAuthenticated()">
+                            <h4 class="ui image header">
+                              <img ng-src="{{offer.poster.profilePictures[0]}}" class="ui mini rounded image">
+                              <div class="content" style="font-size:15px;">
+                                <hovercard 
+                                    hover-tmpl-url="{{hovercardURL}}"
+                                    placement="topRight"
+                                    hover-top-amount="-15em"
+                                    ng-mouseover="hoverProfileIn(offer.poster)"
+                                    ng-mouseleave="hoverProfileOut(offer.poster)"
+                                    >
+                                    <span>
+                                      <a ng-href="#/profile/{{offer.poster._id}}">
+                                        {{offer.poster.firstName}}
+                                      </a>
+                                      <i ng-show="isPostCreator(selectedPost) && offer.accepted && !isSold(selectedPost)" class="ion-checkmark-circled text-success ng-class={">&#32;(Buyer)</i>
+                                    </span>
+                                  </hovercard>
+
+                              </div>
+                            </h4>
+                          </td>
+                          <td class="content" style="font-size:15px;">
+                            <h4 class="ui center aligned" ng-show="isAuthenticated()"><b>${{offer.total}}</b></h4>
+                          </td>
+                          <td ng-show="isAuthenticated() && isPostCreator(selectedPost) && !isSold(selectedPost)" style="font-size:15px;" class="center aligned">
+
+                            <!-- For the seller, give the option to accept an offer if the item is currently not held -->
+                            <button class="ui inverted green button big" ng-click="showAcceptOffer($event, offer)">
+                              View Offer
+                            </button>
+
+                            <!-- For the seller, give the option to remove a hold if the item is being held -->
+                            <button ng-show="isPostCreator(selectedPost) && !isAvailable(selectedPost) && (offer.poster._id === selectedPost.buyer)" class="ui red labeled submit icon button big" ng-click="removeHold(offer._id)">
+                              <i class="icon cancel"></i>
+                              Remove Hold
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="ui section divider"></div>
+
+            <div class="ui column vertically padded grid">
+              <div class="column">
+                <md-content class="md-padding">
+                  <md-tabs md-selected="selectedTabIndex" md-dynamic-height md-border-bottom>
+                    <md-tab label="<i class='info circle icon'></i>About">
+                      <md-content class="md-padding prodDesc">
+                        <h4 class="ui horizontal divider header">
+                          <i class="tag icon"></i>
+                          Description
+                        </h4>
+                        <div class="ui left aligned container" ng-show="isAuthenticated() && (selectedPost.seller_id === currentUser._id)" style="font-size:15px;">
+                          <div ng-show="isEditing">
+                            <p
+                              e-rows="6" e-cols="40"
+                              editable-textarea="selectedPost.description"
+                              e-form="descriptionForm"
+                              blur="submit"
+                              onbeforesave="checkField($data, 'description')"
+                              onaftersave="updateListing(selectedPost._id, selectedPost.description, 'description')"
+                            >
+                              {{selectedPost.description}}
+                            </p>
+                            <button class="ui circular inverted red button" ng-click="descriptionForm.$show()" ng-hide="descriptionForm.$visible">
+                              Edit Description
+                            </button>
+                          </div>
+                          
+                          <div class="ui left aligned container" ng-show="!isEditing" style="white-space: pre-line;">
+                            {{selectedPost.description}}
+                          </div>
+
+                          <div ng-show="isEditing" style="padding-top:5%;">
+                            <p
+                              e-rows="6" e-cols="40"
+                              editable-textarea="selectedPost.tags"
+                              e-form="tagsForm"
+                              blur="submit"
+                              onbeforesave="checkField($data, 'tags')"
+                              onaftersave="updateListing(selectedPost._id, selectedPost.tags, 'tags')"
+                            >
+                              {{selectedPost.tags}}
+                            </p>
+                            <button class="ui circular inverted red button" ng-click="tagsForm.$show()" ng-hide="tagsForm.$visible">
+                              Edit Tags
+                            </button>
+                          </div>
+                          
+                          <div class="ui left aligned container" ng-show="!isEditing" style="white-space: pre-line;">
+                            {{selectedPost.tags}}
+                          </div>
+                        </div>
+
+                        <div class="ui left aligned container" ng-show="!isAuthenticated() || !(selectedPost.seller_id === currentUser._id)" style="white-space: pre-line;">
+                          <p>
+                            {{selectedPost.description}}
+                          </p>
+                        </div>
+                        <br>
+                        <h4 class="ui horizontal divider header">
+                          <i class="bar chart icon"></i>
+                          Specifications
+                        </h4>
+                        <table class="ui definition table">
+                          <tbody>
+                            <tr>
+                              <td class="four wide column" style="width: 20%;">Return Policy</td>
+                              <td ng-show="isAuthenticated()">
+                                <span ng-show="isEditing">
+                                  <span
+                                    editable-select="selectedPost.return"
+                                    blur="submit"
+                                    e-ng-options="c.value as c.text for c in returnPolicies"
+                                    onaftersave="updateListing(selectedPost._id, selectedPost.return, 'return')"
+                                    e-form="returnForm"
+                                    style="padding-right:10px;"
+                                  >
+                                    {{ showReturn() }}
+                                  </span>
+                                  <button class="ui red circular button" ng-click="returnForm.$show()" ng-hide="returnForm.$visible">
+                                    Edit Returns
+                                  </button>
+                                  <i class="warning circle link red icon" tooltip="Required" style="font-size:17px;"></i>
+                                </span>
+                                <span ng-show="!isEditing">
+                                  {{ showReturn() }}
+                                </span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="four wide column">Condition</td>
+                              <td>
+                                <span ng-show="isEditing">
+                                  <span
+                                    editable-select="selectedPost.condition"
+                                    blur="submit"
+                                    e-ng-options="c.value as c.text for c in conditions"
+                                    onaftersave="updateListing(selectedPost._id, selectedPost.condition, 'condition')"
+                                    e-form="conditionForm"
+                                    style="padding-right:10px;"
+                                  >
+                                    {{ showCondition() }}
+                                  </span>
+                                  <button class="ui red circular button" ng-click="conditionForm.$show()" ng-hide="conditionForm.$visible">
+                                    Edit Condition
+                                  </button>
+                                  <i class="warning circle link red icon" tooltip="Required" style="font-size:17px;"></i>
+                                </span>
+                                <span ng-show="!isEditing || !isAuthenticated()">
+                                  {{ showCondition() }}
+                                </span>
+                              </td>
+                            </tr>
+                            <tr ng-if="!isOther()">
+                              <td class="four wide column">Category</td>
+                              <td ng-if="isFashion()">
+                                <span ng-show="isEditing">
+                                  <span
+                                    editable-select="selectedPost.category"
+                                    e-ng-options="c.value as c.text for c in fashionCategories"
+                                    onaftersave="updateListing(selectedPost._id, selectedPost.category, 'category')"
+                                    e-form="fashionCategoryForm"
+                                    blur="submit"
+                                    style="padding-right:10px;"
+                                  >
+                                    {{ showCategory() }}
+                                  </span>
+                                  <button class="ui red circular button" ng-click="fashionCategoryForm.$show()" ng-hide="fashionCategoryForm.$visible">
+                                    Edit Category
+                                  </button>
+                                  <i class="warning circle link red icon" tooltip="Required" style="font-size:17px;"></i>
+                                </span>
+                                <span ng-show="!isEditing || !isAuthenticated()">
+                                  {{ showCategory() }}
+                                </span>
+                              </td>
+                              <td ng-if="isHomeFurniture()">
+                                <span ng-show="isEditing">
+                                  <span
+                                    editable-select="selectedPost.category"
+                                    e-ng-options="c.value as c.text for c in furnitureCategories"
+                                    onaftersave="updateListing(selectedPost._id, selectedPost.category, 'category')"
+                                    e-form="homeFurnitureCategoryForm"
+                                    blur="submit"
+                                    style="padding-right:10px;"
+                                  >
+                                    {{ showCategory() }}
+                                  </span>
+                                  <button class="ui red circular button" ng-click="homeFurnitureCategoryForm.$show()" ng-hide="homeFurnitureCategoryForm.$visible">
+                                    Edit Category
+                                  </button>
+                                  <i class="warning circle link red icon" tooltip="Required" style="font-size:17px;"></i>
+                                </span>
+                                <span ng-show="!isEditing || !isAuthenticated()">
+                                  {{ showCategory() }}
+                                </span>
+                              </td>
+                              <td ng-if="isElectronics()">
+                                <span ng-show="isEditing">
+                                  <span
+                                    editable-select="selectedPost.category"
+                                    e-ng-options="c.value as c.text for c in electronicsCategories"
+                                    onaftersave="updateListing(selectedPost._id, selectedPost.category, 'category')"
+                                    e-form="electronicsCategoryForm"
+                                    blur="submit"
+                                    style="padding-right:10px;"
+                                  >
+                                    {{ showCategory() }}
+                                  </span>
+                                  <button class="ui red circular button" ng-click="electronicsCategoryForm.$show()" ng-hide="electronicsCategoryForm.$visible">
+                                    Edit Category
+                                  </button>
+                                  <i class="warning circle link red icon" tooltip="Required" style="font-size:17px;"></i>
+                                </span>
+                                <span ng-show="!isEditing || !isAuthenticated()">
+                                  {{ showCategory() }}
+                                </span>
+                              </td>
+                              <td ng-if="isTextbooks()">
+                                <span ng-show="isEditing">
+                                  <span
+                                    editable-select="selectedPost.category"
+                                    e-ng-options="c.value as c.text for c in textbooksCategories"
+                                    onaftersave="updateListing(selectedPost._id, selectedPost.category, 'category')"
+                                    e-form="textbooksCategoryForm"
+                                    blur="submit"
+                                    style="padding-right:10px;"
+                                  >
+                                    {{ showCategory() }}
+                                  </span>
+                                  <button class="ui red circular button" ng-click="textbooksCategoryForm.$show()" ng-hide="textbooksCategoryForm.$visible">
+                                    Edit Category
+                                  </button>
+                                  <i class="warning circle link red icon" tooltip="Required" style="font-size:17px;"></i>
+                                </span>
+                                <span ng-show="!isEditing || !isAuthenticated()">
+                                  {{ showCategory() }}
+                                </span>
+                              </td>
+                            </tr>
+                            <tr ng-if="isFashion() || isHomeFurniture() || isElectronics()">
+                              <td class="five wide column">
+                                <span>Size</span>
+                              </td>
+                              <td>
+                                <span ng-show="isEditing">
+                                  <span
+                                    editable-text="selectedPost.size"
+                                    onbeforesave="checkField($data, 'size')"
+                                    onaftersave="updateListing(selectedPost._id, selectedPost.size, 'size')"
+                                    e-form="sizeForm"
+                                    blur="submit"
+                                    style="padding-right:10px;"
+                                  >
+                                    {{selectedPost.size | capitalize}}
+                                  </span>
+                                  <button class="ui red circular button ng-class: {'inverted' : !isFashion() || !isHomeFurniture() }" ng-click="sizeForm.$show()" ng-hide="sizeForm.$visible">
+                                    <span>Edit Size</span>
+                                  </button>
+                                </span>
+                                <span ng-show="!isEditing || !isAuthenticated()">
+                                  {{selectedPost.size | capitalize}}
+                                </span>
+                              </td>
+                            </tr>
+                            <tr ng-if="isFashion()">
+                              <td class="four wide column">Gender</td>
+                              <td>
+                                <span ng-show="isEditing">
+                                  <span
+                                    editable-select="selectedPost.gender"
+                                    e-ng-options="c.value as c.text for c in genders"
+                                    onaftersave="updateListing(selectedPost._id, selectedPost.gender, 'gender')"
+                                    e-form="genderForm"
+                                    blur="submit"
+                                    style="padding-right:10px;"
+                                  >
+                                    {{ showGender() }}
+                                  </span>
+                                  <button class="ui inverted red circular button" ng-click="genderForm.$show()" ng-hide="genderForm.$visible">
+                                    Edit Gender
+                                  </button>
+                                </span>
+                                <span ng-show="!isEditing || !isAuthenticated()">
+                                  {{ showGender() }}
+                                </span>
+                              </td>
+                            </tr>
+                            <tr ng-if="isHomeFurniture()">
+                              <td class="four wide column">Room &nbsp;<i class="info circle link icon" tooltip="i.e. Living Room; Bedroom"></i></td>
+                              <td>
+                                <span ng-show="isEditing">
+                                  <span
+                                    editable-text="selectedPost.room"
+                                    onbeforesave="checkField($data, 'room')"
+                                    onaftersave="updateListing(selectedPost._id, selectedPost.room, 'room')"
+                                    e-form="roomForm"
+                                    blur="submit"
+                                    style="padding-right:10px;"
+                                  >
+                                    {{selectedPost.room | capitalize}}
+                                  </span>
+                                  <button class="ui inverted red circular button" ng-click="roomForm.$show()" ng-hide="roomForm.$visible">
+                                    <span>Edit Room</span>
+                                  </button>
+                                </span>
+                                <span ng-show="!isEditing || !isAuthenticated()">
+                                  {{selectedPost.room | capitalize}}
+                                </span>
+                              </td>
+                            </tr>
+                            <tr ng-if="!isTextbooks()">
+                              <td class="two wide column">Colour</td>
+                              <td>
+                                <span ng-show="isEditing">
+                                  <span
+                                    editable-text="selectedPost.colour"
+                                    onbeforesave="checkField($data, 'colour')"
+                                    onaftersave="updateListing(selectedPost._id, selectedPost.colour, 'colour')"
+                                    e-form="colourForm"
+                                    blur="submit"
+                                    style="padding-right:10px;"
+                                  >
+                                    {{selectedPost.colour | capitalize}}
+                                  </span>
+                                  <button class="ui inverted red circular button" ng-click="colourForm.$show()" ng-hide="colourForm.$visible">
+                                    Edit Colour
+                                  </button>
+                                </span>
+                                <span ng-show="!isEditing || !isAuthenticated()">
+                                  {{selectedPost.colour | capitalize}}
+                                </span>
+                              </td>
+                            </tr>
+                            <tr ng-if="isFashion()">
+                              <td class="four wide column">Try On?</td>
+                              <td>
+                                <span ng-show="isEditing">
+                                  <span
+                                    editable-select="selectedPost.ifTryOn"
+                                    e-ng-options="c.value as c.text for c in tryOnOptions"
+                                    onaftersave="updateListing(selectedPost._id, selectedPost.ifTryOn, 'ifTryOn')"
+                                    e-form="ifTryOnForm"
+                                    blur="submit"
+                                    style="padding-right:10px;"
+                                  >
+                                    {{ showTryOnOptions() }}
+                                    <!--add method later-->
+                                  </span>
+                                  <button class="ui inverted red circular button" ng-click="ifTryOnForm.$show()" ng-hide="ifTryOnForm.$visible">
+                                    Edit Try On
+                                  </button>
+                                </span>
+                                <span ng-show="!isEditing || !isAuthenticated()">
+                                  {{ showTryOnOptions() }}
+                                </span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="two wide column">Status</td>
+                              <td>
+                                <span>
+                                  {{selectedPost.status | capitalize}}
+                                </span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </md-content>
+                    </md-tab> 
+                    <md-tab label="<i class='marker icon'></i>Location">
+                      <md-content class="md-padding">
+
+                        <div class="ui center aligned basic segment">
+
+                          <div class="ui compact menu" ng-if="selectedPost.locations.length == 0" style="margin-bottom:8px;">
+                            <a class="item ui basic red label large" style="text-decoration:none;cursor:pointer;">
+                              <i class="marker icon"></i> 
+                              No locations selected.
+                            </a>
+                          </div>
+
+                          <div class="ui compact menu" ng-repeat="location in selectedPost.locations" style="margin-bottom:8px;">
+                            <a class="item ui basic red label large" style="text-decoration:none;cursor:pointer;" ng-click="changeLocation(location)">
+                              <i class="marker icon"></i> 
+                              {{location.name}}
+                              <div ng-show="isEditing" class="floating ui red label" style="cursor: pointer;" ng-click="removeLocation(location.name)"><i class="remove icon" style="margin: 0"></i></div>
+                            </a>
+                          </div>
+
+                          <div class="ui horizontal divider">
+                            
+                          </div>
+
+                          <div class="ui right icon action input">
+                            <i class="search icon"></i>
+                            <input 
+                              id="mySearch"
+                              places-auto-complete
+                              size=80
+                              ng-model="address" 
+                              on-place-changed="placeChanged(place)"
+                              placeholder="Enter a location...">
+                            <i class="remove circle link icon" ng-click="address = ''"></i>
+                          </div>
+                        </div>
+
+                        <br>
+
+                        <div class="myMap">
+                          <map map-lazy-load="http://maps.google.com/maps/api/js" center="{{mapCenter}}" zoom="15">
+                            <marker id="foo" position="{{mapCenter}}" animation="google.maps.Animation.DROP" on-click="showInfoWindow(event, 'info')"></marker>
+                              <info-window id="info" max-width="200" visible-on-marker="foo">
+                              <div ng-non-bindable="">
+                                
+                                <h5 id="firstHeading" class="firstHeading">{{place.name}}</h5>
+                                <button ng-show="isEditing" class="ui red circular button" ng-click="addLocation()">Add this location</button>
+
+                              </div>
+                            </info-window>
+                          </map>
+                        </div>
+
+                      </md-content>
+                    </md-tab>
+                  </md-tabs>
+                </md-content>
+              </div>
+            </div>
+
+            <div class="ui container left aligned">
+              <hr class="soften">
+              <h5 class="text-center"><i class="ion-chatbox-working text-primary"></i> Comments</h5>
+              <div class="ui large comments" ng-repeat="comment in comments | orderBy: 'created':false">
+                <div class="comment">
+                  <a class="avatar" href="#/profile/{{comment.poster._id}}">
+                    <img ng-src="{{comment.poster.profilePictures[0]}}">
+                  </a>
+                  <div class="content">
+                    <hovercard 
+                        hover-tmpl-url="{{hovercardURL}}"
+                        placement="topRight"
+                        hover-top-amount="-14.5em"
+                        ng-mouseover="hoverProfileIn(comment.poster)"
+                        ng-mouseleave="hoverProfileOut(comment.poster)"
+                        >
+                      <a class="author" href="#/profile/{{comment.poster._id}}">{{comment.poster.firstName}} {{comment.poster.lastName}}</a>
+                    </hovercard>
+                    <div class="metadata">
+                      <span class="date">{{ comment.created | amCalendar }}</span>
+                    </div>
+                    <div class="text">
+                      <div ng-show="isAuthenticated() && (comment.poster._id === currentUser._id)">
+                        <span 
+                          editable-textarea="comment.content[comment.content.length - 1]"
+                          e-rows="5" 
+                          e-cols="40"
+                          blur="submit"
+                          onbeforesave="checkField($data, 'comment')"
+                          onaftersave="updateComment(comment._id, comment.content[comment.content.length - 1])"
+                          e-form="commentForm" 
+                        >
+                          <div ng-bind-html="comment.content[comment.content.length - 1]">
+                          </div>
+                        </span>
+                      </div>
+
+                      <div ng-bind-html="comment.content[comment.content.length - 1]" ng-show="!isAuthenticated() || !(comment.poster._id === currentUser._id)"></div>  
+                    </div>
+                    <div class="actions">
+                      <a
+                        ng-if="isAuthenticated() && ((comment.poster._id === currentUser._id))" 
+                        class="reply" 
+                        ng-click="commentForm.$show()" 
+                        ng-hide="commentForm.$visible">
+                        Edit
+                      </a>
+                      <a ng-show="isAuthenticated() && ((comment.poster._id === currentUser._id))" class="reply" ng-click="removeComment(comment._id)">
+                        <i class="remove red icon">&nbsp;Delete</i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr class="soften">
+              <form ng-show="isAuthenticated()" class="ui huge reply form" ng-submit="addComment()">
+                <div class="field">
+                  <textarea type="text" ng-model="content" placeholder="Write a comment..." required></textarea>
+                </div>
+                <button class="ui blue huge labeled submit icon button" type="submit">
+                  <i class="icon edit"></i> Add Reply
+                </button>
+              </form>
+            </div>
+
+<!--             <div class="ui column vertically padded grid">
+              <div class="column">
+                
+                <hr class="soften">
+                
+                <h5 class="text-center"><i class="ion-chatbox-working text-primary"></i> Comments</h5>
+
+                <div class="ui comments" style="font-size:15px;">
+
+                  <div class="comment" ng-repeat="comment in comments | orderBy: 'created':false">
+
+                    <a class="avatar" href="#/profile/{{comment.poster._id}}" target="_blank" target="_blank">
+                      <img ng-src="{{comment.poster.profilePictures[0]}}">
+                    </a>
+                      
+                    <div class="content">
+                        <a class="author pull-left" href="#/profile/{{comment.poster._id}}" style="">{{comment.poster.firstName}} {{comment.poster.lastName}}</a>
+
+
+                      <div class="metadata pull-right" style="line-height: 64.5px;">
+                        <div class="date">
+                          
+                          <span>{{ comment.created | amCalendar }}</span>
+                          
+                        </div>
+                      </div>
+                      <div class="text">
+                        <span ng-show="isAuthenticated() && (comment.poster._id === currentUser._id)">
+                          <span 
+                            editable-text="comment.content[comment.content.length - 1]"
+                            onbeforesave="checkField($data, 'comment')"
+                            onaftersave="updateComment(comment._id, comment.content[comment.content.length - 1])"
+                            e-form="commentForm" 
+                          >
+                            {{comment.content[comment.content.length - 1]}}
+                          </span>
+                        </span>
+
+                        <div ng-show="!isAuthenticated() || !(comment.poster._id === currentUser._id)">{{comment.content[comment.content.length - 1]}}</div>
+                      </div>
+                      <div class="actions">
+                        <a 
+                          ng-if="isAuthenticated() && ((comment.poster._id === currentUser._id))" 
+                          class="reply" 
+                          ng-click="commentForm.$show()" 
+                          ng-hide="commentForm.$visible"
+                        >
+                          Edit
+                        </a>
+                        <a ng-show="isAuthenticated() && ((comment.poster._id === currentUser._id))" class="reply" ng-click="removeComment(comment._id)">
+                          <i class="remove red icon">&nbsp;Delete</i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <hr class="soften">
+
+                <div class="ui comments" ng-show="isAuthenticated()">
+                  <div class="col-md-11">
+                    <form ng-submit="addComment()">
+                      <div class="input-group">
+                        <div class="input-group-addon">
+                          <img ng-src="{{currentUser.profilePictures[0]}}" class="media-object img-rounded comment">
+                        </div>
+                        <input type="text" ng-model="content" cols="1" rows="3" class="form-control" placeholder="Write a comment..." required><br>
+                        <div class="input-group-addon">
+                          <button class="ui blue labeled submit icon button huge" type="submit">
+                            <i class="icon edit"></i>
+                            Add Comment
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+<!-- <div ng-include="'views/partials/edit.html'"></div> -->
+<!-- <div ng-include="'views/partials/offer.html'"></div> -->

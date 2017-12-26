@@ -1,0 +1,66 @@
+<div class="aboutPage">
+  <ion-view>
+    <ion-nav-title>
+       <span style="color: #FF2D54;"> {{howToBuy.navTitle}} </span>
+    </ion-nav-title>
+    <ion-nav-bar align-title="center">
+    <ion-nav-buttons side="left">
+      <button class="button button-positive button-clear no-animation"
+              ng-click="startTutorial()" ng-show="!slideIndex">
+        Back
+      </button>
+      <button class="button button-positive button-clear no-animation"
+              ng-click="previous()" ng-show="slideIndex > 0">
+        Previous 
+      </button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right"> 
+      <button class="button button-positive button-clear no-animation"
+              ng-click="next()" ng-show="slideIndex != 2">
+        Next
+      </button>
+      
+    </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <ion-slide-box on-slide-changed="slideChanged(index)">
+      <ion-slide>
+        <div class="wrapper-step">
+          <img src="../img/label.svg">
+          <span>Make your offer. 
+            <div id="list">
+              <li> Ready to purchase? You have to make a bid first and let seller know that you’re interested.</li>
+              <li> Press the Place Bid button. </li>
+              <li> Type in the amount you would like to bid and click ‘Place My Offer’. </li>
+            </div>
+          </span>
+        </div>
+     
+      </ion-slide>
+      <ion-slide>
+        <div class="wrapper-step">
+          <img src="../img/hourglass.svg">
+          <span>  Wait until the seller has accepted your offer to start purchasing.
+            <div id="list">
+              <li> Chat with your seller to decide on a perfect location and time.</li>
+            </div>  
+          </span>
+        </div>
+      </ion-slide>
+      <ion-slide>
+        <div class="wrapper-step">
+          <img src="../img/online-pay.svg">
+          <span>   Once that’s done, congrats, you’re ready to pay. </span>
+          <div id="list">
+            <li> Stylefnf has two options regarding payments: 
+              <li>
+                Credit card or Paypal.
+              </li>
+            </li>
+            <li> Meet up and press pay with Stylefnf’s 1 click button. </li>
+          </div>
+        </div>
+      </ion-slide>
+    </ion-slide-box>
+  </ion-view>
+</div>

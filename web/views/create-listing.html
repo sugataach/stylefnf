@@ -1,0 +1,649 @@
+<meta view-head property="og:url" content="http://stylefnf.com/#/detail/{{newListing._id}}">
+<meta view-head property="og:title" content="{{newListing.brand}} {{newListing.title}}">
+<meta view-head property="og:description" content="{{newListing.description}}">
+<meta view-head property="og:image" content="{{newListing.imageUrls[0]}}">
+
+<view-title>{{newListing.brand | capitalize}} {{newListing.title | capitalize}}</view-title>
+
+
+
+<div class="container detail-form">
+
+  <div class="detail-form panel panel-default margin-top">
+
+    <div class="ui icon success message" style="box-shadow:none;">
+      <i class="add circle icon"></i>
+      <div class="content">
+        <div class="header" ng-if="isFashion()">
+          Create a fashion listing
+        </div>
+        <div class="header" ng-if="isHomeFurniture()">
+          Create a home & furniture listing
+        </div>
+        <div class="header" ng-if="isElectronics()">
+          Create an electronics listing
+        </div>
+        <div class="header" ng-if="isTextbooks()">
+          Create a textbooks listing
+        </div>
+        <div class="header" ng-if="isOther()">
+          Create an other listing
+        </div>
+        <ul ng-if="isEditing && isFashion()" class="list" ng-repeat="error in fashionErrors()">
+          <li style="color: red;">{{error}}</li>
+        </ul>
+        <ul ng-if="isEditing && isHomeFurniture()" class="list" ng-repeat="error in homeFurnitureErrors()">
+          <li style="color: red;">{{error}}</li>
+        </ul>
+        <ul ng-if="isEditing && isElectronics()" class="list" ng-repeat="error in electronicsErrors()">
+          <li style="color: red;">{{error}}</li>
+        </ul>
+        <ul ng-if="isEditing && isTextbooks()" class="list" ng-repeat="error in textbooksErrors()">
+          <li style="color: red;">{{error}}</li>
+        </ul>
+        <ul ng-if="isEditing && isOther()" class="list" ng-repeat="error in otherErrors()">
+          <li style="color: red;">{{error}}</li>
+        </ul>
+        <ul ng-if="noErrors()" class="list">
+          <li style="">Click <b>List Now</b> to finish</li>
+        </ul>
+      </div>
+      <div class="content pull-right">
+        <button type="button" class="ui button massive green pull-right" ng-disabled="hasData(newListing)" ng-click="createListing()"> 
+          <span>
+            <i class="cloud upload icon"></i>
+            List now
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <div class="row">
+      
+        <div class="col-xs-5">
+          <div class="detail-carousel">
+
+            <div ng-show="!isEditing" style="min-height:500px;">
+              <a ng-repeat="image_link in newListing.imageUrls">
+                <img class="center-block ui rounded image img-responsive text-center" ng-src="{{image_link}}" style="margin-bottom:10px;box-shadow: 0 1px 3px 0 #d4d4d5,0 0 0 1px #d4d4d5" data-action="zoom">
+              </a>
+            </div>
+
+            <div ng-show="isAuthenticated() && isEditing" style="min-height:500px;">
+
+            <div class="fileUpload ui right floated fluid massive button huge trigger-send" style="margin-bottom: 35px;">
+              <span ng-show="uploadingPic">
+                <i ng-show="uploadingPic" class="notched circle loading icon"></i>
+                <span style="color: black; font-weight:bold;">Uploading Photo ({{currProgress}} %)</span>
+              </span>
+              <span ng-show="!uploadingPic">
+                <i class="icons">
+                    <i class="file image outline icon"></i>
+                    <i class=" corner add icon"></i>
+                  </i>
+                <span style="color: black; font-weight:bold;">Add Photos</span>
+                <input multiple type="file" class="upload" style="font-size: 120px;" id="images" onchange="angular.element(this).scope().s3Upload(this.files)" accept="image/*"/>
+              </span>
+            </div>
+
+              <div class="ui centred card no-hover" ng-repeat="image_link in newListing.imageUrls" style="width:100%">
+                <a class="image" href="">
+                  <img class="center-block ui rounded image img-responsive text-center" ng-src="{{image_link}}" title="" style="">
+                </a>
+                <div class="content">
+                  <div class="ui two column centered grid" style="padding-top: 20px;padding-bottom: 20px;">
+                    <button ng-click="editPhoto(image_link)" class="ui red inverted circular icon button massive" style="font-size:20px">
+                      <i class="paint brush icon"></i>
+                      Edit
+                    </button>
+                    <div class="or" style="padding-left: 70px;"></div>
+                    <button ng-click="deletePhoto(image_link)" class="ui circular negative icon button massive" style="font-size:20px">
+                      <i class="delete icon"></i>
+                        Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-7">
+
+        <div class="media" style="padding-bottom:5px;">
+          <a class="pull-left" ng-href="#/profile/{{currentUser._id}}" style="margin-right:10px;text-decoration: none;">
+            <img class="img-responsive img-rounded" ng-src="{{currentUser.profilePictures[0]}}" style="max-height:75px;max-width:75px;">
+            <p style="text-align:center;font-weight: 600;font-size: 1.05em;">{{currentUser.firstName}}</p>
+          </a>
+
+        <div class="media" style="padding-bottom:15px;padding-top:1px;">
+            <h4>
+              <ul class="list-inline" style="">
+                <li style="padding:0px;">
+                
+                  <span ng-show="isAuthenticated()">
+                    <span ng-show="isEditing">
+                      <b 
+                        editable-text="newListing.brand"
+                        blur="submit"
+                        onbeforesave="checkField($data, 'brand')"
+                        onaftersave="updateListing(newListing._id, newListing.brand, 'brand')" 
+                        style="" 
+                        e-form="brandForm">
+                        {{newListing.brand | capitalize}}
+                        <button class="ui red inverted circular button" ng-click="brandForm.$show()" ng-hide="brandForm.$visible">
+                          Edit Brand
+                        </button>
+                      </b>
+                    </span>
+
+                    <b ng-show="!isEditing">{{newListing.brand | capitalize}}</b>
+                  </span>
+
+                  <li class="pull-right">
+                    <a class="ui circular icon massive outline button" href=""><i class="like icon"></i></a> 
+                    <span class="like-label" style="vertical-align: super;cursor: default;">0 likes</span>
+                  </li>
+
+                  <h5 class="list-inline" style="margin-left:0;font-size:0.8em;">
+                    <span ng-show="isAuthenticated()">
+                      <span ng-show="isEditing">
+                        <span 
+                          editable-text="newListing.title" 
+                          blur="submit"
+                          onbeforesave="checkField($data, 'title')"
+                          onaftersave="updateListing(newListing._id, newListing.title, 'title')"
+                          e-form="titleForm" 
+                        >
+                          {{newListing.title | capitalize}}
+                          <button class="ui red circular button align-top" ng-click="titleForm.$show()" ng-hide="titleForm.$visible">
+                            Edit Title
+                          </button>
+                          <i class="warning circle link red icon" tooltip="Required"></i>
+                        </span>
+                      </span>
+
+                      <span ng-show="!isEditing">{{newListing.title | capitalize}}</span>
+                    </span>
+                  </h5>
+
+                  <h5 class="list-inline" style="margin-left:0;font-size:0.6em;">
+                    <span ng-if="isFashion() && newListing.gender">
+                      <i style="" ng-if="newListing.gender == 'Women'"class="ion-woman red icon"></i>
+                      <i style="" ng-if="newListing.gender == 'Men'"class="ion-man red icon"></i> 
+                      <i style="" ng-if="newListing.gender == 'Any' || newListing.gender == 'Not set'" class="ion-android-person red icon"></i>
+                      <span ng-show="isEditing">Gender</span> {{newListing.gender != "Any"? newListing.gender : "Men + Women" | capitalize}}
+                    </span>
+                    <span ng-if="isHomeFurniture()"><i class="ion-home"></i> <span ng-if="isEditing">Room</span> <span>{{newListing.room}}</span></span>
+                    <li ng-if="isFashion() || isHomeFurniture()">|</li> 
+                    <span ng-if="isFashion() || isHomeFurniture()"><i class="ion-arrow-resize"></i> Size <span>{{newListing.size}}</span></span>
+                    <li ng-if="isFashion() || isHomeFurniture()">|</li> 
+                    <span><i class="ion-asterisk"></i> <span ng-show="isEditing">Condition</span> {{ showCondition() }}</span>
+                  </h5>
+                </li>
+                  </h4>
+              </ul>
+            </h4>
+          </div>
+        </div>
+
+        <div class="retail">
+          <span ng-show="isAuthenticated()">
+            <span ng-show="isEditing">
+              <h4 
+                class="retail" 
+                editable-number="newListing.retail" 
+                blur="submit"
+                onbeforesave="checkField($data, 'retail')"
+                e-min="1"
+                e-max="1000000"
+                onaftersave="updateListing(newListing._id, newListing.retail, 'retail')"
+                e-form="retailForm"
+              >
+                <span>$</span>
+                {{newListing.retail - .01}}
+                
+                <button style="margin-left:10px" class="ui inverted red circular button" ng-click="retailForm.$show()" ng-hide="retailForm.$visible">
+                  Edit Original Price
+                </button>
+              </h4>
+            </span>
+
+            <h4 class="retail" ng-show="!isEditing" style="cursor: default;"><span>$</span><span tooltip="Suggested Retail Price" tooltip-placement="right">{{newListing.retail - .01}}</span></h4>
+          </span>
+        </div>
+          
+
+        <div class="media pricebox deal" style="margin-top:0px;">
+          <section>
+            
+            <span ng-show="isAuthenticated()">
+              <span ng-show="isEditing">
+                <h4 
+                  editable-number="newListing.price" 
+                  blur="submit"
+                  e-min="0"
+                  e-max="1000000"
+                  onbeforesave="checkField($data, 'price')"
+                  onaftersave="updateListing(newListing._id, newListing.price, 'price')"
+                  e-form="priceForm"
+                >
+                  <span>$</span>
+                  {{newListing.price}}
+                </h4>
+                <button style="vertical-align:400%;margin-left:20px;"class="ui red circular button" ng-click="priceForm.$show()" ng-hide="priceForm.$visible">
+                  Edit Listing Price
+                </button>
+                <i class="warning circle link red icon" tooltip="Required" style="vertical-align:170%;"></i>
+              </span>
+
+              <h4 ng-show="!isEditing && !isFree()" style="margin-top:0px;"><span>$</span>{{newListing.price}}</h4>
+              <h4 ng-show="!isEditing && isFree()" style="margin-top:0px;font-size: 70px !important;">Free!</h4>
+            </span>
+            
+            <h5 ng-show="!isEditing && newListing.retail && !isFree()">({{savings}}% off)</h5>
+
+            <div class="detail-action pull-right"> 
+              
+              <div ng-if="isAuthenticated()">
+
+                <ul class="list-inline" style="">
+                  <li class="pull-right" ng-show="!isEditing" style="">
+                    <a class="ui red massive outline button" href="" ng-click="changeEditing()"><i class="write icon"></i>Edit Listing</a>
+                  </li>
+                  <li class="pull-right" ng-show="isEditing" style="">
+                    <a class="ui inverted red massive outline button" href="" ng-click="changeEditing()"><i class="unhide icon"></i>Preview Listing</a>
+                  </li>
+                </ul>
+
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="detail-placeholder">
+          
+        </div>
+
+        <div class="media">
+          <md-content class="md-padding">
+            <md-tabs md-selected="selectedTabIndex" md-dynamic-height md-border-bottom>
+              <md-tab label="<i class='info circle icon'></i>About">
+                <md-content class="md-padding prodDesc">
+                  <h4 class="ui horizontal divider header">
+                    <i class="tag icon"></i>
+                    Description
+                  </h4>
+                  <div ng-show="isAuthenticated()" style="font-size:15px;">
+                    <div ng-show="isEditing" style="white-space: pre-line;">
+                      <p
+                        e-rows="6" e-cols="40"
+                        editable-textarea="newListing.description"
+                        blur="submit"
+                        e-form="descriptionForm"
+                        onbeforesave="checkField($data, 'description')"
+                        onaftersave="updateListing(newListing._id, newListing.description, 'description')"
+                      >
+                        {{newListing.description}}
+                      </p>
+                      <button class="ui inverted red circular button" ng-click="descriptionForm.$show()" ng-hide="descriptionForm.$visible">
+                        Edit Description
+                      </button>
+                    </div>
+                    
+                    <div ng-show="!isEditing" style="white-space: pre-line;">
+                      {{newListing.description}}
+                    </div>
+
+                    <div ng-show="isEditing" style="white-space: pre-line;">
+                      <p
+                        e-rows="6" e-cols="40"
+                        blur="submit"
+                        editable-textarea="newListing.tags"
+                        e-form="tagsForm"
+                        onbeforesave="checkField($data, 'tags')"
+                        onaftersave="updateListing(newListing._id, newListing.tags, 'tags')"
+                      >
+                        {{newListing.tags}}
+                      </p>
+                      <button class="ui inverted red circular button" ng-click="tagsForm.$show()" ng-hide="tagsForm.$visible">
+                        Edit Tags
+                      </button>
+                    </div>
+                    
+                    <div ng-show="!isEditing" style="white-space: pre-line;">
+                      {{newListing.tags}}
+                    </div>
+                  </div>
+                  <br>
+                  <h4 class="ui horizontal divider header">
+                    <i class="bar chart icon"></i>
+                    Specifications
+                  </h4>
+                  <table class="ui definition table">
+                    <tbody>
+                      <tr>
+                        <td style="width: 20%;">Return Policy</td>
+                        <td ng-show="isAuthenticated()">
+                          <span ng-show="isEditing">
+                            <span
+                              editable-select="newListing.return"
+                              blur="submit"
+                              e-ng-options="c.value as c.text for c in returnPolicies"
+                              onaftersave="updateListing(newListing._id, newListing.return, 'return')"
+                              e-form="returnForm"
+                              style="padding-right:10px;"
+                            >
+                              {{ showReturn() }}
+                            </span>
+                            <button class="ui red circular button" ng-click="returnForm.$show()" ng-hide="returnForm.$visible">
+                              Edit Returns
+                            </button>
+                            <i class="warning circle link red icon" tooltip="Required"></i>
+                          </span>
+                          <span ng-show="!isEditing">
+                            {{ showReturn() }}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Condition</td>
+                        <td ng-show="isAuthenticated()">
+                          <span ng-show="isEditing">
+                            <span
+                              editable-select="newListing.condition"
+                              blur="submit"
+                              e-ng-options="c.value as c.text for c in conditions"
+                              onaftersave="updateListing(newListing._id, newListing.condition, 'condition')"
+                              e-form="conditionForm"
+                              style="padding-right:10px;"
+                            >
+                              {{ showCondition() }}
+                            </span>
+                            <button class="ui red circular button" ng-click="conditionForm.$show()" ng-hide="conditionForm.$visible">
+                              Edit Condition
+                            </button>
+                            <i class="warning circle link red icon" tooltip="Required"></i>
+                          </span>
+                          <span ng-show="!isEditing">
+                            {{ showCondition() }}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr ng-if="!isOther()">
+                        <td>Category</td>
+                        <td ng-if="isFashion()">
+                          <span ng-show="isEditing">
+                            <span
+                              editable-select="newListing.category"
+                              blur="submit"
+                              e-ng-options="c.value as c.text for c in fashionCategories"
+                              onaftersave="updateListing(newListing._id, newListing.category, 'category')"
+                              e-form="fashionCategoryForm"
+                              style="padding-right:10px;"
+                            >
+                              {{ showCategory() }}
+                            </span>
+                            <button class="ui red circular button" ng-click="fashionCategoryForm.$show()" ng-hide="fashionCategoryForm.$visible">
+                              Edit Category
+                            </button>
+                            <i class="warning circle link red icon" tooltip="Required"></i>
+                          </span>
+                          <span ng-show="!isEditing">
+                            {{ showCategory() }}
+                          </span>
+                        </td>
+                        <td ng-if="isHomeFurniture()">
+                          <span ng-show="isEditing">
+                            <span
+                              editable-select="newListing.category"
+                              blur="submit"
+                              e-ng-options="c.value as c.text for c in homeFurnitureCategories"
+                              onaftersave="updateListing(newListing._id, newListing.category, 'category')"
+                              e-form="homeFurnitureCategoryForm"
+                              style="padding-right:10px;"
+                            >
+                              {{ showCategory() }}
+                            </span>
+                            <button class="ui red circular button" ng-click="homeFurnitureCategoryForm.$show()" ng-hide="homeFurnitureCategoryForm.$visible">
+                              Edit Category
+                            </button>
+                            <i class="warning circle link red icon" tooltip="Required"></i>
+                          </span>
+                          <span ng-show="!isEditing">
+                            {{ showCategory() }}
+                          </span>
+                        </td>
+                        <td ng-if="isElectronics()">
+                          <span ng-show="isEditing">
+                            <span
+                              editable-select="newListing.category"
+                              blur="submit"
+                              e-ng-options="c.value as c.text for c in electronicsCategories"
+                              onaftersave="updateListing(newListing._id, newListing.category, 'category')"
+                              e-form="electronicsCategoryForm"
+                              style="padding-right:10px;"
+                            >
+                              {{ showCategory() }}
+                            </span>
+                            <button class="ui red circular button" ng-click="electronicsCategoryForm.$show()" ng-hide="electronicsCategoryForm.$visible">
+                              Edit Category
+                            </button>
+                            <i class="warning circle link red icon" tooltip="Required"></i>
+                          </span>
+                          <span ng-show="!isEditing">
+                            {{ showCategory() }}
+                          </span>
+                        </td>
+                        <td ng-if="isTextbooks()">
+                          <span ng-show="isEditing">
+                            <span
+                              editable-select="newListing.category"
+                              blur="submit"
+                              e-ng-options="c.value as c.text for c in textbooksCategories"
+                              onaftersave="updateListing(newListing._id, newListing.category, 'category')"
+                              e-form="textbooksCategoryForm"
+                              style="padding-right:10px;"
+                            >
+                              {{ showCategory() }}
+                            </span>
+                            <button class="ui red circular button" ng-click="textbooksCategoryForm.$show()" ng-hide="textbooksCategoryForm.$visible">
+                              Edit Category
+                            </button>
+                            <i class="warning circle link red icon" tooltip="Required"></i>
+                          </span>
+                          <span ng-show="!isEditing">
+                            {{ showCategory() }}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr ng-if="isFashion() || isHomeFurniture() || isElectronics()">
+                        <td class="four wide column">
+                          <span>Size</span>
+                        </td>
+                        <td ng-show="isAuthenticated()">
+                          <span ng-show="isEditing">
+                            <span
+                              editable-text="newListing.size"
+                              blur="submit"
+                              onbeforesave="checkField($data, 'size')"
+                              onaftersave="updateListing(newListing._id, newListing.size, 'size')"
+                              e-form="sizeForm"
+                              style="padding-right:10px;"
+                            >
+                              {{newListing.size | capitalize}}
+                            </span>
+                            <button class="ui red circular button ng-class: {'inverted' : !isFashion() || !isHomeFurniture() }" ng-click="sizeForm.$show()" ng-hide="sizeForm.$visible">
+                              <span>Edit Size</span>
+                            </button>
+                          </span>
+                          <span ng-show="!isEditing">
+                            {{newListing.size | capitalize}}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr ng-if="isFashion()">
+                        <td>Gender</td>
+                        <td ng-show="isAuthenticated()">
+                          <span ng-show="isEditing">
+                            <span
+                              editable-select="newListing.gender"
+                              blur="submit"
+                              e-ng-options="c.value as c.text for c in genders"
+                              onaftersave="updateListing(newListing._id, newListing.gender, 'gender')"
+                              e-form="genderForm"
+                              style="padding-right:10px;"
+                            >
+                              {{ showGender() }}
+                              <!-- {{newListing.size | capitalize}} -->
+                            </span>
+                            <button class="ui inverted red circular button" ng-click="genderForm.$show()" ng-hide="genderForm.$visible">
+                              Edit Gender
+                            </button>
+                          </span>
+                          <span ng-show="!isEditing">
+                            {{ showGender() }}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr ng-if="isHomeFurniture()">
+                        <td>Room &nbsp;&nbsp;&nbsp;<i class="info circle link icon" tooltip="i.e. Living Room; Bedroom"></i></td>
+                        <td ng-show="isAuthenticated()">
+                          <span ng-show="isEditing">
+                            <span
+                              editable-text="newListing.room"
+                              blur="submit"
+                              onbeforesave="checkField($data, 'room')"
+                              onaftersave="updateListing(newListing._id, newListing.room, 'room')"
+                              e-form="roomForm"
+                              style="padding-right:10px;"
+                            >
+                              {{newListing.room | capitalize}}
+                            </span>
+                            <button class="ui inverted red circular button" ng-click="roomForm.$show()" ng-hide="roomForm.$visible">
+                              <span>Edit Room</span>
+                            </button>
+                          </span>
+                          <span ng-show="!isEditing">
+                            {{newListing.room | capitalize}}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr ng-if="!isTextbooks()">
+                        <td class="two wide column">Colour</td>
+                        <td ng-show="isAuthenticated()">
+                          <span ng-show="isEditing">
+                            <span
+                              editable-text="newListing.colour"
+                              blur="submit"
+                              onbeforesave="checkField($data, 'colour')"
+                              onaftersave="updateListing(newListing._id, newListing.colour, 'colour')"
+                              e-form="colourForm"
+                              style="padding-right:10px;"
+                            >
+                              {{newListing.colour | capitalize}}
+                            </span>
+                            <button class="ui inverted red circular button" ng-click="colourForm.$show()" ng-hide="colourForm.$visible">
+                              Edit Colour
+                            </button>
+                          </span>
+                          <span ng-show="!isEditing">
+                            {{newListing.colour | capitalize}}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr ng-if="isFashion()">
+                        <td class="two wide column">Try On?</td>
+                        <td ng-show="isAuthenticated()">
+                          <span ng-show="isEditing">
+                            <span
+                              editable-select="newListing.ifTryOn"
+                              blur="submit"
+                              e-ng-options="c.value as c.text for c in tryOnOptions"
+                              onbeforesave="checkField($data, 'ifTryOn')"
+                              onaftersave="updateListing(newListing._id, newListing.ifTryOn, 'ifTryOn')"
+                              e-form="ifTryOnForm"
+                              style="padding-right:10px;"
+                            >
+                              {{ showTryOnOptions() }}
+                            </span>
+                            <button class="ui inverted red circular button" ng-click="ifTryOnForm.$show()" ng-hide="ifTryOnForm.$visible">
+                              Edit Try On
+                            </button>
+                          </span>
+                          <span ng-show="!isEditing">
+                            {{ showTryOnOptions() }}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </md-content>
+              </md-tab> 
+              <md-tab label="<i class='marker icon'></i>Location">
+                <md-content class="md-padding">
+
+                  <div class="ui center aligned basic segment">
+
+                    <div class="ui compact menu" ng-if="newListing.locations.length == 0" style="margin-bottom:8px;">
+                      <a class="item ui basic red label large" style="text-decoration:none;cursor:pointer;">
+                        <i class="marker icon"></i> 
+                        No locations selected.
+                      </a>
+                    </div>
+
+                    <div class="ui compact menu" ng-repeat="location in newListing.locations" style="margin-bottom:8px;">
+                      <a class="item ui basic red label large" style="text-decoration:none;cursor:pointer;" ng-click="changeLocation(location)">
+                        <i class="marker icon"></i> 
+                        {{location.name}}
+                        <div class="floating ui red label" style="cursor: pointer;" ng-click="removeLocation(location.name)"><i class="remove icon" style="margin: 0"></i></div>
+                      </a>
+                    </div>
+
+                    <div class="ui horizontal divider">
+                      
+                    </div>
+
+                    <div class="ui right icon action input">
+                      <i class="search icon"></i>
+                      <input 
+                        id="mySearch"
+                        places-auto-complete
+                        size=80
+                        ng-model="address" 
+                        on-place-changed="placeChanged(place)"
+                        placeholder="Enter a location...">
+                      <i class="remove circle link icon" ng-click="address = ''"></i>
+                    </div>
+                  </div>
+
+                  <br>
+
+                  <div class="myMap">
+                    <map map-lazy-load="http://maps.google.com/maps/api/js" center="{{mapCenter}}" zoom="15">
+                      <marker id="foo" position="{{mapCenter}}" animation="google.maps.Animation.DROP" on-click="showInfoWindow(event, 'info')"></marker>
+                        <info-window id="info" max-width="200" visible-on-marker="foo">
+                        <div ng-non-bindable="">
+                          
+                          <h5 id="firstHeading" class="firstHeading">{{place.name}}</h5>
+                          <button ng-show="isEditing" class="ui red circular button" ng-click="addLocation()">Add this location</button>
+
+                        </div>
+                      </info-window>
+                    </map>
+                  </div>
+
+                </md-content>
+              </md-tab>
+            </md-tabs>
+          </md-content>
+        </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- <div ng-include="'views/partials/edit.html'"></div> -->
+<!-- <div ng-include="'views/partials/offer.html'"></div> -->

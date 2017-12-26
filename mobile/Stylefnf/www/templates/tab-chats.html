@@ -1,0 +1,26 @@
+
+<ion-view view-title="Chats">
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      Chats
+    </div>
+  </ion-nav-title>
+  <ion-content ng-init="loadChats()">
+    <ion-refresher on-refresh="loadChats()" spinner="spiral" disable-pulling-rotation="true"></ion-refresher>
+    <ion-list>
+      <div ng-repeat="chat in chatThreads">
+        <ion-item class="item-avatar item-icon-right ng-class: {'unseen-notif' : isUnseenChat(chat)}" type="item-text-wrap" style="padding: 5px 0px 0px 0px" ng-click="goToChat(chat)">
+          <img ng-src="{{getParticipantPic(chat.participants)}}">
+          <h2>{{getParticipantName(chat.participants)}}</h2>
+          <p>{{chat.lastMessage | limitTo:50}} {{chat.lastMessage.length > 50 ? "..." : ""}} </p>
+          <p>{{chat.lastUpdated | amCalendar}}</p>
+          <i class="icon ion-chevron-right icon-accessory"></i>
+
+          <ion-option-button class="button-assertive" ng-click="remove(chat)">
+            Delete
+          </ion-option-button>
+        </ion-item>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-view>

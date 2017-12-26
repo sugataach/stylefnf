@@ -1,0 +1,25 @@
+<ion-view>
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      <i class="icon ion-chevron-left assertive" ng-click="goBack()"></i> &nbsp; About
+    </div>
+  </ion-nav-title>
+  
+  <ion-content scroll="true">
+    <form novalidate>
+			<div class="categories">
+			 	<div class="row">
+				  <div class="col" ng-click="goTo('gettingStarted')"> 
+				  	<i class="ion-plus-circled" ></i> <span>Getting Started</span>
+				  </div>
+				  <div class="col" ng-click="goTo('howToList')">
+				  	<i class="ion-tshirt"></i> <span> How To List </span>
+				  </div>
+				  <div class="col" ng-click="goTo('howToBuy')">
+				  	<i class="ion-social-usd"></i> <span> How To Buy </span>
+				  </div>
+				</div>
+			</div>
+	 </form>
+  </ion-content>
+</ion-view>

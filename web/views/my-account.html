@@ -1,0 +1,108 @@
+<view-title>My Account - Stylefnf</view-title>
+
+
+<div class="container detail-form">
+
+  <div class="detail-form panel panel-default margin-top">
+
+    <div class="module top" style="height:100px;">
+      <h2>
+        Account Settings
+      </h2>
+    </div>
+
+    <div class="ui stackable centered grid container" style="padding-top:40px;padding-bottom:15px;">
+
+      <div class="six wide center aligned column">
+        <div class="ui centered link card" style="border:none;">
+          <a class="image" href="">
+            <img src="{{$root.currentUser.profilePictures[0]}}">
+          </a>
+          <div class="content">
+            <!-- <a class="header" href="#">{{currentUser.firstName}} {{currentUser.lastName}}</a> -->
+            <div class="fileUpload ui red fluid button huge" style="cursor: pointer;">
+                <span style="cursor: pointer;"><i class="photo link icon"></i> Upload Photo<input type="file" class="upload" onchange="angular.element(this).scope().grabImage(this.files)" accept="image/*"/ style="cursor: pointer;"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="eight wide column">
+        <div class="account-container">
+          <h1 class="ui dividing header">
+            Account Info
+            <span ng-hide="clickSave" class="ui basic red label" style="cursor: pointer;" ng-click="clickEdit()">Edit </span>
+            <!-- <span ng-show="clickSave" class="ui green label" style="cursor: pointer;" ng-click="">Save </span> -->
+          </h1>
+
+          <form name="userForm" class="ui center aligned form">
+            <div class="sixteen wide field ng-class: { 'disabled' : !isEditing, 'error' : currentUser.firstName.$dirty && currentUser.firstName.$invalid } " style="padding-top: 10px;">
+              <label style="font-size:16px;line-height: 1.4285em;font-weight: 600;">First Name</label>
+              <div class="ui left icon input massive account-info">
+                <input required ng-model="currentUser.firstName" type="text" name="first-name" placeholder="First Name" ng-change="isUpdated()">
+                <i class="user icon"></i>
+              </div>
+            </div>
+            <div class="sixteen wide field ng-class: { 'disabled' : !isEditing, 'error' : currentUser.lastName.$dirty && currentUser.lastName.$invalid }">
+              <label style="font-size:16px;line-height: 1.4285em;font-weight: 600;">Last Name</label>
+              <div class="ui left icon input massive account-info">
+                <input required ng-change="isUpdated()" ng-model="currentUser.lastName" type="text" name="last-name" placeholder="Last Name">
+                <i class="user icon"></i>
+              </div>
+            </div>
+            <div class="sixteen wide field ng-class: { 'disabled' : !isEditing, 'error' : userForm.email.$dirty && userForm.email.$invalid }">
+              <label style="font-size:16px;line-height: 1.4285em;font-weight: 600;">Email <span class="label-meta">(Pick the address you check often...)</span></label>
+              <!-- <label style="font-size:16px;line-height: 1.4285em;font-weight: 600;">Email</label> -->
+              <div class="ui left icon input massive account-info">
+                <input ng-change="isUpdated()" ng-model="currentUser.email" type="email" name="email" placeholder="Email" required>
+                <i class="mail icon"></i>
+              </div>
+            </div>
+            <div class="sixteen wide field ng-class: { 'disabled' : !isEditing, 'error' : userForm.password.$dirty && userForm.password.$invalid }">
+              <label style="font-size:16px;line-height: 1.4285em;font-weight: 600;">New Password</label>
+              <div class="ui left icon input massive account-info">
+                <input required ng-change="isUpdated()" type="password" id="password" name="password" ng-model="currentUser.password" placeholder="Password" equals="{{currentUser.confirmPassword}}" required>
+                <i class="key icon"></i>
+                <div ng-messages="userForm.password.$error" style="color:red" role="alert">
+                </div>
+              </div>
+            </div>
+            <div class="sixteen wide field ng-class: { 'disabled' : !isEditing, 'error' : userForm.password.$dirty && userForm.password.$invalid }">
+              <label style="font-size:16px;line-height: 1.4285em;font-weight: 600;">Confirm New Password</label>
+              <div class="ui left icon input massive account-info">
+                <input required ng-change="isUpdated()" type="password" id="confirmPassword" name="confirmPassword" ng-model="currentUser.confirmPassword" placeholder="Confirm Password" equals="{{currentUser.confirmPassword}}" required>
+                <i class="key icon"></i>
+                <div ng-messages="userForm.confirmPassword.$error" style="color:red" role="alert">
+                  <div ng-message="equals">Your passwords don't match.</div>
+                </div>
+              </div>
+            </div>
+            <div class="sixteen wide disabled field" style="margin-bottom: -1%;">
+              <label style="font-size:16px;line-height: 1.4285em;font-weight: 600;">College</label>
+              <div class="ui left icon input massive account-info">
+                <input ng-change="isUpdated()" ng-model="$root.currentUser.education" type="text" readonly="" name="education" placeholder="College">
+                <i class="student icon"></i>
+              </div>
+            </div>
+            <div class="sixteen wide field">
+              <md-radio-group layout="row" ng-change="isUpdated()" ng-model="currentUser.gender" class="md-primary" style="font-size: 20px;">
+                  <md-radio-button ng-repeat="d in genderOptions"
+                                   ng-value="d.value"
+                                   ng-disabled="!isEditing" >
+                      {{ d.label }}<br/>
+                  </md-radio-button>
+              </md-radio-group>
+            </div>
+            <div class="centered column">
+              <button ng-disabled="!profileIsComplete()" ng-show="clickSave" ng-click="updateProfile()" class="ui green left icon button massive">
+                <i class="save icon"></i>
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+    </div>
+
+  </div>
+
+</div>

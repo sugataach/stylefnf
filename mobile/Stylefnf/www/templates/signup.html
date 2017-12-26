@@ -1,0 +1,119 @@
+<ion-view hide-nav-bar="true">
+    <ion-content scroll="true">
+      <form novalidate>
+        <div class="signup-container">
+          <div class = "col header-pic">
+             <img src="./img/stylefnf.png"/>
+          </div>
+
+          <script id="email-modal.html" type="text/ng-template">
+            <ion-modal-view>
+              <ion-header-bar class="bar bar-header bar-assertive">
+                <h1 class="title">
+                  <button class="button icon-left ion-chevron-left adjust-btn" ng-click="closeModal()"></button>
+                  Campus Emails
+                </h1>
+              </ion-header-bar>
+              <ion-content scroll="true" class="checkout-has-header">
+                <ion-list>
+                  <ion-item ng-repeat="item in whiteList | filter: '!@'">
+                    @{{item}}
+                  </ion-item>
+                </ion-list>
+              </ion-content>
+            </ion-modal-view>
+          </script>
+
+          <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" ng-init="lockSlide()">
+            <ion-slide>
+              <div class="minor-padding"></div>
+              <div ng-show="emailNotValid" class="text-center assertive">
+                Please enter a valid school email.
+              </div>
+              <div class="col input-col">
+                <div class="item item-input-inset form-input">
+                  <label class="item-input-wrapper">
+                    <input class="error" ng-change="emailChange()" type="email" ng-model="firstpage.email" placeholder="School Email" required>
+                  </label>
+                </div>
+              </div>
+              <div class="col input-col">
+                <div class="item item-input-inset form-input">
+                  <label class="item-input-wrapper">
+                    <input ng-change="passChange(password)"  ng-model="firstpage.password" type="password" placeholder="Password">
+                  </label>
+                </div>
+              </div>
+              <div class="col input-col" style="margin-bottom: 60px;">
+                <div class="item item-input-inset form-input">
+                  <button class="button button-assertive" ng-disabled="!isValidEmailPassword()" ng-click="nextSlide()">
+                    Next
+                    &nbsp;
+                    <i class="ion-chevron-right"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="item item-input-inset form-input">
+                <button class="button button-outline button-assertive icon-left ion" ng-click="openModal()">
+                  <i class="ion-ios-location"></i>
+                  &nbsp;
+                  Is my campus available?
+                </button>
+              </div>
+            </ion-slide>
+
+            <ion-slide>
+              <div class="col input-col">
+                <img class="signup-pic" src="https://s3-us-west-2.amazonaws.com/stylefnf.static/default-user.png">
+              </div> 
+              <div class="major-padding"></div>
+              <div class="col input-col">
+                <div class="item item-input-inset form-input" >
+                  <label class="item-input-wrapper">
+                    <input ng-change="" ng-model="secondpage.firstName" type="text" placeholder="First Name" required>
+                  </label>
+                </div>
+              </div>
+              <div class="col input-col">
+                <div class="item item-input-inset form-input">
+                  <label class="item-input-wrapper" >
+                    <input ng-change="" ng-model="secondpage.lastName" type="text" placeholder="Last Name" required>
+                  </label>
+                </div>
+              </div>
+              <!-- <div class="col input-col">
+                <div class="item item-input-inset form-input">
+                  <label class="item item-input item-select">
+                    <div  class="input-label">
+                      Gender
+                    </div>
+                    <select class="form-control" id="select" ng-model="genderStatuses.selectedOption" ng-options="option.label for option in genderStatuses.availableOptions track by option.val" required></select>
+                  </label>
+                </div>
+              </div> -->
+              <div class="col input-col">
+                <div class="item item-input-inset form-input">
+                  <button class="button button-balanced" ng-disabled="!hasName()" ng-click="signUp()">
+                    Register
+                    &nbsp;
+                    <i class="ion-checkmark-circled"></i>
+                  </button>
+                </div>
+                <div ng-show="isSending" class="ui active centered inline loader"></div>
+              </div>
+            </ion-slide>
+          </ion-slide-box>
+
+        </div>
+      </form>
+    </ion-content>
+    <ion-footer-bar ng-show="showFooter" align-title="center" class="authenticationFooter bar-assertive">
+      <div class="title">
+        <a class="signup-exit-login" href="#/login">
+          <span class="signup-exit">Already have an account?</span>
+          Login
+        </a>
+      </div>
+    </ion-footer-bar>
+</ion-view>

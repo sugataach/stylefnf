@@ -1,0 +1,150 @@
+<view-title>Signup - Stylefnf</view-title>
+
+<div class="container">
+
+  <div class="ui two column grid">
+    <div class="column">
+      <div class="center-form panel">
+        <div class="panel-body">
+          <h4 class="text-center"><i class="ion-person-add" style="color: red;"></i> Sign up</h4>
+          <p style="text-align:left;margin-left:10px;">To register for Stylefnf, fill out the following fields. You will have a chance to complete your profile once you have registered.</p>
+          <form method="post" ng-submit="signup()" name="signupForm">
+
+            <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.firstName.$invalid && signupForm.firstName.$dirty }">
+              <input autofocus="autofocus" class="form-control input-lg" type="text" id="firstName" name="firstName" ng-model="firstName" placeholder="First Name" required>
+              <span class="ion-android-person form-control-feedback"></span>
+            </div>
+
+            <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.lastName.$invalid && signupForm.lastName.$dirty }">
+              <input class="form-control input-lg" type="text" id="lastName" name="lastName" ng-model="lastName" placeholder="Last Name" required>
+              <span class="ion-android-person form-control-feedback"></span>
+            </div>
+
+            <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.email.$invalid && signupForm.email.$dirty }">
+              <input class="form-control input-lg" type="text" id="email" name="email" ng-change="checkEmail()" ng-model="email" placeholder="School Email" required>
+              <span class="ion-at form-control-feedback"></span>
+              <div ng-messages="signupForm.email.$error" style="color:red" role="alert">
+                <div ng-message="email">You must enter a valid email.</div>
+              </div>
+            </div>
+
+            <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.password.$invalid && signupForm.password.$dirty }">
+              <input class="form-control input-lg" type="password" id="password" name="password" ng-model="password" placeholder="Password" equals="{{confirmPassword}}" required>
+              <span class="ion-key form-control-feedback"></span>
+              <div ng-messages="signupForm.password.$error" style="color:red" role="alert">
+              </div>
+            </div>
+
+           <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.confirmPassword.$invalid && signupForm.confirmPassword.$dirty }">
+              <input class="form-control input-lg" type="password" id="confirmPassword" name="confirmPassword" ng-model="confirmPassword" placeholder="Confirm Password" equals="{{password}}" required>
+              <span class="ion-key form-control-feedback"></span>
+              <div ng-messages="signupForm.confirmPassword.$error" style="color:red" role="alert">
+                <div ng-message="equals">Your passwords don't match.</div>
+              </div>
+            </div>
+
+<!--             <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.campusStatus.$error && signupForm.campusStatus.$dirty }">
+              <select class="form-control" id="select" ng-model="campusStatuses.selectedOption" ng-options="option.val for option in campusStatuses.availableOptions track by option.val" required></select>
+              <span class="ion-university form-control-feedback"></span>
+            </div> -->
+
+            <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.genderStatus.$error && signupForm.genderStatus.$dirty }">
+              <select class="form-control" id="select" ng-model="genderStatuses.selectedOption" ng-options="option.label for option in genderStatuses.availableOptions track by option.val" required></select>
+              <span class="ion-person-stalker form-control-feedback"></span>
+            </div>
+
+            <button ng-hide="isSending" ng-click="signUp()" type="submit" class="btn btn-block btn-primary" ng-disabled="signupForm.$invalid">Sign up</button>
+            <br/>
+
+            <div ng-show="isSending" class="ui active centered inline loader"></div>
+
+            <p ng-hide="isSending" class="text-center text-muted"><small>Already have an account? <a href="#/login">Log in now</a></small></p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="column" style="">
+      <div class="container detail-form pad-top">
+        <div class="detail-form panel signup-container panel-default">
+          <div class="panel-body">
+            
+            <h5 style="font-weight:bold">
+              <img class="img-rounded" src="../../img/stylefnf_icon.png" style="height:50px;margin-right:10px;">
+              <span style="color:#FF2D54">Buy, Sell, Discover </span> on campus.
+            </h5>
+
+            <div class="row h6 signup-reasons reasons" style="text-align:left;margin-left:20px;margin-bottom:40px;font-size:15px;margin-top:40px;">
+              <p>
+                Stylefnf is an online marketplace that connects students through social networks at colleges.
+              </p>
+              <p>
+                You can use Stylefnf to:
+
+                <div class="ui list">
+                  <a class="item">
+                    <i class="dollar red icon"></i>
+                    <div class="content">
+                      <div class="header">Buy what you love</div>
+                      <div class="description">Find your favourite brands discounted up to 90% all year round.</div>
+                    </div>
+                  </a>
+                  <a class="item">
+                    <i class="ion-tshirt red icon"></i>
+                    <div class="content">
+                      <div class="header">Sell what you own</div>
+                      <div class="description">Earn <span style="font-weight:bold;color:#FF2D54">$$$</span> by listing your unused items.</div>
+                    </div>
+                  </a>
+                  <a class="item">
+                    <i class="lock red icon"></i>
+                    <div class="content">
+                      <div class="header">Shop with confidence</div>
+                      <div class="description">Buy and sell with your friends, classmates, and community.</div>
+                    </div>
+                  </a>
+                </div>
+              </p>
+<!--               <p>
+                Register now:
+              </p> -->
+            </div>
+          
+            <div class="row">
+              <div class="ui four column grid">
+                <div class="column">
+                  <img src="img/UofT_logo.jpg" alt="University of Toronto" style="height:100px;">
+                  <p style="text-align:center;font-size:14px;">Register using your <b>@mail.utoronto.ca</b> email.</p>
+                </div>
+                <div class="column">
+                  <img src="img/OCAD_Logo.png" alt="OCAD" style="height:80px;opacity:.5;margin-bottom:20px;">
+                  <p>Coming Soon!</p>
+                </div>
+                <div class="column">
+                  <img src="img/RU_logo.png" alt="Ryerson University" style="height:80px;opacity:.5;margin-bottom:20px;">
+                  <p style="text-align:center;font-size:14px;">Coming Soon!</p>
+                </div>
+                <div class="column">
+                  <img src="img/george-brown.png" alt="George Brown" style="height:80px;opacity:.5;margin-bottom:20px;">
+                  <p style="text-align:center;font-size:14px;">Coming Soon!</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row" style="margin-top:40px;">
+              <div class="ui massive buttons">
+                <button class="ui red button" ng-click="goToLink('help')">Help Me!</button>
+                <div class="or"></div>
+                <button class="ui positive button" ng-click="goToLink('login')">I already have an account<i class="right arrow icon"></i></button>
+              </div>
+            </div>
+
+          </div>    
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- <div ng-include="'views/footer.html'"></div> -->

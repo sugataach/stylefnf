@@ -1,0 +1,130 @@
+<md-dialog ng-cloak>
+<!--   <md-toolbar>
+    <div class="md-toolbar-tools" layout="row">
+      <h2 class="md-toolbar-tools">{{$root.viewListingDetail.title}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="answer()">
+        <md-icon md-svg-src="../../img/ic_close_24px.svg"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar> -->
+  <md-dialog-content>
+
+          <div class="ui message" style="margin: 0;padding: 0;">
+
+            <div class="ui divided items">
+              
+              <div class="item">
+                
+                <div class="image" style="width: 37vw;height: auto;background:white;">
+                  <slick dots="false" style="margin:0;">
+                    <div ng-if="$root.viewListingDetail.imageUrls.length" ng-repeat="image_link in $root.viewListingDetail.imageUrls">
+                      <a href="">
+                        <img class="make-pic-fit img-responsive" data-lazy="{{image_link}}">
+                      </a>
+                    </div>
+
+                    <div ng-if="!$root.viewListingDetail.imageUrls.length">
+                      <img class="browse-slick" src="../img/pic-placeholder.png">
+                    </div>
+                  </slick>
+                </div>
+
+
+                <div class="content featured-post centred" style="padding: 10px 40px;background-color: white;">
+
+                  <a class="header" ng-click="goToLink($root.viewListingDetail._id, 'post')" style="margin-top:10px;font-size:27px;line-height: 4vh;">{{$root.viewListingDetail.title | capitalize}}</a>
+
+                  <div class="meta" style="margin-top: 10px; font-size: 1.4em">
+                    <span class="cinema">{{$root.viewListingDetail.brand | capitalize}}</span>
+                  </div>
+                  <div class="meta" style="margin-top: 10px;">
+                    <span style="font-size: 12px;">Posted <span am-time-ago="$root.viewListingDetail.created"></span></span>
+                  </div>
+                  <div class="description" style="margin-top: 40px;margin-bottom: 40px;min-width:28vw;">
+                    <p>
+                      {{$root.viewListingDetail.description}}
+                    </p>
+                  </div>
+                  
+                  <div style="">
+                    <div class="ui red button massive centered" style="cursor:pointer;padding:10px;text-align: center;margin-bottom: 20px;float:left;" ng-click="goToLink($root.viewListingDetail._id, 'post')">
+                      View Listing <i class="icon chevron right"></i>
+                    </div>  
+                    <span class="pull-right" style="float:right;margin-bottom:4%;">
+                      <a href="" class="right floated ui red basic massive label ng-class: {'do-not-show' : $root.viewListingDetail.price == 0}" style="color:#FF2D55;font-size:25px;cursor:pointer;">${{$root.viewListingDetail.price}}</a>
+                      <a href="" class="right floated ui red basic massive label ng-class: {'do-not-show' : $root.viewListingDetail.price != 0}" style="color:#FF2D55;font-size:25px;cursor:pointer;">Free!</a>
+                    </span>
+                  </div>
+
+                  <table class="ui definition table">
+                    <tbody>
+                      <tr>
+                        <td class="four wide column" style="width: 20%;">Return Policy</td>
+                        <td>
+                          <span>
+                            {{ showReturn($root.viewListingDetail) }}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="four wide column">Condition</td>
+                        <td>
+                          <span>
+                            {{ showCondition($root.viewListingDetail.condition) }}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr ng-if="$root.viewListingDetail.macro == 'fashion' || $root.viewListingDetail.macro == 'homeFurniture'">
+                        <td class="five wide column">
+                          <span>Size</span>
+                        </td>
+                        <td>
+                          <span>
+                            {{$root.viewListingDetail.size | capitalize}}
+                          </span>
+                        </td>
+                      </tr>
+<!--                             <tr ng-if="isFashion()">
+                        <td class="four wide column">Gender</td>
+                        <td>
+                          <span>
+                            {{ showGender($root.viewListingDetail) }}
+                          </span>
+                        </td>
+                      </tr> -->
+<!--                             <tr ng-if="$root.viewListingDetail.macro != 'textbooks'">
+                        <td class="two wide column">Colour</td>
+                        <td>
+                          <span>
+                            {{$root.viewListingDetail.colour | capitalize}}
+                          </span>
+                        </td>
+                      </tr> -->
+                      <tr ng-if="$root.viewListingDetail.macro == 'fashion'">
+                        <td class="four wide column">Try On?</td>
+                        <td>
+                          <span>
+                            {{ showTryOnOptions($root.viewListingDetail) }}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="two wide column">Status</td>
+                        <td>
+                          <span>
+                            {{$root.viewListingDetail.status | capitalize}}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+              </div>
+            </div>
+
+            </div>
+
+  </md-dialog-content>
+</md-dialog>

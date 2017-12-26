@@ -1,0 +1,56 @@
+<div class="aboutPage">
+  <ion-view>
+    <ion-nav-title>
+       <span style="color: #FF2D54;"> {{gettingStarted.navTitle}} </span>
+    </ion-nav-title>
+    <ion-nav-bar align-title="center">
+    <ion-nav-buttons side="left">
+      <button class="button button-positive button-clear no-animation"
+              ng-click="startTutorial()" ng-show="!slideIndex">
+        Back
+      </button>
+      <button class="button button-positive button-clear no-animation"
+              ng-click="previous()" ng-show="slideIndex > 0">
+        Previous 
+      </button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right"> 
+      <button class="button button-positive button-clear no-animation"
+              ng-click="next()" ng-show="slideIndex != 2">
+        Next
+      </button>
+      <!--<button class="button button-positive button-clear no-animation"
+            ng-click="startTutorial()" ng-show="slideIndex == 2">
+      Start using MyApp
+    </button>-->
+    </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <ion-slide-box on-slide-changed="slideChanged(index)">
+      <ion-slide>
+        <div class="wrapper-step">
+          <img src="../img/click-on-the-heart.svg">
+          <span> Click Sign Up and fill in the information. </span>
+        </div>
+     
+      </ion-slide>
+      <ion-slide>
+        <div class="wrapper-step">
+          <img src="../img/close-envelope.svg">
+          <span> Check your email to activate your account.
+            <div id="list">
+              <li>Be sure to check your junk or clutter tab</li>
+              <li>Verified users are one of the features we pride ourselves on.</li>
+            </div>
+           </span>
+        </div>
+      </ion-slide>
+      <ion-slide>
+        <div class="wrapper-step">
+          <img src="../img/running-at-finish-line.svg">
+          <span> Add a profile picture, review to make sure all the information is correct and click Finish. </span>
+        </div>
+      </ion-slide>
+    </ion-slide-box>
+  </ion-view>
+</div>

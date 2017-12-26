@@ -1,0 +1,765 @@
+<view-title>Stylefnf</view-title>
+
+<div class="home-container" ng-cloak>
+
+  <div class="home-intro" ng-show="isAuthenticated()" style="background-color: #f1f3fa;">
+    <div class="container detail-form" style="background-color: #f1f3fa;padding-bottom:40px;">
+      <div class="detail-form panel panel-default">
+
+        <div class="module top" style="height:140px;" >
+          <h2>Here's what's new, {{$root.currentUser.firstName}}</h2>
+        </div>
+
+        <!-- <div class="ui stackable center aligned grid container" style="padding-top:40px;padding-bottom:15px;">
+          <div class="feature alternate ui stripe vertical segment">
+            <div class="ui three column center aligned relaxed stackable grid container">
+              <div class="row">
+                <div class="column" style="visibility:hidden;">
+                  <h2 class="ui huge icon header">
+                    <i class="fire red circular icon" style="margin-bottom: 25px;"></i>
+                    U of T Clothing Swap
+                  </h2>
+                  <p style="font-size: 14px;line-height: 1.6;flex: 1 0 auto;margin: 0.5em 0em 2.5em;">Cheese! Let's get to know each other :)<br> Customize your profile with a snap.</p>
+                  <a class="ui fluid huge red button" href="#/browse/term=c4c"><i class="cloud upload link icon"></i>Check out the listings</a>
+                </div>
+                <div class="column" style="bor">
+                  <h2 class="ui huge icon header">
+                    <i class="fire red circular icon" style="margin-bottom: 25px;"></i>
+                    U of T Clothing Swap
+                  </h2>
+                  <p style="font-size: 14px;line-height: 1.6;flex: 1 0 auto;margin: 0.5em 0em 2.5em;">We're helping out our friends at Campaign for Community with their clothing swap event - there's plenty of amazing items! Check them out now.</p>
+                  <a class="ui fluid huge red button" href="#/browse/term=c4c">Check out the listings<i class="chevron right upload link icon"></i></a>
+                </div>
+                <div class="column" style="visibility:hidden;">
+                  <h2 class="ui huge icon header">
+                    <i class="search red circular icon" style="margin-bottom: 25px;"></i>
+                    3. Discover
+                  </h2>
+                  <p style="font-size: 14px;line-height: 1.6;flex: 1 0 auto;margin: 0.5em 0em 2.5em;">
+                    <b>Buy what you love</b> - find your favourite brands discounted up to 90% all year round.
+                  </p>
+                  <a href="#/browse" class="ui fluid red basic huge button"><i class="search link icon"></i>Start Browsing</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+      </div>
+    </div>
+  </div>
+
+  <div ng-if="!isAuthenticated()" class="carousel" ng-cloak>
+    <slick fade="true" infinte="true" next-arrow=".slick-right-arrow" prev-arrow=".slick-left-arrow" autoplay="true" autoplaySpeed="20000">
+      <div>
+        <!-- <div class="black-background-overlay"></div> -->
+        <img class="img-responsive" src="img/main_page2.png" style="width:100px;height:auto;">
+        <div class="carousel-caption">
+          <h1 style="color: #ff4265;">Buy, sell, discover fashion & furniture on campus.</h1>
+          <!-- <p ng-style="{{slide.style}}">{{slide.text}}</p> -->
+          <a ng-href="#/signup" class="greenbutton">Sign Up Now</a>
+        </div>
+      </div>
+      <div>
+        <div class="black-background-overlay"></div>
+        <img class="img-responsive" src="img/mega_uoftCOM.jpg" style="width:100px;height:auto;">
+        <div class="carousel-caption">
+          <h1 style="">Now available for U of T students.</h1>
+          <!-- <p ng-style="{{slide.style}}">{{slide.text}}</p> -->
+          <a ng-href="#/signup" class="greenbutton">Get Started</a>
+        </div>
+      </div>
+    </slick>
+
+    <a href="" class="slick-left-arrow">
+      <span class="fa fa-angle-left fa-5x"></span>
+    </a>
+
+    <a href="" class="slick-right-arrow">
+      <span class="fa fa-angle-right fa-5x"></span>
+    </a>
+  </div>
+
+  <div class="whats-popular" style="border-bottom: 1px solid #d9d9de;padding-bottom: 50px;">
+    <div class="container">
+      <div class="whats-popular-header">
+        <ul class="list-inline">
+          <li>
+            <h2><i class="diamond icon" style="color:#ff3158;font-size:30px;"></i> Featured Listing</h2>
+          </li>
+        </ul>
+        <!-- <p>Listings we love.</p> -->
+      </div>
+
+      <div class="row">
+        <div class="container">
+          <div class="ui message" style="margin: 0;padding: 0;">
+            <div ng-repeat="post in featuredPost" class="ui divided items">
+              <div class="item" style="height:389px;">
+                <div class="image leftBorder" style="width: 50%">
+                  <slick dots="false" style="margin:0;">
+                    <div ng-repeat="image_link in post.imageUrls">
+                      <a ng-click="goToDetail($event, post)" href="">
+                        <img class="make-pic-fit" style="width:100%;height:389px;overflow:hidden;" data-lazy="{{image_link}}">
+                      </a>
+                    </div>
+                  </slick>
+                </div>
+
+                <div class="content featured-post centred" style="padding: 10px 40px;background-color: white;border-width: 1px;border-style: solid;border-color: #d9d9de;">
+                  <div class="ui two column centered grid" style="margin-bottom: 20px;">
+                    <div class="column" style="text-align: center;padding-top: 0;">
+                      <a class="ui grey label" style="font-size: 11.5px;"><i class="bullseye icon"></i>Listing of the Week</a>
+                    </div>
+                  </div>
+
+                  <a class="pull-left" ng-href="#/profile/{{post.seller_id}}" style="margin-right:20px">
+
+                    <hovercard 
+                      hover-tmpl-url="{{hovercardURL}}"
+                      placement="topRight"
+                      hover-top-amount="-16em"
+                      ng-mouseover="hoverProfileIn(post.seller)"
+                      ng-mouseleave="hoverProfileOut(post.seller)"
+                      >
+                      <img class="img-responsive img-rounded" ng-src="{{post.seller.profilePictures[0]}}" style="max-height:70px;max-width:75px;">
+                    </hovercard>
+                    
+                    <p style="text-align:center;font-weight: 600;font-size: 1.05em;">{{post.seller.firstName}}</p>
+                  </a>
+
+                  <a class="header" ng-click="goToLink(post._id, 'post')" style="margin-top:10px;font-size:27px;">{{post.title | limitTo:25 | capitalize}}{{post.title.length > 25? "..." : ""}}</a>
+
+                  <div class="pull-right" style="margin-top:20px;">
+                    <div ng-if="isAuthenticated()" class="" style="margin-top:-15px;margin-right:-10px;">
+                        <button class="circular ui icon button large ng-class:{ 'red': myLike(post.likes) }" ng-click="likePost(post, 'featured')">
+                        <i class="heart icon"></i>
+                      </button>
+                      <a class="like-label ng-class:{ 'red': myLike(post.likes) }" tooltip="{{usersLiked(post.likes)}}" ng-click="showLiked($event, post)">
+                        {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                      </a>
+                    </div>
+
+                    <div ng-if="!isAuthenticated()" style="margin-top:-15px;margin-right:-10px;">
+                      <button class="circular ui icon button large">
+                        <i class="heart icon"></i>
+                      </button>
+                      <a href="#/login" class="like-label" tooltip="Login to continue">
+                        {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class="meta" style="margin-top: 10px; font-size: 1.4em">
+                    <span class="cinema">{{post.brand | limitTo:25 | capitalize}}{{post.brand.length > 25? "..." : ""}}</span>
+                  </div>
+                  <div class="meta" style="margin-top: 10px;">
+                    <span style="font-size: 12px;">Posted <span am-time-ago="post.created"></span></span>
+                  </div>
+                  <div class="description" style="margin-top: 40px;margin-bottom: 40px;">
+                    <p>
+                      {{post.description | limitTo:50}}{{post.description.length > 50? "..." : ""}}
+                      <span class="pull-right" style="padding-top:125px;cursor:pointer;">
+                        <a ng-show="post.price != 0" href="" class="right floated ui red basic massive label" style="color:#FF2D55;font-size:25px;cursor:pointer;">${{post.price}}</a>
+                        <a ng-show="post.price == 0" href="" class="right floated ui red basic massive label" style="color:#FF2D55;font-size:25px;cursor:pointer;">Free!</a>
+                      </span>
+                    </p>
+                  </div>
+
+                  <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;text-align: center;margin-bottom: 20px;" ng-click="goToDetail($event, post)">
+                    Quick Look
+                  </div>
+
+                  <div class="extra" style="margin-top: 20px;">
+
+                    <a ng-href="#/browse/macro={{post.macro}}&category={{post.category}}" class="ui red basic label large">
+                      {{post.category | capitalize}}
+                    </a>
+
+                    <div class="ui basic label large">
+                      {{showCondition(post.condition) | capitalize}}
+                    </div>
+
+                    <a ng-if="post.macro == 'fashion'" ng-href="#/browse/macro={{post.macro}}&gender={{post.gender}}" class="ui basic red label large">
+                      {{post.gender}}
+                    </a>
+    <!--                     <div class="ui basic label large">
+                      Size: {{post.size}}
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>  
+    </div>
+  </div>
+
+
+
+  <!-- Right now we don't have a way to recommend things to people, this was just copied from what's trending -->
+<!--   <div class="whats-popular" style="padding-bottom: 40px;" ng-if="isAuthenticated()">
+    <div class="container">
+        <div class="whats-popular-header">
+                <ul class="list-inline">
+                    <li>
+                        <h2><i class="star icon" style="color:#ff3158;font-size:30px;"></i> Recommended for You</h2>
+                    </li>
+                </ul>
+          <p>Here's what we think you might be interested in.</p>
+        </div>
+        
+        <div class="row">
+
+          <div ng-if="trendingPosts.length == 0">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4 centered ui massive message" style="box-shadow:none;margin-bottom:50px;">
+              <h1 class="ui header">
+                <i class="frown icon"></i>
+                <div class="content">
+                  Sorry, no listings were found.
+                </div>
+              </h1>
+            </div>
+          </div>
+
+          <div ng-if="trendingPosts">
+            <div ng-repeat="post in trendingPosts" class="ui col-lg-4 browse-view-2">
+              <div class="ui fluid card ng-class:{ 'card-sold': post.status == 'Held' }">
+                <div class="content">
+                  <span class="right floated">
+                    <div ng-if="isAuthenticated()">
+                      <button class="circular ui icon button large ng-class:{ 'red': myLike(post.likes), 'basic': !myLike(post.likes) }" ng-click="likePost(post, 'trending')">
+                        <i class="heart icon"></i>
+                      </button>
+                      <a class="like-label ng-class:{ 'red': myLike(post.likes) }" tooltip="{{usersLiked(post.likes)}}" ng-click="showLiked($event, post)">
+                        {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                      </a>
+                    </div>
+                    <div ng-if="!isAuthenticated()">
+                      <button class="circular basic ui icon button large">
+                        <i class="heart icon"></i>
+                      </button>
+                      <a href="#/login" class="like-label" tooltip="Login to continue">
+                        {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                      </a>
+                    </div>
+                  </span>
+                  <div class="right floated meta"></div>
+                  <hovercard 
+                    hover-tmpl-url="{{hovercardURL}}"
+                    placement="bottom"
+                    hover-bottom-amount="3.5em"
+                    ng-mouseover="hoverProfileIn(post.seller)"
+                    ng-mouseleave="hoverProfileOut(post.seller)"
+                    >
+                    <a href="#/profile/{{post.seller_id}}" class="ui big basic image label mylabel" style="font-weight:600;border:none;">
+                      <img class="avatar" ng-src="{{post.seller.profilePictures[0]}}">
+                      {{post.seller.firstName}}
+                    </a>
+                  </hovercard>
+                </div>
+                <div class="image"> -->
+
+                  <!-- Put for HOT items - those with a certain amount of views -->
+                  <!-- <div ng-if="post.status == 'Available' && post.offers.length > 0" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                    <i class="star icon"></i> {{post.offers.length}} {{post.offers.length === 1? "offer" : "offers"}}
+                  </div>
+
+                  <div ng-if="post.status != 'Available'" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                    <i class="selected radio icon card-icon-space"></i> On Hold
+                  </div>
+
+                  <slick ng-if="post.imageUrls.length" dots="false" style="margin:0;">
+                    <div ng-repeat="image_link in post.imageUrls">
+                      <a ng-click="goToDetail($event, post)" href="">
+                        <img class="browse-slick" data-lazy="{{image_link}}">
+                      </a>
+                    </div>
+                  </slick>
+
+                  <div ng-if="!post.imageUrls.length">
+                    <a ng-click="goToDetail($event, post)" href="">
+                      <img class="browse-slick" src="../img/pic-placeholder.png">
+                    </a>
+                  </div>
+                </div>  
+                <div class="content card-content" ng-click="goToDetail($event, post)">
+                  <a ng-show="post.price != 0" href="#/detail/{{post._id}}" class="right floated ui red basic massive label"><span style="color:#FF2D55">${{post.price}}</span></a>
+                  <a ng-show="post.price == 0" href="#/detail/{{post._id}}" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                  <div class="header"><a href="#/detail/{{post._id}}">{{post.title | limitTo:25 | capitalize}}{{post.title.length > 25? "..." : ""}}</a><span ng-if="post.status == 'Held'" style="color: red"> (On Hold)</span></div>
+                  <div class="meta">
+                    <a href="#/detail/{{post._id}}">{{post.brand | limitTo:25 | capitalize}}{{post.brand.length > 25? "..." : ""}}</a>
+                  </div>
+                  <div class="description" style="min-height:46px;">
+                    <div style="margin-bottom:10px;">
+                      {{post.description | limitTo:35}}{{post.description.length > 25? "..." : ""}}
+                    </div>
+                    <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;text-align: center;">
+                      Quick Look
+                    </div>
+                  </div>
+                </div>
+                <div class="extra content">
+                  <span class="right floated">
+                    <span am-time-ago="post.created"></span>
+                  </span>
+                  <div class="ui basic icon label large">
+                    {{showCondition(post.condition) | capitalize}}
+                  </div> -->
+
+<!--                   <div class="ui basic icon label large">
+                    {{post.gender != "Any"? post.gender : "Men + Women" | capitalize}}
+                  </div> -->
+
+<!--                   <div class="ui basic icon label large">
+                    Size: {{post.size}}
+                  </div> -->
+                <!-- </div>
+              </div>  
+            </div>
+          </div> -->
+
+<!--           <div class="container">
+            <a href="#/browse/sort=trending" class="ui right floated fluid massive button huge trigger-send" style="margin-top:30px;margin-bottom: 10px;">
+              <span>See more of</span> <span style="color: black; font-weight:bold;">what's trending</span>
+              <i class="right chevron icon"></i>
+            </a>
+          </div> -->
+        <!-- </div>
+      </div>
+    </div> -->
+
+
+  <div class="whats-popular" ng-if="!isAuthenticated()" style="padding-top: 55px;padding-bottom: 35px;">
+    <div class="container">
+
+      <div class="ui massive message" style="background-color: white;padding: 0.05em 0.05em;">
+        <!-- <div class="ui stripe theming vertical segment"> -->
+          <div class="ui stackable very relaxed 2 column grid container">
+            <div class="left aligned twelve wide column" style="background-color: #E8F6FF;">
+              <div class="content" style="padding: 60px;">
+                <h1 class="ui left aligned icon header" style="font-size: 40px;line-height: 48px;font-weight: 100;padding-bottom: 10px;"> 
+                  Buy what you <span style="color:#FF2D54">love</span>.<br>Sell what you <span style="color:#FF2D54">own</span>.
+                </h1>
+                <p>Stylefnf is an online marketplace that connects students through social networks at colleges. What amazing products will you discover? <a class="" style="" href="#/signup">Sign Up Now.</a></p>
+              </div>
+            </div>
+            <div class="middle aligned four wide column">
+              <a href="#/signup" class="ui center red aligned massive fluid button">
+                <i class="ion-person-add" style="font-size: 27px;vertical-align: text-top;padding-right: 10px;"></i>
+                Sign Up Now
+              </a>
+              <p style="color: #828587">To get started, all you need is your school email.</p>
+            </div>
+          </div>
+        <!-- </div> -->
+      </div>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+  <div class="whats-popular" style="padding-bottom: 50px;" ng-if="trendingPosts.length != 0">
+    <div class="container">
+      <div class="whats-popular-header">
+        <ul class="list-inline">
+          <li>
+            <h2><i class="line chart icon" style="color:#ff3158;font-size:30px;"></i> What's Trending</h2>
+          </li>
+        </ul>
+        <p>Here's what's generating the most excitement.</p>
+      </div>
+      
+      <div class="row">
+        <!-- <div ng-if="trendingPosts.length == 0">
+          <div class="col-lg-4"></div>
+          <div class="col-lg-4 centered ui massive message" style="box-shadow:none;margin-bottom:50px;">
+            <h1 class="ui header">
+              <i class="frown icon"></i>
+              <div class="content">
+                Sorry, no listings were found.
+              </div>
+            </h1>
+          </div>
+        </div> -->
+
+        <div ng-if="trendingPosts">
+          <div ng-repeat="post in trendingPosts" class="ui col-lg-4 browse-view-2">
+            <div class="ui product-card fluid card ng-class:{ 'card-sold': post.status == 'Held' }">
+              <div class="content">
+                <span class="right floated">
+                  <div ng-if="isAuthenticated()">
+                    <button class="circular ui icon button large ng-class:{ 'red': myLike(post.likes), 'basic': !myLike(post.likes) }" ng-click="likePost(post, 'trending')">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a class="like-label ng-class:{ 'red': myLike(post.likes) }" tooltip="{{usersLiked(post.likes)}}" ng-click="showLiked($event, post)">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                  <div ng-if="!isAuthenticated()">
+                    <button class="circular basic ui icon button large">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a href="#/login" class="like-label" tooltip="Login to continue">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                </span>
+                <div class="right floated meta"></div>
+                <hovercard 
+                  hover-tmpl-url="{{hovercardURL}}"
+                  placement="bottom"
+                  hover-bottom-amount="3.5em"
+                  ng-mouseover="hoverProfileIn(post.seller)"
+                  ng-mouseleave="hoverProfileOut(post.seller)"
+                  >
+                  <a href="#/profile/{{post.seller_id}}" class="ui big basic image label mylabel" style="font-weight:600;border:none;">
+                    <img class="avatar" ng-src="{{post.seller.profilePictures[0]}}">
+                    {{post.seller.firstName}}
+                  </a>
+                </hovercard>
+              </div>
+              <div class="image">
+
+                <!-- Put for HOT items - those with a certain amount of views -->
+                <div ng-if="post.status == 'Available' && post.offers.length > 0" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                  <i class="star icon"></i> {{post.offers.length}} {{post.offers.length === 1? "offer" : "offers"}}
+                </div>
+
+                <div ng-if="post.status != 'Available'" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                  <i class="selected radio icon card-icon-space"></i> On Hold
+                </div>
+
+                <slick ng-if="post.imageUrls.length" dots="false" style="margin:0;">
+                  <div ng-repeat="image_link in post.imageUrls">
+                    <a ng-click="goToDetail($event, post)" href="">
+                      <img class="browse-slick" data-lazy="{{image_link}}">
+                    </a>
+                  </div>
+                </slick>
+
+                <div ng-if="!post.imageUrls.length">
+                  <a ng-click="goToDetail($event, post)" href="">
+                    <img class="browse-slick" src="../img/pic-placeholder.png">
+                  </a>
+                </div>
+              </div>  
+              <div class="content card-content" ng-click="goToDetail($event, post)">
+                <a ng-show="post.price != 0" href="#/detail/{{post._id}}" class="right floated ui red basic massive label"><span style="color:#FF2D55">${{post.price}}</span></a>
+                <a ng-show="post.price == 0" href="#/detail/{{post._id}}" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                <div class="header"><a href="#/detail/{{post._id}}">{{post.title | limitTo:25 | capitalize}}{{post.title.length > 25? "..." : ""}}</a><span ng-if="post.status == 'Held'" style="color: red"> (On Hold)</span></div>
+                <div class="meta">
+                  <a href="#/detail/{{post._id}}">{{post.brand | limitTo:25 | capitalize}}{{post.brand.length > 25? "..." : ""}} </a>
+                </div>
+                <div class="description" style="min-height:46px;">
+                  <div style="margin-bottom:10px;">
+                    {{post.description | limitTo:35}}{{post.description.length > 25? "..." : ""}}
+                  </div>
+                  <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;text-align: center;">
+                    Quick Look
+                  </div>
+                </div>
+              </div>
+              <div class="extra content">
+                <span class="right floated">
+                  <span am-time-ago="post.created"></span>
+                </span>
+                <div class="ui basic icon label large">
+                  {{showCondition(post.condition) | capitalize}}
+                </div>
+
+<!--                   <div class="ui basic icon label large">
+                  {{post.gender != "Any"? post.gender : "Men + Women" | capitalize}}
+                </div> -->
+
+<!--                   <div class="ui basic icon label large">
+                  Size: {{post.size}}
+                </div> -->
+              </div>
+            </div> 
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="col-lg-4"></div>
+          <a href="#/browse/sort=trending" class="col-lg-4 centered ui massive button huge" style="margin-top:30px; margin-bottom: 10px; background-color: #ff3148; padding: 20px 10px !important; border-width: 1px !important; border-style: solid !important; border-color: transparent !important; border-radius: 10px;">
+            <span style="color: white;">See more of what's trending</span>
+            <i class="right chevron icon" style="color: white"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <hr style="margin-top: 0; margin-bottom: 0">
+
+
+  <div class="whats-popular" style="padding-bottom: 40px;" ng-if="isAuthenticated()">
+    <div class="container">
+      <div class="whats-popular-header">
+          <ul class="list-inline">
+            <li>
+              <h2><i class="heart icon" style="color:#ff3158;"></i>What's Popular</h2>
+            </li>
+          </ul>
+        <p>Here's what people are loving most.</p>
+      </div>
+          
+      <div class="row">
+        <div ng-if="popularPosts.length == 0">
+          <div class="col-lg-4"></div>
+          <div class="col-lg-4 centered ui massive message" style="box-shadow:none;margin-bottom:50px;">
+            <h1 class="ui header">
+              <i class="frown icon"></i>
+              <div class="content">
+                Sorry, no listings were found.
+              </div>
+            </h1>
+          </div>
+        </div>
+
+        <div ng-if="popularPosts.length > 0">
+          <div ng-repeat="post in popularPosts" class="ui col-lg-4 browse-view-2">
+            <div class="ui product-card fluid card ng-class:{ 'card-sold': post.status == 'Held' }">
+              <div class="content">
+                <span class="right floated">
+                  <div ng-if="isAuthenticated()">
+                    <button class="circular basic ui icon button large ng-class:{ 'red': myLike(post.likes), 'basic': !myLike(post.likes) }" ng-click="likePost(post, 'popular')">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a class="like-label ng-class:{ 'red': myLike(post.likes) }" tooltip="{{usersLiked(post.likes)}}" ng-click="showLiked($event, post)">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                  <div ng-if="!isAuthenticated()">
+                    <button class="circular basic ui icon button large">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a href="#/login" class="like-label" tooltip="Login to continue">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                </span>
+                <div class="right floated meta"></div>
+                <hovercard 
+                  hover-tmpl-url="{{hovercardURL}}"
+                  placement="bottom"
+                  hover-bottom-amount="3.5em"
+                  ng-mouseover="hoverProfileIn(post.seller)"
+                  ng-mouseleave="hoverProfileOut(post.seller)"
+                  >
+                  <a href="#/profile/{{post.seller_id}}" class="ui big basic image label mylabel" style="font-weight:600;border:none;">
+                    <img class="avatar" ng-src="{{post.seller.profilePictures[0]}}">
+                    {{post.seller.firstName}}
+                  </a>
+                </hovercard>
+              </div>
+              <div class="image">
+
+                <!-- Put for HOT items - those with a certain amount of views -->
+                <div ng-if="post.status == 'Available' && post.offers.length > 0" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                    <i class="star icon"></i> {{post.offers.length}} {{post.offers.length === 1? "offer" : "offers"}}
+                </div>
+
+                <div ng-if="post.status != 'Available'" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                  <i class="selected radio icon card-icon-space"></i> On Hold
+                </div>
+
+                <slick ng-if="post.imageUrls.length" dots="false" style="margin:0;">
+                  <div ng-repeat="image_link in post.imageUrls">
+                    <a ng-click="goToDetail($event, post)" href="">
+                      <img class="browse-slick" data-lazy="{{image_link}}">
+                    </a>
+                  </div>
+                </slick>
+
+                <div ng-if="!post.imageUrls.length">
+                  <a ng-click="goToDetail($event, post)" href="">
+                    <img class="browse-slick" src="../img/pic-placeholder.png">
+                  </a>
+                </div>
+              </div>  
+              <div class="content card-content" ng-click="goToDetail($event, post)">
+                <a ng-show="post.price != 0" href="#/detail/{{post._id}}" class="right floated ui red basic massive label"><span style="color:#FF2D55">${{post.price}}</span></a>
+                <a ng-show="post.price == 0" href="#/detail/{{post._id}}" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                <div class="header"><a href="#/detail/{{post._id}}">{{post.title | limitTo:25 | capitalize}}{{post.title.length > 25? "..." : ""}}</a><span ng-if="post.status == 'Held'" style="color: red"> (On Hold)</span></div>
+                <div class="meta">
+                  <a href="#/detail/{{post._id}}">{{post.brand | limitTo:25 | capitalize}}{{post.brand.length > 25? "..." : ""}} </a>
+                </div>
+                <div class="description" style="min-height:46px;">
+                  <div style="margin-bottom:10px;">
+                    {{post.description | limitTo:35}}{{post.description.length > 25? "..." : ""}}
+                  </div>
+                  <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;text-align: center;">
+                    Quick Look
+                  </div>
+                </div>
+              </div>
+              <div class="extra content">
+                <span class="right floated">
+                  <span am-time-ago="post.created"></span>
+                </span>
+
+                <div class="ui basic icon label large">
+                  {{showCondition(post.condition) | capitalize}}
+                </div>
+
+<!--                   <div class="ui basic icon label large">
+                  {{post.gender != "Any"? post.gender : "Men + Women" | capitalize}}
+                </div> -->
+
+<!--                     <div class="ui basic icon label large">
+                  Size: {{post.size}}
+                </div> -->
+<!--                   <a>
+                  <i style="" ng-if="post.gender == 'Women'"class="ion-woman red icon"></i>
+                  <i style="" ng-if="post.gender == 'Men'"class="ion-man red icon"></i> 
+                  <i style=""ng-if="post.gender == 'Any'" class="ion-android-person red icon"></i>
+                  {{post.gender != "Any"? post.gender : "Men + Women" | capitalize}}
+                  
+                </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="col-lg-4"></div>
+          <a href="#/browse/sort=popular" class="col-lg-4 centered ui massive button huge" style="margin-top:30px; margin-bottom: 10px; background-color: #ff3148; padding: 20px 10px !important; border-width: 1px !important; border-style: solid !important; border-color: transparent !important; border-radius: 10px;">
+            <span style="color: white;">See more of what's popular</span>
+            <i class="right chevron icon" style="color: white"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div ng-if="isAuthenticated()" class="whats-popular" style="background-color: #f1f3fa;border-bottom: 1px solid #d9d9de;border-top: 1px solid #d9d9de;">
+    <div class="container" style="padding-bottom: 40px">
+
+        <div class="whats-popular-header" style="margin-bottom:0;background-color: #f1f3fa;">
+            <ul class="list-inline">
+                <li>
+                    <h2><i class="user icon" style="color:#ff3158;"></i> Do you know?</h2>
+                </li>
+            </ul>
+          <p>Quick look at users making a splash on Stylefnf.</p>
+        </div>
+
+        <div class="row">
+          <section id="t-cards">
+            <div class="container">
+              <div class="row">
+
+                <div ng-if="featuredUsers.length == 0">
+                  <div class="col-lg-4"></div>
+                  <div class="col-lg-4 centered ui massive message" style="box-shadow:none;margin-bottom:150px;">
+                    <h1 class="ui header">
+                      <i class="frown icon"></i>
+                      <div class="content">
+                        Sorry, no users were found.
+                      </div>
+                    </h1>
+                  </div>
+                </div>
+                
+                <div ng-if="featuredUsers.length > 0">
+                  <div ng-repeat="user in featuredUsers"  class="col-sm-6 col-md-5 col-lg-3 browse-view-2">
+
+                    <div class="ui link card" style="min-height:0;" ng-click="goToLink(user._id, 'user')">
+                      <div class="image">
+                        <!-- <a class="ui left red corner large label" tooltip="{{user.numOfPosts}} Listings">
+                          <i class="star icon"></i>
+                        </a> -->
+                        <img ng-src="{{user._id.profilePictures[0]}}" style="height:32vh;">
+                      </div>
+                      <div class="content">
+                        <div class="header"><a href="#/profile/{{user._id._id}}">{{user._id.firstName}} {{user._id.lastName}}</a></div>
+                        <div class="meta">
+                          <a>{{user._id.education}}</a>
+                        </div>
+                        <div class="description">
+                          {{user._id.about | limitTo:35}}{{user._id.about.length > 25? "..." : ""}}
+                        </div>
+                      </div>
+                      <div class="extra content">
+                        <span class="right floated">
+                          Joined {{user._id.joined | amDateFormat:'MMM YYYY' }}
+                        </span>
+                        <span>
+                          <i class="ion-tshirt red icon"></i>
+                          {{user._id.myPosts.length}} {{user._id.myPosts.length === 1? "listing" : "listings"}}
+                        </span>
+                      </div>
+                    </div>
+
+                  </div>                  
+                </div>
+                
+              </div>
+            </div>
+          </section>
+        </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="container">
+      <div class="ui five column center aligned relaxed stackable grid container" style="padding-top: 30px;">
+        <div class="row">
+          <div class="column" style="cursor: pointer;" ng-click="goToPath('help')">
+            <div class="column">
+              <img class="" src="img/UofT_logo.jpg" alt="University of Toronto" style="height:100px;margin-bottom: 20px;">
+            </div>
+          </div>
+          <div class="column" style="cursor: pointer;" ng-click="goToPath('help')">
+            <div class="column">
+              <img src="img/OCAD_Logo.png" alt="OCAD" style="height:100px;opacity:.5;margin-bottom:20px;">
+            </div>
+          </div>
+          <div class="column" style="cursor: pointer;" ng-click="goToPath('help')">
+            <div class="column">
+              <img src="img/RU_logo.png" alt="Ryerson University" style="height:100px;opacity:.5;margin-bottom:20px;">
+            </div>
+          </div>
+          <div class="column" style="cursor: pointer;" ng-click="goToPath('help')">
+            <div class="column">
+              <img src="img/george-brown.png" alt="George Brown" style="height:100px;opacity:.5;margin-bottom:20px;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui alternate stripe vertical segment">
+        <div class="ui stackable center aligned grid container" style="padding-bottom: 40px;">
+          <div class="fourteen wide column">
+            <h1 class="ui icon header" style="font-size: 34px;line-height: 48px;font-weight: 100;">
+              <!-- <img class="ui inline icon image" src="/images/icons/rocket.png"> -->
+              Where listings come alive
+            </h1>
+            <div class="ui stackable center aligned vertically padded grid">
+              <div class="ten wide column">
+                <p style="font-size: 15px;line-height: 1.6;margin-bottom:16px;color: #828587;">Each and every Stylefnf listing is owned by someone like you.
+                Want to know more about the people behind the listings, or how to list your own?</p>
+                <a class="massive ui red button" href="#/help">
+                  <!-- <i class="right chevron icon"></i> -->
+                  Learn More
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div ng-include="'views/footer.html'"></div> -->

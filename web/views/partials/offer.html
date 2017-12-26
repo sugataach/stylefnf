@@ -1,0 +1,95 @@
+<md-dialog ng-controller="detailController" aria-label="Make an Offer on {{selectedPost.title}}">
+  <form name="offerForm">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>My Offer</h2>
+      <span flex></span>
+      <md-button class="md-icon-button text-danger" ng-click="answer('not applicable')">
+        <md-icon md-svg-src="../../img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+  <md-content layout-padding>
+    <div class="ui two column padded grid" style="width: 50vw;">
+      <div class="ten wide column">
+        <h4 class="ui header">
+          <!-- <i class="bar chart icon"></i> -->
+          Product Details
+        </h4>
+        <table class="ui celled table">
+          <tbody>
+            <tr ng-if="isFashion() || isHomeFurniture()">
+              <td class="two wide column">Size</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Condition</td>
+              <td>{{ showCondition() }}</td>
+            </tr>
+            <tr>
+              <td>Return Policy</td>
+              <td>{{ showReturn() }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 class="ui centered header">
+          Delivery Details
+        </h4>
+        <table class="ui celled table">
+          <tbody>
+            <tr>
+              <td>Meet in Person</td>
+              <td>
+                <div class="ui big labels" ng-repeat="location in selectedPost.locations">
+                  <span class="ui red basic label">
+                    {{location.name}}
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="six wide column">
+        <table class="ui collapsing celled large table" style="margin: 0 auto;">
+          <thead>
+            <tr style="margin: 0 auto;text-align:center;"><th colspan="3">
+              Total
+            </th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td>Bid</td>
+              <td>${{$root.offerModalPrice.toFixed(2)}}</td>
+            </tr>
+            <tr>
+              <td>
+                Service Fee 
+                <i class="info circle link icon"><md-tooltip md-direction="top" style="font-size:13px;">This helps us run our platform and offer services like buyer protection.</md-tooltip></i>
+                </td>
+              <td>${{$root.serviceFee.toFixed(2)}}</td>
+            </tr>
+            <tr style="font-weight:bold;">
+              <td>Total</td>
+              <td>${{ getTotal($root.offerModalPrice, $root.serviceFee, 'buyer').toFixed(2) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </md-content>
+  </md-dialog-content>
+    <!-- Cancel and Post Buttons -->
+    <div class="md-actions" layout="row">
+      <md-button href="#/about" target="_blank">
+        <a href="#"><i class="ion-information-circled"></i> </a>
+        HELP
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="makeOffer()" type="submit" ng-disabled="offerForm.$invalid" class="md-raised md-primary" layout layout-align="center end">Place ${{$root.offerModalPrice.toFixed(2)}} offer</md-button>
+    </div>
+  </form>
+</md-dialog>
+

@@ -1,0 +1,720 @@
+<view-title>{{profile.firstName}} {{profile.lastName}}</view-title>
+
+<meta view-head property="og:url" content="http://stylefnf.com/#/about">
+<meta view-head property="og:title" content="About Us - Stylefnf">
+<meta view-head property="og:description" content="Stylefnf helps you buy, sell and discover. It's the simple way to share fashion and accessories with your friends, classmates, and community.">
+<meta view-head property="og:image" content="https://s3-us-west-2.amazonaws.com/stylefnf.static/hero.png">
+
+<div class="container">
+    
+    <div class="row profile ">
+
+      <div class="col-md-3">
+        <div class="profile-sidebar">
+          <!-- SIDEBAR USERPIC -->
+          <div class="profile-userpic">
+            <img ng-src="{{profile.profilePictures[0]}}" class="img-responsive make-pic-fit" alt="">
+          </div>
+          <!-- END SIDEBAR USERPIC -->
+          
+          <!-- SIDEBAR USER TITLE -->
+          <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+              <h5>{{profile.firstName}} {{profile.lastName}} <i class="ion-checkmark-circled text-success" tooltip="Verified ID"></i></h5>
+            </div>
+            <div ng-if="isAuthenticated()" class="profile-usertitle-job">
+              Fashionista
+            </div>
+          </div>
+          <div>
+          <!-- END SIDEBAR USER TITLE -->
+          <!-- SIDEBAR BUTTONS -->
+          <div class="profile-userbuttons">
+            <!-- <button type="button" class="btn btn-success btn-sm">Follow</button> -->
+<!--             <button ng-if="!isAuthenticated()" class="ui red basic button huge">
+              <i class="icon mail"></i>
+              Message {{profile.facebookDisplayName}}
+            </button> -->
+            <a href="#/login" ng-if="!isAuthenticated()" class="ui red button huge" style="margin-bottom:10px;">
+              Login to message {{profile.firstName}}
+              <i class="icon chevron right"></i>
+            </a>
+<!--             <button ng-if="(isAuthenticated() && isNotCurrentUser())" ng-click="showMessage($event)" class="ui red button huge">
+              <i class="icon mail"></i>
+              Message {{profile.firstName}}
+            </button> -->
+
+            <div class="" ng-if="(isAuthenticated() && isNotCurrentUser())">
+              <button class="ui red big button ng-class: { 'basic': !isFollowing(profile) }" ng-click="followAction(profile)">
+                <i class="icon ng-class: { 'add circle': !isFollowing(profile), 'check' : isFollowing(profile) }"></i>
+                <span class="ng-class: { 'do-not-show' : isFollowing(profile) }">Follow</span>
+                <span class="ng-class: { 'do-not-show' : !isFollowing(profile) }">Following</span>
+              </button>
+              <!-- <div class="or basic" style="border: 1px solid #dbdbdb"></div> -->
+              <button class="ui blue big basic button" ng-click="showMessage($event)">
+                <i class="mail icon"></i>
+                Message
+              </button>
+            </div>
+
+            <div ng-if="(isAuthenticated() && !isNotCurrentUser())" class="fileUpload ui red inverted button huge">
+                <span><i class="photo icon"></i> Update Profile Picture<input type="file" class="upload" onchange="angular.element(this).scope().grabImage(this.files)" accept="image/*"/></span>
+            </div>
+
+<!--             <button type="button" class="btn btn-danger btn-sm">Message</button> -->
+          </div>
+          <!-- END SIDEBAR BUTTONS -->
+          <!-- SIDEBAR MENU -->
+          <div ng-if="isAuthenticated()" class="profile-usermenu" style="cursor: default;"> 
+            <ul class="nav">
+              <li>
+                <a>
+                  <i style="font-size:13px;" class="icon university"></i>
+                  Studied at {{profile.education}} 
+                </a>
+              </li>
+<!--               <li>
+                <a>
+                <i style="font-size:13px;" class="icon building"></i>
+                Works at UHN </a>
+              </li> -->
+              <li>
+                <div id="myLocation" style="padding: 10px 15px;">
+                  <i style="font-size:13px;" class="icon marker"></i>
+                  <span ng-show="isNotCurrentUser()">Lives in {{profile.location}}</span>
+                  
+                  <span ng-show="!isNotCurrentUser()">
+                    <span
+                      e-rows="6" e-cols="12"
+                      editable-textarea="profile.location"
+                      e-form="profileLocationForm"
+                      onbeforesave="checkField($data, 'location')"
+                      onaftersave="updateProfile(profile._id, profile.location, 'location')"
+                    >
+                      Lives in {{profile.location}}
+                    </span>
+                    
+                    <span class="notHover"> 
+                      &nbsp;
+                      <i class="circular inverted red link pencil icon" ng-click="profileLocationForm.$show()" ng-hide="profileLocationForm.$visible" tooltip="Edit Current City"></i>
+                    </span>
+                  </span>
+                </div>
+              </li>
+<!--               <li>
+                <a>
+                <i style="font-size:13px;" class="icon home"></i>
+                From Brampton, ON </a>
+              </li> -->
+              <li>
+                <a>
+                <i style="font-size:13px;" class="icon clock"></i>
+                Joined {{profile.joined | amDateFormat:'MMM YYYY' }} </a>
+              </li>
+            </ul>
+          </div>
+          <!-- END MENU -->
+          </div>
+        </div>
+
+
+        <div class="profile-sidebar portlet" ng-if="isAuthenticated()">
+          <!-- SIDEBAR USERPIC -->
+            <div class="profile-stats">
+              <!-- STAT -->
+              <div ng-if="isAuthenticated()" class="row list-separated profile-about">
+                  <h4 class="profile-desc-title">
+                    About {{profile.firstName}}
+                    <span ng-if="!isNotCurrentUser()"> 
+<!--                       <a class="ui inverted red circular button" ng-click="profileAboutForm.$show()" ng-hide="profileAboutForm.$visible">
+                      <i class="pencil icon"></i>
+                      Edit
+                      </a> --> 
+                      &nbsp;
+                      <i class="circular inverted red link small pencil icon" ng-click="profileAboutForm.$show()" ng-hide="profileAboutForm.$visible" tooltip="Edit About" style="font-size: 10px;"></i>
+                    </span>
+                  </h4>
+                  <span class="profile-desc-text" ng-show="!isNotCurrentUser()">
+                    <p
+                      e-rows="6" e-cols="12"
+                      editable-textarea="profile.about"
+                      e-form="profileAboutForm"
+                      onbeforesave="checkField($data, 'about')"
+                      onaftersave="updateProfile(profile._id, profile.about, 'about')"
+                    >
+                      {{profile.about}}
+                    </p>
+                  </span>
+                  <span ng-show="isNotCurrentUser()" class="profile-desc-text"> {{profile.about}}. </span>
+              </div>
+              <div class="row list-separated profile-stat">
+                <div class="col-md-4 col-sm-4 col-xs-4">
+                  <div class="uppercase profile-stat-title">
+                     {{myPosts.length}}
+                  </div>
+                  <div class="uppercase profile-stat-text">
+                     Listings
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-4">
+                  <div class="uppercase profile-stat-title">
+                     {{profile.following.length}}
+                  </div>
+                  <div class="uppercase profile-stat-text">
+                     Following
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-4">
+                  <div class="uppercase profile-stat-title">
+                     {{profile.followers.length}}
+                  </div>
+                  <div class="uppercase profile-stat-text">
+                     Followers
+                  </div>
+                </div>
+              </div>
+
+<!--               <div>
+              </div> -->
+            </div>
+          <!-- END MENU -->
+        </div>
+      </div>
+    
+      <div class="col-md-9">
+        <div class="profile-content">
+           <div>
+
+            <tabset justified="true">
+              <tab ng-if="(isAuthenticated() && !isNotCurrentUser())">
+                <tab-heading>
+                  <i class='shop icon'></i> Offers
+                </tab-heading>
+                
+                  <div class="row">
+
+                    <div class="col-md-12 text-center ng-class: { 'do-not-show': (offeredPosts.length > 0) }" style="margin-top:19.5px;">
+                      <a class="ui message massive compact" style="box-shadow:none" href="#/browse">
+                        <b><i class="dollar green icon"></i></b>
+                        Get started by placing an offer!
+                      </a>
+                    </div>
+
+                    <div ng-show="offeredPosts.length > 0" ng-repeat="post in offeredPosts | orderBy:'-created'" class="ui divided items ng-class:{ 
+                    'item-available': isAvailable(post.post), 
+                    'item-offer-accepted': !isAvailable(post.post) && isBuyer(post.post), 
+                    'item-on-hold': !isAvailable(post.post) && !isBuyer(post.post) }">
+
+                      <div class="item" style="height:auto;">
+
+                        <div class="image leftBorder">
+                          <slick dots="false" style="margin:0;">
+                            <div ng-repeat="image_link in post.post.imageUrls">
+                              <a ng-click="goToDetail($event, post.post)" href="">
+                                <img class="make-pic-fit" style="width:174px;height:150px;overflow:hidden;" data-lazy="{{image_link}}">
+                              </a>
+                            </div>
+                          </slick>
+                        </div>
+
+                        <div class="content">
+                          <a class="header" ng-click="goToDetail($event, post.post)" style="margin-top:5px;">{{post.post.title | capitalize}}</a>
+
+                          <span ng-if="post.post.status == 'Available'" class="header" style="color:#FF2D54;">&mdash; No decision yet.</span>
+
+                          <span ng-if="post.post.status == 'Held' && post.post.buyer == $root.currentUser._id" class="header" style="color:#1A531B;">&mdash; It's yours!</span>
+
+                          <span ng-if="post.post.status == 'Held' && post.post.buyer != $root.currentUser._id" class="header" style="color:#912D2B;">&mdash; You didn't get it :(</span>
+                          
+                          <div ng-if="isAuthenticated()" class=" pull-right ui big labeled basic" style="margin-top:10px;margin-right:20px;">
+
+                            <hovercard 
+                              hover-tmpl-url="{{hovercardURL}}"
+                              placement="bottomLeft"
+                              hover-bottom-amount="-16em"
+                              ng-mouseover="hoverProfileIn(post.post.seller)"
+                              ng-mouseleave="hoverProfileOut(post.post.seller)"
+                              >
+                              <a class="ui big basic image label lower-font-weight" style="font-weight:600;" href="#/profile/{{post.post.seller_id}}">
+                                <img ng-src="{{post.post.seller.profilePictures[0]}}">
+                                {{post.post.seller.firstName}}
+                              </a>
+                            </hovercard>
+                          </div>
+
+                          <a ng-if="!isAuthenticated()" style="margin-top:10px;margin-right:20px;" class="ui big label pull-right">
+                            <i class="heart icon"></i>
+                            {{post.post.likes.length}}
+                          </a>
+
+                          <div class="meta" style="margin:0;">
+                            <a href="" ng-click="goToLink(post.post._id, 'post')" class="cinema">{{post.post.brand | capitalize}} &mdash; Offer placed <span am-time-ago="post.created"></span></a>
+                          </div>
+                          <div class="description">
+                            <p>
+                              {{post.post.description | limitTo:50}}{{post.description.length > 25? "..." : ""}}
+                              <span class="pull-right" style="padding-right:20px;padding-top:35px;">
+                                <a ng-show="post.post.price != 0" href="" class="right floated ui red basic massive label" style="color:#FF2D55;">${{post.post.price}}</a>
+                                <a ng-show="post.post.price == 0" href="" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                              </span>
+                            </p>
+                          </div>
+                          <div class="extra" style="margin-top: 25px;">
+                            <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;">
+                              Quick Look
+                            </div>
+                            <div ng-if="isAuthenticated()" class="ui labeled button" style="margin-top:10px;margin-right:20px;">
+                              <button class="ui button ng-class:{ 'red': myLike(post.post.likes) }" ng-click="likePost(post.post, 'offeredPost')">
+                                <span ng-if="myLike(post.post.likes)"><i class="heart icon"></i> Liked</span>
+                                <span ng-if="!myLike(post.post.likes)"><i class="heart icon"></i> Like</span>
+                              </button>
+                              <a class="ui basic label ng-class:{ 'red': myLike(post.post.likes) }" tooltip="{{usersLiked(post.post.likes)}}" ng-click="showLiked($event, post.post)">
+                                {{post.post.likes.length}} {{post.post.likes.length === 1? "person" : "people"}}
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+              </tab>
+              <tab ng-if="(isAuthenticated() && !isNotCurrentUser())">
+                <tab-heading>
+                  Sold
+                </tab-heading>
+                
+                  <div class="row">
+
+                    <div class="col-md-12 text-center ng-class: { 'do-not-show': (soldPosts.length > 0) }" style="margin-top:19.5px;">
+                      <a class="ui message massive compact" style="box-shadow:none" href="#/browse">
+                        <b><i class="dollar green icon"></i></b>
+                        No listings sold yet!
+                      </a>
+                    </div>
+
+                    <div ng-show="soldPosts.length > 0" ng-repeat="post in soldPosts | orderBy:'-created'" class="ui divided items item-available">
+
+                      <div class="item" style="height:auto;">
+
+                        <div class="image leftBorder">
+                          <slick dots="false" style="margin:0;">
+                            <div ng-repeat="image_link in post.imageUrls">
+                              <a ng-href="#/detail/{{post._id}}">
+                                <img class="make-pic-fit" style="width:174px;height:150px;overflow:hidden;" data-lazy="{{image_link}}">
+                              </a>
+                            </div>
+                          </slick>
+                        </div>
+
+                        <div class="content">
+                          <a class="header" ng-click="goToLink(post._id, 'post')" style="margin-top:5px;">{{post.title | capitalize}}</a>
+                          
+                          <div ng-if="isAuthenticated()" class=" pull-right ui big labeled basic" style="margin-top:10px;margin-right:20px;">
+
+                            <a class="ui big red label lower-font-weight" style="font-weight:600;" href="#/detail/{{post._id}}">
+                              Take a look
+                            </a>
+                          </div>
+
+                          <a ng-if="!isAuthenticated()" style="margin-top:10px;margin-right:20px;" class="ui big label pull-right">
+                            <i class="heart icon"></i>
+                            {{post.likes.length}}
+                          </a>
+
+                          <div class="meta" style="margin:0;">
+                            <a href="" ng-click="goToLink(post._id, 'post')" class="cinema">{{post.brand | capitalize}} &mdash; Listed <span am-time-ago="post.created"></a></span>
+                          </div>
+                          <div class="description">
+                            <p>
+                              {{post.description | limitTo:50}}{{post.description.length > 25? "..." : ""}}
+                              <span class="pull-right" style="padding-right:20px;padding-top:35px;">
+                                <a ng-show="post.post.price != 0" href="" class="right floated ui red basic massive label" style="color:#FF2D55;">${{post.price}}</a>
+                                <a ng-show="post.price == 0" href="" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                              </span>
+                            </p>
+                          </div>
+                          <div class="extra" style="margin-top: 25px;">
+                            <div class="ui basic label large">
+                              {{showCondition(post.condition) | capitalize}}
+                            </div>
+                            <a ng-href="#/browse/macro={{post.macro}}&category={{post.category}}" class="ui red basic label large">
+                              {{post.category | capitalize}}
+                            </a>
+                            <div class="ui basic icon label large">
+                              Size: {{post.size}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </tab>
+              <tab ng-if="(isAuthenticated() && !isNotCurrentUser())">
+                <tab-heading>
+                  Purchased
+                </tab-heading>
+                
+                <div class="row">
+
+                  <div class="col-md-12 text-center ng-class: { 'do-not-show': (purchasedPosts.length > 0) }" style="margin-top:19.5px;">
+                    <a class="ui message massive compact" style="box-shadow:none" href="#/browse">
+                      <b><i class="dollar green icon"></i></b>
+                      No purchases yet!
+                    </a>
+                  </div>
+
+                  <div ng-show="purchasedPosts.length > 0" ng-repeat="post in purchasedPosts | orderBy:'-created'" class="ui divided items item-available">
+
+                    <div class="item" style="height:auto;">
+
+                      <div class="image leftBorder">
+                        <slick dots="false" style="margin:0;">
+                          <div ng-repeat="image_link in post.imageUrls">
+                            <a ng-href="#/detail/{{post._id}}">
+                              <img class="make-pic-fit" style="width:174px;height:150px;overflow:hidden;" data-lazy="{{image_link}}">
+                            </a>
+                          </div>
+                        </slick>
+                      </div>
+
+                      <div class="content">
+                        <a class="header" ng-click="goToLink(post._id, 'post')" style="margin-top:5px;">{{post.title | capitalize}}</a>
+                        
+                        <div ng-if="isAuthenticated()" class=" pull-right ui big labeled basic" style="margin-top:10px;margin-right:20px;">
+
+                          <a class="ui big red label lower-font-weight" style="font-weight:600;" href="#/detail/{{post._id}}">
+                            Take a look
+                          </a>
+                        </div>
+
+                        <a ng-if="!isAuthenticated()" style="margin-top:10px;margin-right:20px;" class="ui big label pull-right">
+                          <i class="heart icon"></i>
+                          {{post.likes.length}}
+                        </a>
+
+                        <div class="meta" style="margin:0;">
+                          <a href="" ng-click="goToLink(post._id, 'post')" class="cinema">{{post.brand | capitalize}} &mdash; Listed <span am-time-ago="post.created"></a></span>
+                        </div>
+                        <div class="description">
+                          <p>
+                            {{post.description | limitTo:50}}{{post.description.length > 25? "..." : ""}}
+                            <span class="pull-right" style="padding-right:20px;padding-top:35px;">
+                              <a ng-show="post.post.price != 0" href="" class="right floated ui red basic massive label" style="color:#FF2D55;">${{post.price}}</a>
+                              <a ng-show="post.price == 0" href="" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                            </span>
+                          </p>
+                        </div>
+                        <div class="extra" style="margin-top: 25px;">
+                          <div class="ui basic label large">
+                            {{showCondition(post.condition) | capitalize}}
+                          </div>
+                          <a ng-href="#/browse/macro={{post.macro}}&category={{post.category}}" class="ui red basic label large">
+                            {{post.category | capitalize}}
+                          </a>
+                          <div class="ui basic icon label large">
+                            Size: {{post.size}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </tab>
+              <tab>
+                <tab-heading>
+                  <i class='gift icon'></i> Listings
+                </tab-heading>
+
+                  <div class="row">
+
+                    <div class="col-md-12 text-center ng-class: { 'do-not-show': (myPosts.length > 0) }" style="margin-top:19.5px;" ng-if="(isAuthenticated() && !isNotCurrentUser())">
+                      <div class="ui message massive compact" style="box-shadow:none;cursor:pointer;" ng-click="chooseMacro($event)">
+                        <b><i class="add circle green icon link"></i></b>
+                        Get started by listing an item!
+                      </div>
+                    </div>
+
+                    <div ng-show="myPosts.length > 0" ng-repeat="post in myPosts | orderBy:'-created'" class="ui divided items ng-class:{ 
+                    'item-available': isAvailable(post), 
+                    'item-offer-accepted': (isAvailable(post) && post.offers.length > 0), 
+                    'item-on-hold': !isAvailable(post) && !isBuyer(post) }">
+                      
+                      <div class="item" style="height:auto;">
+                        
+                        <div class="image leftBorder">
+                          <slick dots="false" style="margin:0;">
+                            <div ng-repeat="image_link in post.imageUrls">
+                              <a ng-click="goToDetail($event, post)">
+                                <img class="make-pic-fit" style="width:174px;height:150px;overflow:hidden;" data-lazy="{{image_link}}">
+                              </a>
+                            </div>
+                          </slick>
+                        </div>
+
+
+                        <div class="content">
+                          <a class="header" ng-click="goToDetail($event, post)" style="margin-top:5px;">{{post.title | capitalize}}</a>
+
+                          <span ng-if="(post.status == 'Available')" class="header" style="color:#1A531B;">
+                            &mdash; 
+                            <span ng-if="!isNotCurrentUser()">You have</span> 
+                            {{post.offers.length}} {{ post.offers.length === 1? "offer" : "offers"}}
+                          </span>
+
+                          <span ng-if="post.status == 'Held' && post.buyer != $root.currentUser._id" class="header" style="color:#912D2B;">&mdash; Sold <span ng-if="!isNotCurrentUser()">baby!</span></span>
+
+                          <div ng-if="isAuthenticated()" class=" pull-right ui big labeled basic" style="margin-top:10px;margin-right:20px;">
+
+                            <hovercard 
+                              hover-tmpl-url="{{hovercardURL}}"
+                              placement="bottomLeft"
+                              hover-bottom-amount="-16em"
+                              ng-mouseover="hoverProfileIn(post.seller)"
+                              ng-mouseleave="hoverProfileOut(post.seller)"
+                              >
+                              <a class="ui big basic image label lower-font-weight" style="font-weight:600;" href="#/profile/{{post.seller_id}}">
+                                <img ng-src="{{post.seller.profilePictures[0]}}">
+                                {{post.seller.firstName}}
+                              </a>
+                            </hovercard>
+                          </div>
+
+                          <a ng-if="!isAuthenticated()" style="margin-top:10px;margin-right:20px;" class="ui big label pull-right">
+                            <i class="heart icon"></i>
+                            {{post.likes.length}}
+                          </a>
+
+                          <div class="meta" style="margin:0;">
+                            <span class="cinema">{{post.brand | capitalize}} &mdash; Posted <span am-time-ago="post.created"></span>
+                          </div>
+                          <div class="description">
+                            <p>
+                              {{post.description | limitTo:50}}{{post.description.length > 25? "..." : ""}}
+                              <span class="pull-right" style="padding-right:20px;padding-top:20px;cursor:pointer;">
+                                <a ng-show="post.price != 0" href="" class="right floated ui red basic massive label" style="color:#FF2D55;">${{post.price}}</a>
+                                <a ng-show="post.price == 0" href="" class="right floated ui red basic massive label" style="color:#FF2D55;">Free!</a>
+                              </span>
+                            </p>
+                          </div>
+                          <div class="extra" style="margin-top: 20px;">
+                            <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;" ng-click="goToDetail($event, post)">
+                              Quick Look
+                            </div>
+                            <div ng-if="isAuthenticated()" class="ui labeled button" style="margin-top:10px;margin-right:20px;">
+                              <button class="ui button ng-class:{ 'red': myLike(post.likes) }" ng-click="likePost(post, 'myPost')">
+                                <span ng-if="myLike(post.likes)"><i class="heart icon"></i> Liked</span>
+                                <span ng-if="!myLike(post.likes)"><i class="heart icon"></i> Like</span>
+                              </button>
+                              <a class="ui basic label ng-class:{ 'red': myLike(post.likes) }" tooltip="{{usersLiked(post.likes)}}" ng-click="showLiked($event, post)">
+                                {{post.likes.length}} {{post.likes.length === 1? "person" : "people"}}
+                              </a>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+              </tab>
+              <tab ng-if="isAuthenticated()">
+                <tab-heading>
+                  <i class='heart red icon'></i> Likes
+                </tab-heading>
+
+                <div class="row">
+
+                  <div class="col-md-12 text-center ng-class: { 'do-not-show': (likedPosts.length > 0) }" style="margin-top:19.5px;">
+                    <div class="ui message massive compact" style="box-shadow:none">
+                      <b><i class="heart red icon"></i></b>
+                      Get started by liking an item!
+                    </div>
+                  </div>
+
+                  <div ng-show="likedPosts.length > 0" ng-repeat="lPost in likedPosts | orderBy:'-created'" class="ui divided items item-available">
+
+                    <div class="item" style="height:auto;">
+
+                      <div class="image leftBorder">
+                        <slick dots="false" style="margin:0;">
+                          <div ng-repeat="image_link in lPost.post.imageUrls">
+                            <a ng-click="goToDetail($event, lPost.post)">
+                              <img class="make-pic-fit" style="width:175px;height:150px;overflow:hidden;" data-lazy="{{image_link}}">
+                            </a>
+                          </div>
+                        </slick>
+                      </div>
+
+                      <div class="content">
+
+                        <a class="header" ng-click="goToLink(lPost.post._id, 'post')" style="margin-top:5px;">{{lPost.post.title | capitalize}}</a>
+
+                        <div ng-if="isAuthenticated()" class=" pull-right ui big labeled basic" style="margin-top:10px;margin-right:20px;">
+
+                          <hovercard 
+                            hover-tmpl-url="{{hovercardURL}}"
+                            placement="bottomLeft"
+                            hover-bottom-amount="-16em"
+                            ng-mouseover="hoverProfileIn(lPost.post.seller)"
+                            ng-mouseleave="hoverProfileOut(lPost.post.seller)"
+                            >
+                            <a class="ui big basic image label lower-font-weight" style="font-weight:600;" href="#/profile/{{lPost.post.seller_id}}">
+                              <img ng-src="{{lPost.post.seller.profilePictures[0]}}">
+                              {{lPost.post.seller.firstName}}
+                            </a>
+                          </hovercard>
+                        </div>
+
+                        <a ng-if="!isAuthenticated()" style="margin-top:10px;margin-right:20px;" class="ui big label pull-right">
+                          <i class="heart icon"></i>
+                          {{lPost.post.likes.length}}
+                        </a>
+
+                        <div class="meta" style="margin:0;">
+                          <span class="cinema">{{lPost.post.brand | capitalize}} &mdash; Liked <span am-time-ago="lPost.created"></span>
+                        </div>
+                        <div class="description">
+                          <p>
+                            <!-- {{lPost.post.description | limitTo:50}}{{post.description.length > 25? "..." : ""}} -->
+                            <span class="pull-right" style="padding-right:20px;padding-top:20px;cursor:pointer;">
+                              <a ng-show="lPost.post.price != 0" href="" class="right floated ui red basic massive label">${{lPost.post.price}}</a>
+                              <a ng-show="lPost.post.price == 0" href="" class="right floated ui red basic massive label" style="color:#FF2D55;">Free!</a>
+                            </span>
+                          </p>
+                        </div>
+                        <div class="extra" style="margin-top: 20px;">
+                          <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;" ng-click="goToDetail($event, lPost.post)">
+                            Quick Look
+                          </div>
+                          <div ng-if="isAuthenticated()" class="ui labeled button" style="margin-top:10px;margin-right:20px;">
+                            <button class="ui button ng-class:{ 'red': myLike(lPost.post.likes) }" ng-click="likePost(lPost.post, 'likedPost')">
+                              <span ng-if="myLike(lPost.post.likes)"><i class="heart icon"></i> Liked</span>
+                              <span ng-if="!myLike(lPost.post.likes)"><i class="heart icon"></i> Like</span>
+                            </button>
+                            <a class="ui basic label ng-class:{ 'red': myLike(lPost.post.likes) }" tooltip="{{usersLiked(lPost.post.likes)}}" ng-click="showLiked($event, lPost.post)">
+                              {{lPost.post.likes.length}} {{lPost.post.likes.length === 1? "person" : "people"}}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </tab>
+              <tab ng-if="isAuthenticated()">
+                <tab-heading>
+                <i class='linkify icon' style=""></i>
+                  Following
+                </tab-heading>
+
+                <div class="row">
+
+                  <div class="col-md-12 text-center ng-class: { 'do-not-show': (profile.following.length > 0) }" style="margin-top:19.5px;">
+                    <div class="ui message massive compact" style="box-shadow:none">
+                      <b><i class="user blue icon"></i></b>
+                      Get started by following a user!
+                    </div>
+                  </div>
+
+                  <div ng-show="profile.following.length > 0" ng-repeat="follower in profile.following" class="ui divided items item-available">
+                    <div class="item" style="height:auto;">
+                      <div class="image leftBorder" style="width: auto;">
+                        <a ng-href="#/profile/{{follower._id}}">
+                          <img class="make-pic-fit" style="width:155px;height:140px;overflow:hidden;" ng-src="{{follower.profilePictures[0]}}">
+                        </a>
+                      </div>
+                      <div class="content">
+                        <a class="header" style="margin-top:8px;" ng-href="#/profile/{{follower._id}}">{{follower.firstName}} {{follower.lastName}}</a>
+                        <div class=" pull-right" style="margin-top:15px;margin-right:20px;" ng-if="isNotUser(follower)">
+                          <button ng-if="!isFollowing(follower)" class="ui huge basic red button" ng-click="followAction(follower)">
+                            <i class="icon add circle"></i>
+                            Follow
+                          </button>
+                          <button ng-if="isFollowing(follower)" class="ui huge red button" ng-click="followAction(follower)">
+                            <i class="icon check"></i>
+                            Following
+                          </button>
+                        </div>
+                        <div class="meta" style="margin:0;">
+                          <div>{{follower.education}}</div>
+                        </div>
+                        <div class="description">
+                          <p>{{follower.about | limitTo:35}}{{follower.about.length > 35? "..." : ""}}</p>
+                        </div>
+                        <div class="extra" style="margin-top: 25px;">
+                          <div class="ui basic label">{{follower.myPosts.length}} Listings</div>
+                          <span class="pull-right" style="padding-right: 20px;">
+                            <div class="ui label">Following {{follower.following.length}}</div>
+                            <div class="ui basic label">{{follower.followers.length}} Followers</div>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </tab>
+              <tab ng-if="isAuthenticated()">
+                <tab-heading>
+                  <i class='users icon' style=""></i> Followers
+                </tab-heading>
+
+                <div class="row">
+
+                  <div class="col-md-12 text-center ng-class: { 'do-not-show': (profile.followers.length > 0) }" style="margin-top:19.5px;">
+                    <div class="ui message massive compact" style="box-shadow:none">
+                      <b><i class="users red icon"></i></b>
+                      Get followers by listing awesome items!
+                    </div>
+                  </div>
+
+                  <div ng-show="profile.followers.length > 0" ng-repeat="follower in profile.followers" class="ui divided items item-available">
+                    <div class="item" style="height:auto;">
+                      <div class="image leftBorder" style="width: auto;">
+                        <a ng-href="#/profile/{{follower._id}}">
+                          <img class="make-pic-fit" style="width:155px;height:140px;overflow:hidden;" ng-src="{{follower.profilePictures[0]}}">
+                        </a>
+                      </div>
+                      <div class="content">
+                        <a class="header" style="margin-top:8px;" ng-href="#/profile/{{follower._id}}">{{follower.firstName}} {{follower.lastName}}</a>
+                        <div class=" pull-right" style="margin-top:15px;margin-right:20px;" ng-if="isNotUser(follower)">
+                          <button ng-if="!isFollowing(follower)" class="ui huge basic red button" ng-click="followAction(follower)">
+                            <i class="icon add circle"></i>
+                            Follow
+                          </button>
+                          <button ng-if="isFollowing(follower)" class="ui huge red button" ng-click="followAction(follower)">
+                            <i class="icon check"></i>
+                            Following
+                          </button>
+                        </div>
+                        <div class="meta" style="margin:0;">
+                          <div>{{follower.education}}</div>
+                        </div>
+                        <div class="description">
+                          <p>{{follower.about | limitTo:35}}{{follower.about.length > 35? "..." : ""}}</p>
+                        </div>
+                        <div class="extra" style="margin-top: 25px;">
+                          <a ng-href="#/profile/{{follower._id}}" class="ui basic label">{{follower.myPosts.length}} Listings</a>
+                          <span class="pull-right" style="padding-right: 20px;">
+                            <a ng-href="#/profile/{{follower._id}}" class="ui label">Following {{follower.following.length}}</a>
+                            <a ng-href="#/profile/{{follower._id}}" class="ui basic label">{{follower.followers.length}} Followers</a>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </tab>
+            </tabset>
+
+          </div>
+        </div>
+      </div>
+
+  </div>
+</div>
+
+<!-- <div ng-include="'views/footer.html'"></div> -->

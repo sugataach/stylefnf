@@ -1,0 +1,32 @@
+<md-dialog ng-controller="CustomNewMsgCtrl as ctrl">
+  <form name="messageForm">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>New message to <span style="color:black;"><b>{{ctrl.sendMessageProfile.firstName}}</b></span></h2>
+      <span flex></span>
+      <md-button class="md-icon-button text-danger" ng-click="answer('not applicable')">
+        <md-icon md-svg-src="../../img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+
+    <div class="ui form big">
+      <div class="field">
+        <textarea ng-model="msgContent" ng-trim="false" style="font-size:17px;" placeholder="Write a message..." required></textarea>
+      </div>
+    </div>
+
+  </md-dialog-content>
+    <!-- Cancel and Post Buttons -->
+    <div class="md-actions" layout="row">
+      <md-button href="#/help" target="_blank">
+        <a href="#"><i class="ion-information-circled"></i> </a>
+        HELP
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="sendMessage()" type="submit" ng-disabled="messageForm.$invalid" class="ui red button huge" layout layout-align="center end">Send</md-button>
+    </div>
+  </form>
+</md-dialog>
+

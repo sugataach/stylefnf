@@ -1,0 +1,363 @@
+<ion-view view-title="Search">
+  <ion-nav-title>
+
+      <div class="item item-input" style="border-color: white; padding:5px 0 5px 5px;">
+        <i class="icon ion-chevron-left assertive ng-class: { 'hidden' : !isSearch && !isFashion && !isHomeFurniture && !isElectronics && !isTextbooks && !isOther }" ng-click="goBackToExplore()" style="float:left;color:#FF2D54;font-size: 25px;"></i>
+        <!-- <i class="icon ion-arrow-left-c ng-class: { 'hidden' : !isSearch && !isFashion && !isHomeFurniture && !isElectronics }" style="font-size: 26px;" ng-click="goBackToExplore()"></i> -->
+        <i class="icon ng-class: { 'hidden' : !isSearch && !isFashion && !isHomeFurniture && !isElectronics && !isTextbooks && !isOther }"></i>
+        <i class="icon ion-search placeholder-icon" style="font-size: 26px;"></i>
+        <i class="icon"></i>
+        <input ng-click="onSearchClick()" ng-change="change()" type="text"  ng-model="searchData.searchText" placeholder="Search" style="font-size: 18px;padding-top: 5px;">
+        <i class="icon"></i>
+        <i class="icon ion-ios-close placeholder-icon ng-class: { 'hidden' : !isSearch }" ng-click="clearSearch()"></i>
+        <i class="icon"></i>
+        <!-- <i class="icon positive ion-android-funnel ng-class: { 'hidden' : !isSearch }" style="font-size: 26px;min-width:22px;" ng-click="showCategories()"></i> -->
+      </div>
+
+  </ion-nav-title>
+
+  <ion-content overflow-scroll="true" lazy-scroll ng-init="searchMacro()">
+
+    <script id="category-modal.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-positive" ng-click="closeModal()">
+          <h1 class="title">Filters</h1>
+          <button class="button button-clear button-primary" ng-click="closeModal()">Cancel</button>
+        </ion-header-bar>
+        <ion-content scroll="true" class="padding">
+          <div class="list">
+          <label class="item item-input no-border">
+              <div class="col input-col">
+                <div class="item item-input-inset form-input">
+                  <label class="item item-input item-select">
+                    <div  class="input-label">
+                      Macro
+                    </div>
+                    <select class="form-control"  ng-model="macro_dict.selectedOption" ng-options="option.label for option in macro_dict.availableOptions track by option.val" required></select>
+                  </label>
+                </div>
+              </div>
+            </label>
+            <label class="item item-input no-border">
+              <div class="col input-col">
+                <div class="item item-input-inset form-input">
+                  <label class="item item-input item-select">
+                    <div  class="input-label">
+                      Category
+                    </div>
+                    <select class="form-control" ng-model="category_dict.selectedOption" ng-options="option.label for option in category_dict.availableOptions track by option.val" required></select>
+                  </label>
+                </div>
+              </div>
+            </label>
+            <label ng-show="checkIsFashion()" class="item item-input no-border">
+              <div class="col input-col">
+                <div class="item item-input-inset form-input">
+                  <label class="item item-input item-select">
+                    <div  class="input-label">
+                      Gender
+                    </div>
+                    <select class="form-control" ng-model="gender_dict.selectedOption" ng-options="option.label for option in gender_dict.availableOptions track by option.val" required></select>
+                  </label>
+                </div>
+              </div>
+            </label>
+
+            <label class="item item-input no-border">
+              <div class="col input-col">
+                <div class="item item-input-inset form-input">
+                  <label class="item item-input item-select">
+                    <div  class="input-label">
+                      Sort
+                    </div>
+                    <select class="form-control" ng-model="sort_dict.selectedOption" ng-options="option.label for option in sort_dict.availableOptions track by option.val" required></select>
+                  </label>
+                </div>
+              </div>
+            </label>
+
+            <button class="button button-full button-positive" ng-click="searchFilterResults()">Create</button>
+          </div>
+        </ion-content>
+      </ion-modal-view>
+    </script>
+
+    <div class="content padding" ng-show="isSearch">
+        <div class="button-bar">
+          <a class="button" ng-click="showCategories()">Filter Listings</a>
+        </div>
+    </div>
+
+    <ion-tabs class="tabs-icon-only tabs-top a search-tab search-pane" overflow-scroll="true" lazy-scroll ng-show="isSearch" overflow-scroll="true" lazy-scroll>
+
+      <ion-tab title="Listings ({{total_listings}})" on-select="isListings=true" on-deselect="isListings=false">
+        <div class="search-results-tab">
+          <div ng-show="!isListings">
+            <div class="col col-50 col-offset-33 message-padding-top">
+              <button class="button icon-left ion-image">No listings yet!</button>
+            </div>
+          </div>
+          <ion-list ng-repeat="post in posts" ng-show="isListings">
+            <ion-item class="item-remove-animate item-thumbnail-left listing-search-item" type="item-text-wrap" ng-click="goTo('listing', post._id)">
+              <img ng-src="{{getMobileAvatar(post)}}">
+              <div class="row">
+                <div class="col col-75">
+                  <h2>{{post.title}}</h2>
+                  <p>{{post.locations[0].name | limitTo:50}} {{post.locations[0].name > 50 ? "..." : ""}} </p>
+                  <p>Listed <span am-time-ago="post.created"></span> ago</p>
+                </div>
+                <div class="col col-33">
+                  <span class="item A_1 assertive pull-right" href="">
+                    <span class="SPAN_2">{{showPrice(post.price)}}</span>
+                  </span>
+                </div>
+              </div>
+            </ion-item>
+          </ion-list>
+          <ion-infinite-scroll ng-if="!allPostsLoaded && isListings" on-infinite="loadMore()"
+            distance="1%" spinner="spiral">
+          </ion-infinite-scroll>
+        </div>
+
+
+<!--         <div class="" ng-show="posts.length === 0">
+          <div> <button></button> </div>
+          <div class="col col-offset-25">
+            <button class="button icon-left ion-person-stalker">No items by that name!</button>
+          </div>
+        </div> -->
+      </ion-tab>
+
+      <ion-tab title="People ({{total_people}})" on-select="isPeople=true" on-deselect="isPeople=false">
+        <div class="search-results-tab" ng-show="isPeople">
+          <ion-list ng-repeat="person in people">
+            <ion-item class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" ng-click="goTo('profile', person._id)">
+              <img ng-src="{{getProfileAvatar(person)}}">
+              <h2>{{person.firstName}} {{person.lastName}}</h2>
+              <p>{{person.education | limitTo:50}} {{person.education.length > 50 ? "..." : ""}} </p>
+            </ion-item>
+          </ion-list>
+<!--           <ion-infinite-scroll ng-if="!allPeopleLoaded" on-infinite="loadMorePeople()"
+            distance="1%" spinner="spiral">
+          </ion-infinite-scroll> -->
+        </div>
+
+<!--         <div class="" ng-show="people.length === 0">
+          <div class="col col-offset-25 message-padding-top">
+            <button class="button icon-left ion-person-stalker">No users by that name!</button>
+          </div>
+        </div> -->
+      </ion-tab>
+    </ion-tabs>
+
+    <div ng-init="loadImages()" ng-show="!isSearch && !isFashion && !isHomeFurniture && !isElectronics && !isTextbooks && !isOther">
+<!--       <ion-refresher spinner="spiral" disable-pulling-rotation="true" on-refresh="loadImages()">
+      </ion-refresher> -->
+      <div class="row main-search-item" ng-click="seeMoreFashion()">
+        <div class="col main-search-item wrapper">
+            <img src="img/fashion_category.png" width="100%">
+            <p>Fashion</p>
+        </div>
+      </div>
+      <div class="row product-gallery" ng-repeat="post in fashionPosts" ng-if="$index % 3 === 0" ng-click="">
+          <div class="col col-33 product-gallery" ng-if="$index < fashionPosts.length" ng-click="seeMoreFashion($index)" id="{{fashionPosts[$index]._id}}">
+              <img image-lazy-src="{{getMobileAvatar(fashionPosts[$index])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+          </div>
+          <div class="col col-33 product-gallery" ng-if="$index + 1 < fashionPosts.length" ng-click="seeMoreFashion($index + 1)">
+              <img image-lazy-src="{{getMobileAvatar(fashionPosts[$index + 1])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+          </div>
+          <div class="col col-33 product-gallery" ng-if="$index + 2 < fashionPosts.length" ng-click="seeMoreFashion($index + 2)">
+              <img image-lazy-src="{{getMobileAvatar(fashionPosts[$index + 2])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+          </div>
+      </div>
+
+      <div class="row main-search-item" ng-click="seeMoreHomeFurniture()">
+        <div class="col main-search-item wrapper">
+            <img image-lazy-src="img/home_category.png" width="100%">
+            <p>Home + Furniture</p>
+        </div>
+      </div>
+      <div class="row product-gallery" ng-repeat="post in homeFurniturePosts" ng-if="$index % 3 === 0" ng-click="">
+          <div class="col col-33 product-gallery" ng-if="$index < homeFurniturePosts.length">
+            <a href="" ng-click="seeMoreHomeFurniture($index)">
+              <img image-lazy-src="{{getMobileAvatar(homeFurniturePosts[$index])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+          <div class="col col-33 product-gallery" ng-if="$index + 1 < homeFurniturePosts.length">
+            <a href="" ng-click="seeMoreHomeFurniture($index + 1)">
+              <img image-lazy-src="{{getMobileAvatar(homeFurniturePosts[$index + 1])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+          <div class="col col-33 product-gallery" ng-if="$index + 2 < homeFurniturePosts.length">
+            <a href="" ng-click="seeMoreHomeFurniture($index + 2)">
+              <img image-lazy-src="{{getMobileAvatar(homeFurniturePosts[$index + 2])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+      </div>
+
+      <div class="row main-search-item" ng-click="seeMoreElectronics()">
+        <div class="col main-search-item wrapper">
+            <img image-lazy-src="img/electronics_category.png" width="100%">
+            <p>Electronics</p>
+        </div>
+      </div>
+      <div class="row product-gallery" ng-repeat="post in electronicsPosts" ng-if="$index % 3 === 0" ng-click="">
+          <div class="col col-33 product-gallery" ng-if="$index < electronicsPosts.length">
+            <a href="" ng-click="seeMoreElectronics($index)">
+              <img image-lazy-src="{{getMobileAvatar(electronicsPosts[$index])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+          <div class="col col-33 product-gallery" ng-if="$index + 1 < electronicsPosts.length">
+            <a href="" ng-click="seeMoreElectronics($index + 1)">
+              <img image-lazy-src="{{getMobileAvatar(electronicsPosts[$index + 1])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+          <div class="col col-33 product-gallery" ng-if="$index + 2 < electronicsPosts.length">
+            <a href="" ng-click="seeMoreElectronics($index + 2)">
+              <img image-lazy-src="{{getMobileAvatar(electronicsPosts[$index + 2])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+      </div>
+
+      <div class="row main-search-item" ng-click="seeMoreTextbooks()">
+        <div class="col main-search-item wrapper">
+            <img image-lazy-src="img/textbook_category.png" width="100%">
+            <p>Textbooks</p>
+        </div>
+      </div>
+      <div class="row product-gallery" ng-repeat="post in textbooksPosts" ng-if="$index % 3 === 0" ng-click="">
+          <div class="col col-33 product-gallery" ng-if="$index < textbooksPosts.length">
+            <a href="" ng-click="seeMoreTextbooks($index)">
+              <img image-lazy-src="{{getMobileAvatar(textbooksPosts[$index])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+          <div class="col col-33 product-gallery" ng-if="$index + 1 < textbooksPosts.length">
+            <a href="" ng-click="seeMoreTextbooks($index + 1)">
+              <img image-lazy-src="{{getMobileAvatar(textbooksPosts[$index + 1])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+          <div class="col col-33 product-gallery" ng-if="$index + 2 < textbooksPosts.length">
+            <a href="" ng-click="seeMoreTextbooks($index + 2)">
+              <img image-lazy-src="{{getMobileAvatar(textbooksPosts[$index + 2])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+      </div>
+
+      <div class="row main-search-item" ng-click="seeMoreOther()">
+        <div class="col main-search-item wrapper">
+            <img image-lazy-src="img/other_category.png" width="100%">
+            <p>Other</p>
+        </div>
+      </div>
+      <div class="row product-gallery" ng-repeat="post in otherPosts" ng-if="$index % 3 === 0" ng-click="">
+          <div class="col col-33 product-gallery" ng-if="$index < otherPosts.length">
+            <a href="" ng-click="seeMoreOther($index)">
+              <img image-lazy-src="{{getMobileAvatar(otherPosts[$index])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+          <div class="col col-33 product-gallery" ng-if="$index + 1 < otherPosts.length">
+            <a href="" ng-click="seeMoreOther($index + 1)">
+              <img image-lazy-src="{{getMobileAvatar(otherPosts[$index + 1])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+          <div class="col col-33 product-gallery" ng-if="$index + 2 < otherPosts.length">
+            <a href="" ng-click="seeMoreOther($index + 2)">
+              <img image-lazy-src="{{getMobileAvatar(otherPosts[$index + 2])}}" image-lazy-loader="lines" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </a>
+          </div>
+      </div>
+    </div>
+
+
+    <div ng-show="!isSearch && (isFashion || isHomeFurniture || isElectronics || isTextbooks || isOther)">
+      <ion-content  delegate-handle="search-feed" overflow-scroll="true" lazy-scroll>
+        <ion-refresher on-refresh="getNewerPosts()" spinner="spiral" disable-pulling-rotation="true">
+        </ion-refresher>
+        <ion-list class="feed-item" ng-repeat="post in posts" end-of-repeat-directive>
+          <div id ="{{'feed-' + $index}}" class="feed-card" type="item-text-wrap" style="" >
+            <div class="row row-center feed-row" style="">
+              <span class="col col-20 item-avatar" ng-click="goTo('profile', post.seller._id)">
+                <img ng-src="{{getProfileAvatar(post.seller)}}">
+              </span>
+              <span class="item-name" ng-click="goTo('profile', post.seller._id)">
+                <div>
+                  {{post.seller.firstName}}
+                </div>
+                <div class="item-note" style="font-weight:normal;font-size:13px;">
+                  {{post.seller.education}}
+                </div>
+              </span>
+
+              <div class="col"></div>
+              <span class="make-right feed-time"><span am-time-ago="post.created"></span></span>
+            </div>
+
+            <div class="img-container">
+              <img class="full-image" image-lazy-src="{{getMobileImg(post)}}" image-lazy-loader="lines" image-lazy-distance-from-bottom-to-load="100" ng-click="goTo('listing', post._id)">
+            </div>
+
+            <div class="row row-center feed-row thin-row">
+              <a class="item item-icon-left assertive" href="" ng-click="likeListing(post)">
+                <i class="icon ng-class: { 'ion-ios-heart' : post.liked,  'ion-ios-heart-outline' : !post.liked }"></i>
+              </a>
+              <a class="item item-icon-left" ng-click="goTo('comments', post._id)">
+                <i class="icon ion-chatbubble-working positive"></i>
+              </a>
+              <a class="item item-icon-left assertive" href="#">
+                <i class="icon ion-ios-redo"></i>
+              </a>
+
+              <span style="flex: auto;"></span>
+              <a class="item A_1 assertive pull-right" href="">
+                <span class="SPAN_2">{{showPrice(post.price)}}</span>
+              </a>
+            </div>
+
+            <div class="likes" style="flex: auto; font-size: 15px; padding: 10px 0px 0px 10px;">
+                <span ng-click="goTo('likes', post._id)" ng-show="post.likes.length != 0">
+                  <i class="icon ion-heart"></i>
+                  <span ng-show="post.likes.length != 1"> {{post.likes.length}} Likes</span>
+                  <span ng-show="post.likes.length == 1"> {{post.likes.length}} Like</span>
+                </span>
+                <span>
+                  <span style="padding-left:2vw;" ng-show="post.offers.length > 0"><i class="icon ion-ios-circle-filled"></i> {{post.offers.length}} {{post.offers.length == 1 ? "Offer" : "Offers"}}</span>
+                  <span style="padding-left:2vw;color:#33cd5f;" ng-show="post.offers.length == 0 || post.status == 'Available'"><i class="icon ion-checkmark-circled balanced"></i> Available</span>
+                  <span style="padding-left:2vw;color:red;" ng-show="post.status == 'Held'"><i class="icon ion-close-circled"></i> On Hold</span>
+                </span>
+            </div>
+
+
+            <div class="row row-center feed-row thin-row"
+            ng-click="goTo('listing', post._id)">
+              <span class="item-name2" style="font-size:15px;font-weight: 50; padding: 0px 0px 0px 10px;">{{post.title}}</span>
+
+              <span class="offers" style="font-size:15px; padding: 0px 0px 0px 30px;">
+            </div>
+
+
+            <div class="col col-100 description padding-bottom" style="font-size:15px;font-weight: 50; padding: 0px 0px 0px 10px" ng-click="toggleDesc(post.description)">
+              <div ng-show="post.description.length < 130">
+                <p>{{post.description}}</p>
+              </div>
+
+              <div ng-show="post.description.length >= 130">
+                <div ng-class="isDescShown(post.description) ? 'item-expand active' : 'item-expand inactive'">
+                  <p>{{post.description}}</p>
+                </div>
+                <div class="item-expand-footer">
+                  <i ng-class="isDescShown(post.description) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+                  {{isDescShown(post.description) ? 'Less' : 'More'}}
+                 </div>
+               </div>
+            </div>
+          </div>
+        </ion-list>
+        <ion-infinite-scroll ng-if="!allPostsLoaded" on-infinite="getOlderPosts()"
+          distance="1%" spinner="spiral">
+        </ion-infinite-scroll>
+      </ion-content>
+    </div>
+
+
+  </ion-content>
+</ion-view>

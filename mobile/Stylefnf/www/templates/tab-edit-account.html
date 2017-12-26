@@ -1,0 +1,70 @@
+<ion-view view-title="">
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      <i class="icon ion-chevron-left assertive" ng-click="goBack()" style="float:left;padding-right:25px;color:#FF2D54"></i>
+   		<!-- <i class="ion-android-arrow-back" ng-click="goBack()"></i> -->
+      &nbsp; Edit Profile
+   		<i class="ion-checkmark" style="position: absolute; right:10px;" ng-click="updateProfile()"></i>
+    </div>
+  </ion-nav-title>
+
+  <ion-content ng-init="loadProfile()">
+    <div class="row"><div class="col"></div></div>
+  	<div class="row">
+  		<div class="col">
+      	<span style="padding-left: 35px;"> First Name </span>
+      	<div class="item item-input-inset form-input">
+      		<label class="item-input-wrapper">
+            <input type="text" server-error name="firstName" ng-model="currentUser.firstName" required>
+          </label>
+      	</div>
+      </div>
+  	</div>
+
+  	<div class="row">
+  		<div class="col">
+      	<span style="padding-left: 35px;"> Last Name </span>
+      	<div class="item item-input-inset form-input">
+      		<label class="item-input-wrapper">
+            <input type="text" server-error name="lastName" ng-model="currentUser.lastName" required>
+          </label>
+      	</div>
+      </div>
+  	</div>
+
+
+  	<div class="row">
+  		<div class="col">
+      	<span style="padding-left: 35px;"> Email </span>
+      	<div class="item item-input-inset form-input">
+      		<label class="item-input-wrapper">
+            <input type="text" server-error name="email" ng-model="currentUser.email" required>
+          </label>
+      	</div>
+      </div>
+  	</div>
+
+    <div class="row">
+      <div class="col">
+        <span style="padding-left: 35px;"> About </span>
+        <div class="item item-input-inset" style="padding-left: 35px ; padding-right: 35px; border: none;">
+          <label class="item-input-wrapper">
+           <!--  <input style="height: 100px;" type="text" server-error name="About" ng-model="currentUser.email" required> -->
+            <textarea style="resize:none; padding-left:0px; padding-top:15px; font-size: 20px; height: 100px;" ng-model="currentUser.about">
+
+            </textarea>
+          </label>
+        </div>
+      </div>
+    </div>
+
+  	<div class="row">
+  		<div class="col">
+      	<span style="padding-left: 35px;"> Gender </span>
+        <label class="item item-input item-select" style="height: 25px; width: 50%; left: 35px;">
+          <select class="form-control" id="select" ng-model="genderStatuses.selectedOption" ng-options="option.label for option in genderStatuses.availableOptions track by option.val" required></select>
+        </label>
+      </div>
+  	</div>
+  </ion-content>
+</ion-view>

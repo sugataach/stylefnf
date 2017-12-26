@@ -1,0 +1,56 @@
+<ion-view hide-nav-bar="true">
+    <ion-content class="login-container" scroll="true" overflow-scroll="false" >
+        <form  name="loginForm" ng-submit="emailLogin(email,password)" novalidate>
+          <div class = "col header-pic">
+           <img src="./img/stylefnfWhite.png"/> 
+          </div>
+          <div class="col input-col">
+            <div class="item item-input-inset form-input">
+              <label class="item-input-wrapper">
+                <input type="email" server-error name="email" ng-model="email" placeholder="School Email">
+              </label>
+            </div>
+          </div>
+          <div class="col input-col">
+            <div class="item item-input-inset form-input">
+              <label class="item-input-wrapper">
+                <input server-error name="password" ng-model="password" type="password" placeholder="Password" required>
+              </label>
+            </div>
+          </div>
+        
+
+          <div class="col input-col">
+            <div class="item item-input-inset form-input">
+              <button type="submit" ng-disabled="loginForm.$invalid" class="button button-assertive" style="border: 1px solid white;">
+                Log in
+              </button>
+            </div>
+          </div>
+
+          <div class="col input-col">
+            <div class="item item-input-inset form-input">
+              <a class="forgot-password" href="#/forgotPassword">
+                Forgot your password?
+              </a>
+            </div>
+          </div>
+        </form>
+    </ion-content>
+
+    <div class="authenticationFooter">
+      <ion-footer-bar align-title="center" class="bar-assertive" style="border-top: 1px solid white;">
+        <div class="title">
+          <a class="signup-exit-login" href="#/signup">
+            <span class="signup-exit">Don't have an account?</span>
+            Sign up.
+          </a>
+        </div>
+        <button class="button button-clear icon ion-help-circled" ng-click="goToAbout()"></button>
+      </ion-footer-bar>
+    </div>
+<!--     <ion-footer-bar align-title="center" class="bar-assertive">
+      <div class="title"><a href="#/signup" class="signup-exit-login">Sign Up for Stylefnf</a></div>
+      <button class="button button-clear icon ion-help-circled" ng-click="goToAbout()"></button>
+    </ion-footer-bar> -->
+</ion-view>

@@ -1,0 +1,87 @@
+
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view hide-tabs>
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      <i class="icon ion-chevron-left assertive" ng-click="goBack()" style="float:left;padding-right:25px;color:#FF2D54"></i> &nbsp; {{$root.currChatName}}
+    </div>
+  </ion-nav-title>
+  <ion-content class="has-footer" delegate-handle="userMessageScroll">
+    <div>
+      <div class="chat-wrapper" ng-repeat="msg in messageThread">
+        <div ng-if="getParticipantId(msg) == getUserId()">
+          <div class="row">
+            <div class="col">
+              <img class="profile-pic right" ng-src="{{getParticipantPic(msg)}}">
+              <div class="chat-bubble right">
+                {{msg.content}}
+                <div class="message-detail">
+                  {{msg.created | amCalendar}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div ng-if="getParticipantId(msg) != getUserId()">
+          <div class="row">
+            <div class="col">
+              <img class="profile-pic left" ng-src="{{getParticipantPic(msg)}}">
+                <div class="chat-bubble left">
+                  {{msg.content}}
+                  <div class="message-detail">
+                    {{msg.created | amCalendar}}
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+<!--     <div ng-if="seenTimestamp">
+      Seen {{seenTimestamp | amCalendar}}
+    </div> -->
+    <!-- <form name="sendMessageForm" ng-submit="sendMessage(sendMessageForm)" novalidate>
+      <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
+        <label class="item-input-wrapper">
+          <textarea ng-model="input.message" value="" placeholder="Send {{toUser.username}} a message..." required minlength="1" maxlength="1500" msd-elastic></textarea>
+        </label>
+        <div class="footer-btn-wrap">
+          <button class="button button-icon icon ion-android-send footer-btn" type="submit"
+              ng-disabled="!input.message || input.message === ''">
+          </button>
+        </div>
+      </ion-footer-bar>
+    </form> -->
+
+  </ion-content>
+  <!-- <form name="sendMessageForm" ng-submit="sendMessage(sendMessageForm)" novalidate>
+    <ion-footer-bar class="chatMsgSend" keyboard-attach>
+      <div class="send-msg-wrapper">
+        <textarea ng-model="input.message" value="" placeholder="Send a message..." required minlength="1" maxlength="1500" msd-elastic></textarea>
+        <button class="button button-icon icon ion-android-send footer-btn" type="submit"
+                ng-disabled="!input.message || input.message === ''">
+        </button>
+      </div>
+    </ion-footer-bar>
+  </form> -->
+  <form name="sendMessageForm" class="send-msg" ng-submit="sendMessage(input.message)" novalidate>
+      <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
+        <label class="item-input-wrapper">
+          <textarea id="chatField" ng-model="input.message" value="" placeholder="Send {{toUser.username}} a message..." required minlength="1" maxlength="1500" msd-elastic></textarea>
+          <div class="footer-btn-wrap">
+            <button ng-click="sendMessage(input.message)" class="button button-icon icon ion-android-send footer-btn" type="submit"
+                ng-disabled="!input.message || input.message === ''">
+            </button>
+          </div>
+        </label>
+
+      </ion-footer-bar>
+    </form>
+</ion-view>

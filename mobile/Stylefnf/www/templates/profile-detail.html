@@ -1,0 +1,195 @@
+<ion-view view-title="">
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      <i class="icon ion-chevron-left assertive" ng-click="goBack()" style="float:left;padding-right:25px;"></i>
+      {{user.firstName}} {{user.lastName}}
+      <span style="flex: auto;"></span>
+    </div>
+  </ion-nav-title>
+  <ion-content ng-init="loadProfile()" overflow-scroll="true" lazy-scroll>
+    <ion-refresher on-refresh="loadProfile()" spinner="spiral" disable-pulling-rotation="true">
+    </ion-refresher>
+    <ion-item class="profile-item">
+      <div class="row">
+        <div class="col col-25">
+          <div class="profile-picture big-profile-picture">
+            <img ng-src="{{user.profilePictures[0]}}" ng-click="showProfileModal()">
+          </div>
+        </div>
+        <div class="col col-75 profile-detail-col">
+          <div class="row">
+            <div class="col center-me">
+              <div class="profile-num">
+                {{getListings(user)}}
+              </div>
+              <span class="profile-stat">listings</span>
+            </div>
+            <div class="col center-me" ng-click="goToFollowing()">
+              <div class="profile-num">
+                {{getFollowing(user)}}
+              </div>
+              <span class="profile-stat">following</span>
+            </div>
+            <div class="col center-me" ng-click="goToFollowers()">
+              <div class="profile-num">
+                {{getFollowers(user)}}
+              </div>
+              <span class="profile-stat">followers</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-75">
+              <button class="button button-full button-outline button-assertive profile-follow-btn ng-class: { 'hidden': isFollowing() }" ng-click="followAction(user)" ng-show="!isFollowing(user)"><i class="ion-plus-round icon-padding"></i>FOLLOW</button>
+
+              <button class="button button-full button-balanced profile-follow-btn ng-class: { 'hidden': !isFollowing() }" ng-click="followAction(user)" ng-show="isFollowing(user)"><i class="ion-checkmark icon-padding"></i>FOLLOWING</button>
+
+             <!--  <button class="button button-full button-outline button-assertive profile-follow-btn" ng-click="follow()"><i class="ion-plus-round icon-padding"></i>UNFOLLOW</button> -->
+
+              <!-- <button class="button button-full button-outline button-assertive profile-follow-btn hidden ng-class: { 'display' : !hasFollowed() }" ng-click="follow()"><i class="ion-plus-round icon-padding"></i>UNFOLLOW</button> -->
+
+            </div>
+
+            <div class="col col-25" style="padding-left: 4px;">
+              <button class="button button-full button-assertive profile-follow-extra-btn" ng-click="startChat()"><i class="ion-ios-email"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <h5 class="profile-name dark">{{user.firstName}} {{user.lastName}}</h5> -->
+      <div class="profile-info">{{user.about}}</div>
+    </ion-item>
+    <ion-tabs class="tabs-icon-only tabs-top profile-tabs profile-feed" overflow-scroll="true" lazy-scroll>
+      <ion-tab icon-on="ion-grid" icon-off="ion-grid" hidden="!isGallery" on-select="isGallery=true" on-deselect="isGallery=false">
+        <div ng-show="isGallery" class="row product-gallery" ng-repeat="post in displayPost" ng-if="$index % 3 === 0">
+            <div class="col col-33 product-gallery" ng-if="$index < displayPost.length" ng-click="goTo('listing', displayPost[$index]._id)">
+                <img image-lazy-src="{{getMobileAvatar(displayPost[$index])}}" image-lazy-loader="dots" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </div>
+            <div class="col col-33 product-gallery" ng-if="$index + 1 < displayPost.length" ng-click="goTo('listing', displayPost[$index + 1]._id)">
+                <img image-lazy-src="{{getMobileAvatar(displayPost[$index + 1])}}" image-lazy-loader="dots" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </div>
+            <div class="col col-33 product-gallery" ng-if="$index + 2 < displayPost.length" ng-click="goTo('listing', displayPost[$index + 2]._id)">
+                <img image-lazy-src="{{getMobileAvatar(displayPost[$index + 2])}}" image-lazy-loader="dots" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </div>
+        </div>
+        <div ng-show="displayPost.length === 0" class="col col-offset-33 message-padding-top">
+          <button class="button icon-left ion-image">No listings yet!</button>
+        </div>
+      </ion-tab>
+      <ion-tab title="Sent" icon-on="ion-navicon" icon-off="ion-navicon" on-select="isFlow=true" on-deselect="isFlow=false">
+        <ion-list ng-show="isFlow" class="feed-item" ng-repeat="post in displayPost | orderBy:'-created' track by post._id">
+          <div class="feed-card" type="item-text-wrap">
+            <div class="row row-center feed-row">
+              <span class="col col-20 item-avatar">
+                <img ng-src="{{getProfileAvatar(post.seller)}}">
+              </span>
+              <span class="item-name" ng-click="goTo('profile', post.seller._id)">
+                <div>
+                  {{post.seller.firstName}}
+                </div>
+                <div class="item-note" style="font-weight:normal;font-size:13px;">
+                  {{post.seller.education}}
+                </div>
+              </span>
+              <div class="col">
+              </div>
+              <span class="make-right feed-time"><span am-time-ago="post.created"></span></span>
+            </div>
+            <div class="img-container" ng-click="goTo('listing', post._id)">
+              <img class="full-image" image-lazy-src="{{getMobileImg(post)}}" image-lazy-loader="lines" image-lazy-distance-from-bottom-to-load="100">
+            </div>
+            <div class="row row-center feed-row thin-row">
+              <a class="item item-icon-left assertive" href="" ng-click="likeListing(post)">
+                <i class="icon ng-class: { 'ion-ios-heart' : post.liked,  'ion-ios-heart-outline' : !post.liked }"></i>
+              </a>
+              <a class="item item-icon-left" ng-click="goTo('comments', post._id)">
+                <i class="icon ion-chatbubble-working positive"></i>
+              </a>
+    <!--           <a class="item item-icon-left assertive" href="#">
+                <i class="icon ion-ios-redo"></i>
+              </a> -->
+
+<!--               <a class="item item-icon-left" href="#">
+                <i class="icon ion-android-more-vertical comment-item"></i>
+              </a> -->
+              <span style="flex: auto;"></span>
+              <a class="item A_1 assertive pull-right" href="">
+                <span class="SPAN_2">{{showPrice(post.price)}}</span>
+              </a>
+            </div>
+
+            <div class="likes" style="flex: auto; font-size: 15px; padding: 10px 0px 0px 10px;">
+                <span ng-show="post.likes.length != 0">
+                  <i class="icon ion-heart"></i>
+                  <span ng-show="post.likes.length != 1"> {{post.likes.length}} Likes</span>
+                  <span ng-show="post.likes.length == 1"> {{post.likes.length}} Like</span>
+                </span>
+                <span>
+                  <span style="padding-left:2vw;" ng-show="post.offers.length > 0"><i class="icon ion-ios-circle-filled"></i> {{post.offers.length}} {{post.offers.length == 1 ? "Offer" : "Offers"}}</span>
+                  <span style="padding-left:2vw;color:#33cd5f;" ng-show="post.offers.length == 0 || post.status == 'Available'"><i class="icon ion-checkmark-circled balanced"></i> Available</span>
+                  <span style="padding-left:2vw;color:red;" ng-show="post.status == 'Held'"><i class="icon ion-close-circled"></i> On Hold</span>
+                </span>
+            </div>
+
+            <div class="row row-center feed-row thin-row" ng-click="goto('listing', post._id)">
+              <span class="item-name2" style="font-size:15px;font-weight: 50; padding: 0px 0px 0px 10px;">{{post.title}}</span>
+
+              <span class="offers" style="font-size:15px; padding: 0px 0px 0px 30px;">
+                </span>
+            </div>
+
+
+            <div class="col col-100 description padding-bottom" style="font-size:15px;font-weight: 50; padding: 0px 0px 0px 10px" ng-click="toggleDesc(post.description)">
+              <div ng-show="post.description.length < 130">
+                <p>{{post.description}}</p>
+              </div>
+
+              <div ng-show="post.description.length >= 130">
+                <div ng-class="isDescShown(post.description) ? 'item-expand active' : 'item-expand inactive'">
+                  <p>{{post.description}}</p>
+                </div>
+                <div class="item-expand-footer">
+                  <i ng-class="isDescShown(post.description) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+                  {{isDescShown(post.description) ? 'Less' : 'More'}}
+                 </div>
+               </div>
+            </div>
+          </div>
+        </ion-list>
+        <div ng-show="displayPost.length === 0" class="col col-offset-33 message-padding-top">
+          <button class="button icon-left ion-image">No listings yet!</button>
+        </div>
+      </ion-tab>
+      <ion-tab icon-on="ion-ios-heart" icon-off="ion-ios-heart-outline" hidden="!isLikeGallery" on-select="isLikeGallery=true" on-deselect="isLikeGallery=false">
+        <div ng-show="isLikeGallery" class="row product-gallery" ng-repeat="post in likedPosts" ng-if="$index % 3 === 0">
+            <div class="col col-33 product-gallery" ng-if="$index < likedPosts.length" ng-click="goTo('listing', likedPosts[$index].post._id)">
+                <img image-lazy-src="{{getMobileAvatar(likedPosts[$index].post)}}" image-lazy-loader="dots" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </div>
+            <div class="col col-33 product-gallery" ng-if="$index + 1 < likedPosts.length" ng-click="goTo('listing', likedPosts[$index + 1].post._id)">
+                <img image-lazy-src="{{getMobileAvatar(likedPosts[$index + 1].post)}}" image-lazy-loader="dots" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </div>
+            <div class="col col-33 product-gallery" ng-if="$index + 2 < likedPosts.length" ng-click="goTo('listing', likedPosts[$index + 2].post._id)">
+                <img image-lazy-src="{{getMobileAvatar(likedPosts[$index + 2].post)}}" image-lazy-loader="dots" width="100%" image-lazy-distance-from-bottom-to-load="100" />
+            </div>
+        </div>
+        <div ng-show="likedPosts.length === 0" class="col col-offset-33 message-padding-top">
+          <button class="button icon-left ion-ios-heart">No likes yet!</button>
+        </div>
+      </ion-tab>
+    </ion-tabs>
+
+    <script id="profile-modal.html" type="text/ng-template">
+      <div class="modal image-modal black-bg" ng-click="closeProfileModal()">
+        <ion-slide-box show-pager="false" >
+          <ion-slide>
+            
+            <div class="flexbox-container" style="height: {{getDeviceHeight()}}px">
+              <img ng-src="{{user.profilePictures[0]}}" class="fullscreen-image">
+            </div>
+           
+          </ion-slide>
+        </ion-slide-box>      
+      </div>
+    </script>
+
+  </ion-content>
+</ion-view>

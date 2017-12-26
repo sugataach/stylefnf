@@ -1,0 +1,111 @@
+<ion-view view-title="Feed">
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font-more">
+      stylefnf
+      <span style="flex: auto"></span>
+      <i ng-click="goToChats()" class="icon ion-android-mail positive badge-container" style="font-size:30px;">
+        <span class="badge badge-assertive notif-badge" style="font-size:20px;font-weight: 100;padding: 3px 7px;">{{$root.showChats()}}</span>
+      </i>
+    </div>
+  </ion-nav-title>
+  <ion-content lazy-scroll>
+    <ion-refresher on-refresh="getNewerPosts()" spinner="spiral" disable-pulling-rotation="true">
+    </ion-refresher>
+    <ion-list class="feed-item" ng-repeat="post in posts track by post._id">
+      <div class="feed-card" type="item-text-wrap" style="">
+        <div class="row row-center feed-row" style="">
+          <span class="col col-20 item-avatar" ng-click="goTo('profile', post.seller._id)">
+            <img ng-src="{{getProfileAvatar(post.seller)}}">
+          </span>
+
+          <span class="item-name" ng-click="goTo('profile', post.seller._id)">
+            <div>
+              {{post.seller.firstName}}
+            </div>
+            <div class="item-note" style="font-weight:normal;font-size:13px;float:left;">
+              {{post.seller.education}}
+            </div>
+          </span>
+
+          <div class="col"></div>
+          <span class="make-right feed-time"><span am-time-ago="post.created"></span></span>
+        </div>
+
+        <div class="img-container">
+<!--           <ion-slide-box>
+              <ion-slide ng-repeat="image in images" image-lazy-loader="android">
+                  <img class="full-image" image-lazy-src="{{image}}" image-lazy-loader="lines">
+              </ion-slide>
+          </ion-slide-box> -->
+          <img class="full-image" image-lazy-src="{{getMobileImg(post)}}" image-lazy-loader="lines" image-lazy-distance-from-bottom-to-load="100" ng-click="goTo('listing', post._id)">
+          <!-- <img class="full-image" ng-src="{{post.imageUrls[0]}}"> -->
+        </div>
+
+        <div class="row row-center feed-row thin-row">
+          <a class="item item-icon-left assertive" href="" ng-click="likeListing(post)">
+            <i class="icon ng-class: { 'ion-ios-heart' : post.liked,  'ion-ios-heart-outline' : !post.liked }"></i>
+          </a>
+          <a class="item item-icon-left" ng-click="goTo('comments', post._id)">
+            <i class="icon ion-chatbubble-working positive"></i>
+          </a>
+<!--           <a class="item item-icon-left assertive" href="#">
+            <i class="icon ion-ios-redo"></i>
+          </a> -->
+
+          <!-- <a class="item item-icon-left" href="#">
+            <i class="icon ion-android-more-vertical comment-item"></i>
+          </a> -->
+          <span style="flex: auto;"></span>
+          <a class="item A_1 assertive pull-right" href="">
+            <span class="SPAN_2">{{showPrice(post.price)}}</span>
+          </a>
+        </div>
+
+
+        <div class="likes" style="flex: auto; font-size: 15px; padding: 10px 0px 0px 10px;">
+            <span ng-click="goTo('likes', post._id)" ng-show="post.likes.length != 0">
+              <i class="icon ion-heart"></i>
+              <span ng-show="post.likes.length != 1"> {{post.likes.length}} Likes</span>
+              <span ng-show="post.likes.length == 1"> {{post.likes.length}} Like</span>
+            </span>
+            <span>
+              <span style="padding-left:2vw;" ng-show="post.offers.length > 0"><i class="icon ion-ios-circle-filled"></i> {{post.offers.length}} {{post.offers.length == 1 ? "Offer" : "Offers"}}</span>
+              <span style="padding-left:2vw;color:#33cd5f;" ng-show="post.offers.length == 0 || post.status == 'Available'"><i class="icon ion-checkmark-circled balanced"></i> Available</span>
+              <span style="padding-left:2vw;color:red;" ng-show="post.status == 'Held'"><i class="icon ion-close-circled"></i> On Hold</span>
+            </span>
+        </div>
+
+
+        <div class="row row-center feed-row thin-row" ng-click="goTo('listing', post._id)">
+          <span class="item-name2" style="font-size:15px;font-weight: 50; padding: 0px 0px 0px 10px;">{{postTitle(post.title)}}</span>
+
+          <span class="offers" style="font-size:15px; padding: 0px 0px 0px 30px;">
+
+        </div>
+
+
+        <div class="col col-100 description padding-bottom" style="font-size:15px;font-weight: 50; padding: 0px 0px 0px 10px" ng-click="toggleDesc(post.description)">
+          <div ng-show="post.description.length < 130">
+            <p>{{post.description}}</p>
+          </div>
+
+          <div ng-show="post.description.length >= 130">
+            <div ng-class="isDescShown(post.description) ? 'item-expand active' : 'item-expand inactive'">
+              <p>{{post.description}}</p>
+            </div>
+            <div class="item-expand-footer">
+              <i ng-class="isDescShown(post.description) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+              {{isDescShown(post.description) ? 'Less' : 'More'}}
+             </div>
+           </div>
+        </div>
+
+
+
+      </div>
+    </ion-list>
+    <ion-infinite-scroll ng-if="!allPostsLoaded" on-infinite="getOlderPosts()"
+      distance="1%" spinner="spiral">
+    </ion-infinite-scroll>
+  </ion-content>
+</ion-view>

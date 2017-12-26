@@ -1,0 +1,128 @@
+<view-title>{{getOtherFullName(currChat.participants)}}</view-title>
+
+<div class="container" style="background-color:white;padding-top:25px;border:1px solid #ddd;">
+<!--     <div class="row">
+        <div class="col-lg-3">
+            <div class="btn-panel btn-panel-conversation">
+                <a href="" class="btn  col-lg-6 send-message-btn " role="button"><i class="fa fa-search"></i> Search</a>
+                <a href="" class="btn  col-lg-6  send-message-btn pull-right" role="button"><i class="fa fa-plus"></i> New Message</a>
+            </div>
+        </div>
+
+        <div class="col-lg-offset-1 col-lg-7">
+            <div class="btn-panel btn-panel-msg">
+
+                <a href="" class="btn  col-lg-3  send-message-btn pull-right" role="button"><i class="fa fa-gears"></i> Settings</a>
+            </div>
+        </div>
+    </div> -->
+    <div class="row">
+        <div class="col-lg-3 padding-below" style="border-right:1px solid #ddd;">
+            <h5>Inbox</h5>
+        </div>   
+
+        <div class="col-lg-9 padding-below">
+            <h5 style="">
+                <b>
+                    <a ng-href="#/profile/{{getOther(currChat.participants, '_id')}}">{{getOtherFullName(currChat.participants)}}</a>
+                </b>
+            </h5>
+        </div> 
+    </div>
+
+    <div class="row" ng-if="chatThreads.length > 0">
+
+<!--         <div ng-if="chatThreads.length == 0" class="conversation-wrap col-lg-3">
+            <div class="media conversation">
+                <a class="pull-left" href="#">
+                    <img style="width: auto; height: 45px;" class="media-object" ng-src="">
+                </a>
+                <div class="media-body">
+                    <a ng-href="" class="h5 media-heading"></a>
+                    <small></small>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- <div class="conversation-wrap col-lg-3"> -->
+            <div class="conversation-wrap col-lg-3">
+                <div ng-repeat="chat in chatThreads">
+                    <div ng-click="selectChat(chat)" class="media conversation ng-class:{ 'selected-conversation': chat._id == currChat._id, 'new-messages': (chat.hasUnseenMessages && chat.lastSentUser != $root.currentUser._id)}">
+                        <a class="pull-left" href="#">
+                            <img style="width: 45px; height: 45px;" class="media-object" ng-src="{{getOtherPicture(chat.participants)}}">
+                        </a>
+                        <div class="media-body" style="width:250px;">
+                            <h6 class="media-heading" style="font-size:18px;width:100%;">
+                                {{getOtherFullName(chat.participants)}}
+                            </h6>
+                            <!-- <a class="h5 media-heading"></a> -->
+                            <small>{{chat.lastMessage | limitTo:25}}{{chat.lastMessage.length > 25? "..." : ""}}</small>
+
+                            <small ng-if="(chat.hasUnseenMessages && chat.lastSentUser != $root.currentUser._id)" class="media-heading pull-right">New</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- </div> -->
+
+        <div class="message-wrap col-lg-9">
+            <div scroll-glue class="msg-wrap">
+                <div ng-repeat="message in messageThread">
+                    <div class="media msg container">
+                        <a class="pull-left" ng-href="#/profile/{{message.sender._id}}">
+                            <img class="media-object" style="width: 32px; height: 32px;" ng-src="{{message.sender.profilePictures[0]}}">
+                        </a>
+                        <div class="media-body" style="width:800px;">
+                            <small class="pull-right time"><i class="fa fa-clock-o"></i> <time>{{ message.created | amCalendar }}</time></small>
+                            <h6 class="media-heading"><a href="#/profile/{{message.sender._id}}">{{message.sender.firstName}} {{message.sender.lastName}}</a></h6>
+                            <small style="padding-left:0;padding-top:5px;white-space: pre-line;" class="col-lg-10">{{message.content}}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="seen-msg text-muted" ng-if="(messageThread[messageThread.length-1].sender._id == $root.currentUser._id) && seenTimestamp">
+                    <i class="checkmark icon"></i> Seen {{seenTimestamp | amCalendar}}
+                </div>
+<!--                 <div ng-if="(messageThread[messageThread.length-1].sender._id == $root.currentUser._id) && seenTimestamp">
+                    <i class="checkmark icon"></i> Seen {{seenTimestamp | amCalendar}}
+                </div> -->
+            </div>
+
+<!--             <div class="seen-msg text-muted" ng-if="(messageThread[messageThread.length-1].sender._id == $root.currentUser._id) && seenTimestamp">
+                <i class="checkmark icon"></i> Seen {{seenTimestamp | amCalendar}}
+            </div> -->
+
+            <form class="send-wrap">
+                <div style="background-color:white;padding:6px;border:1px solid #ddd;">
+                    <textarea 
+                        rows="3" 
+                        id="chatField" 
+                        ng-trim="false" 
+                        ng-model="$parent.msgContent" 
+                        style="width:100%;" 
+                        class="form-control send-message" 
+                        placeholder="Write a reply...">
+                    </textarea>
+                </div>
+            </form>
+
+            <div class="add-reply" style="padding:10px;">
+                <!-- <button class="ui basic left floated button huge"><i class="photo icon"></i>Add a Photo</button> -->
+
+                <div ng-click="sendMessage()" class="ui left floated huge primary submit labeled icon button">
+                  <i class="icon edit"></i> Add Reply
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row emptyMessage" ng-if="chatThreads.length == 0">
+        <div class="column">
+            <div class="ui huge message page grid center aligned">
+                <h1 class="ui huge header text-muted">You don't have any conversations.</h1>
+                <p>To start a conversation, go to a user's profile and click "Message".</p>
+            </div>
+        </div>
+    </div>
+</div>

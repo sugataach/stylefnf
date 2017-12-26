@@ -1,0 +1,627 @@
+<div id="search-results" ng-controller="navController">
+  <div>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="ng-class:{'container':isAuthenticated()}">
+<!--         <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" ng-click="isCollapsed = !isCollapsed">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>    
+        </div> -->
+        <div class="navbar-collapse collapse" collapse="isCollapsed">
+          <ul class="nav navbar-nav" style="height:63.5px">
+            <li class="navbar-left" style="" ng-if="!isAuthenticated()">
+              <a class="navbar-brand" href="#/">
+                <img style="max-width:100px;margin-right:20px;margin-top:-4px;" src="../../img/stylefnf3.png">
+              </a>
+            </li>
+            <li class="navbar-left" style="" ng-if="isAuthenticated()">
+              <a class="navbar-brand" href="#/home">
+                <img ng-if="isAuthenticated()" style="max-width:45px;margin-right:20px;margin-top:-12px;" class="img-rounded" src="../../img/stylefnf_icon.png">
+              </a>
+            </li>
+            <li class="dropdown navbar-left" style="" ng-if="isAuthenticated()">
+              <a ng-href="#/browse" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding-top:19px;padding-bottom:21.5px;">
+                <!-- <!-- <img ng-src="{{currentUser.facebookPicture}}" class="media-object img-rounded"> -->
+                <!-- <i class="mail outline icon" style="font-size: 24px;margin:0;visibility: hidden;"></i> -->
+                <span style="margin-top:15px;">Discover</span>
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" role="menu" style="margin-top:1px;margin-left:-30%;">
+                <li ng-repeat="choice in browse_menu">
+                  <a ng-href="#/browse/{{choice.link}}sort=newest">
+                    <md-icon md-svg-src="{{choice.icon}}" style="font-size:100px;color:#FF2D54;"></md-icon>
+                    &nbsp;&nbsp;&nbsp;{{choice.label}}
+                  </a>                  
+                </li>
+                <li class="divider"></li>
+                <li><a href="#/browse" class="contact-support" href="#" style="font-weight:bold;text-align:center;">Browse All</a></li>
+              </ul>
+            </li>
+            <!-- <li class="dropdown navbar-left discover" ng-if="isAuthenticated()"> -->
+
+<!--               <a href="" class="dropdown-toggle" popover-placement="bottom" popover-template="menuPopover.templateUrl" role="button" ng-click="triggerMenuPopover()" popover-toggle="menuPopoverOpen" popover-append-to-body="false" style="padding-top:19px;padding-bottom:21.5px;cursor: pointer;">
+                <span style="margin-top:15px;">Discover</span>
+                <span ng-if="!menuPopoverOpen" class="caret"></span>
+                <span ng-if="menuPopoverOpen" class="dropup">
+                  <span class="caret"></span>
+                </span>
+              </a> -->
+
+<!--               <script type="text/ng-template" id="menuDropdown.html">
+
+                  <div class="feature alternate ui stripe vertical segment container" style="padding-top: 0px;padding-bottom: 0px;">
+                    <div style="position: absolute;top: -10px;right: -18px;z-index: 10">
+                      <md-button class="md-icon-button" ng-click="triggerMenuPopover()">
+                        <md-icon md-svg-src="../../img/ic_close_24px.svg"></md-icon>
+                      </md-button>
+                    </div>
+                    <div class="ui four column center aligned divided grid container">
+                      <div class="row">
+                        <div class="column">
+                            <h2 class="ui header hover-help" style="padding: 5px 20px 15px;font-size: 24px;line-height: 32px;" ng-click="goToLink('macro=fashion', 'category')">
+                              <md-icon class="ui image" md-svg-src="../../img/svg/fashion.svg" style="color: #FF2D54;"></md-icon>
+                              <div class="content">
+                                Fashion
+                              </div>
+                            </h2>
+                          <hr class="featurette-divider" style="margin-top: 10px;margin-bottom: 10px;">
+                          <div class="ui two column grid">
+                            <div class="column">
+                              <div class="ui small left aligned selection list" ng-repeat="choice in fashion_menu | slice:0:8">
+                                <div class="item" ng-click="goToLink(choice.link, 'category')">
+                                  <md-icon md-svg-src="{{choice.icon}}" style="font-size:100px;"></md-icon>
+                                  <div class="content">
+                                    <div class="header">{{choice.label}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="column">
+                              <div class="ui small left aligned selection list" ng-repeat="choice in fashion_menu | slice:8:16">
+                                <div class="item" ng-click="goToLink(choice.link, 'category')">
+                                  <md-icon md-svg-src="{{choice.icon}}" style="font-size:100px;"></md-icon>
+                                  <div class="content">
+                                    <div class="header">{{choice.label}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="column">
+                          <h2 class="ui header hover-help" style="padding: 5px 20px 15px;font-size: 24px;line-height: 32px;" ng-click="goToLink('macro=furniture', 'category')">
+                            <md-icon class="ui image" md-svg-src="../../img/svg/furniture.svg" style="color: #FF2D54;"></md-icon>
+                            <div class="content">
+                              Furniture
+                            </div>
+                          </h2>
+                          <hr class="featurette-divider" style="margin-top: 10px;margin-bottom: 10px;">
+                          <div class="ui two column grid">
+                            <div class="column">
+                              <div class="ui small left aligned selection list" ng-repeat="choice in furniture_menu | slice:0:5">
+                                <div class="item" ng-click="goToLink(choice.link, 'category')">
+                                  <md-icon md-svg-src="{{choice.icon}}" style="font-size:100px;"></md-icon>
+                                  <div class="content">
+                                    <div class="header">{{choice.label}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="column">
+                              <div class="ui small left aligned selection list" ng-repeat="choice in furniture_menu | slice:5:10">
+                                <div class="item" ng-click="goToLink(choice.link, 'category')">
+                                  <md-icon md-svg-src="{{choice.icon}}" style="font-size:100px;"></md-icon>
+                                  <div class="content">
+                                    <div class="header">{{choice.label}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="column">
+                          <h2 class="ui header hover-help" style="padding: 5px 20px 15px;font-size: 24px;line-height: 32px;" ng-click="goToLink('macro=homekitchen', 'category')">
+                            <md-icon class="ui image" md-svg-src="../../img/svg/electronics.svg" style="color: #FF2D54;"></md-icon>
+                            <div class="content">
+                              <span> Home </span>
+                              <br>
+                              <span>& Kitchen</span>
+                            </div>
+                          </h2>
+                          <hr class="featurette-divider" style="margin-top: 10px;margin-bottom: 10px;">
+                          <div class="ui two column grid">
+                            <div class="column">
+                              <div class="ui small left aligned selection list" ng-repeat="choice in home_kitchen_menu | slice:0:6">
+                                <div class="item" ng-click="goToLink(choice.link, 'category')">
+                                  <md-icon md-svg-src="{{choice.icon}}" style="font-size:100px;"></md-icon>
+                                  <div class="content">
+                                    <div class="header">{{choice.label}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="column">
+                              <div class="ui small left aligned selection list" ng-repeat="choice in home_kitchen_menu | slice:6:12">
+                                <div class="item" ng-click="goToLink(choice.link, 'category')">
+                                  <md-icon md-svg-src="{{choice.icon}}" style="font-size:100px;"></md-icon>
+                                  <div class="content">
+                                    <div class="header">{{choice.label}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="column" style="width: 22%;">
+                          <h2 class="ui header disabled hover-help" style="padding: 5px 20px 15px;font-size: 20px;line-height: 61px;">
+                            <md-icon class="ui image" md-svg-src="../../img/svg/services.svg" style="color: #969798;"></md-icon>
+                            <div class="content">
+                              Services
+                            </div>
+                          </h2>
+                          <hr class="featurette-divider" style="margin-top: 10px;margin-bottom: 10px;">
+                          <a href="" class="ui large button">Coming Soon!</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="ui four column center aligned divided grid container" style="margin-bottom: 10px;margin-top: 25px;">
+                      <a href="#/browse/" class="ui fluid button huge" style="width: 95%;background-color: #EA294E;">
+                        <span style="color: white;">Browse all listings</span>
+                        <i class="right chevron icon" style="color: white"></i>
+                      </a>
+                    </div>
+                  </div> 
+
+              </script> -->
+
+            <!-- </li> -->
+<!--             <li class="dropdown navbar-left">
+              <a ng-href="#/browse" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding-top:19px;padding-bottom:21.5px;">
+                <span style="margin-top:15px;">Discover</span>
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu ng-class: { 'do-not-show' : isOpen == false}" role="menu" style="margin-top:1px;margin-left:-70%;">
+                <li>
+
+                  <div class="feature alternate ui stripe vertical segment" >
+                    <div class="ui four column center aligned divided relaxed stackable grid container">
+                      <div class="row">
+                        <div class="column">
+                          <h2 class="ui header">
+                            <md-icon class="ui image" md-svg-src="../../img/svg/fashion.svg" style="color: #FF2D54;"></md-icon>
+                            <div class="content">
+                              Fashion
+                            </div>
+                          </h2>
+                          <hr class="featurette-divider" style="margin-top: 10px;margin-bottom: 10px;">
+                          <div class="ui two column grid">
+                            <div class="column">
+                              <div class="ui small left aligned selection list" ng-repeat="choice in fashion_menu | slice:0:8">
+                                <div class="item" ng-click="goToLink(choice.link, 'category')">
+                                  <md-icon md-svg-src="{{choice.icon}}" style="font-size:100px;"></md-icon>
+                                  <div class="content">
+                                    <div class="header">{{choice.label}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="column">
+                              <div class="ui small left aligned selection list" ng-repeat="choice in fashion_menu | slice:8:16">
+                                <div class="item" ng-click="goToLink(choice.link, 'category')">
+                                  <md-icon md-svg-src="{{choice.icon}}" style="font-size:100px;"></md-icon>
+                                  <div class="content">
+                                    <div class="header">{{choice.label}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="column">
+                          <h2 class="ui header">
+                            <md-icon class="ui image" md-svg-src="../../img/svg/furniture.svg" style="color: #FF2D54;"></md-icon>
+                            <div class="content">
+                              Furniture
+                            </div>
+                          </h2>
+                          <hr class="featurette-divider" style="margin-top: 10px;margin-bottom: 10px;">
+                          <div class="ui two column grid">
+                            <div class="column">
+                              <div class="ui small left aligned selection list" ng-repeat="choice in furniture_menu | slice:0:5">
+                                <div class="item" ng-click="goToLink(choice.link, 'category')">
+                                  <md-icon md-svg-src="{{choice.icon}}" style="font-size:100px;"></md-icon>
+                                  <div class="content">
+                                    <div class="header">{{choice.label}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="column">
+                              <div class="ui small left aligned selection list" ng-repeat="choice in furniture_menu | slice:5:10">
+                                <div class="item" ng-click="goToLink(choice.link, 'category')">
+                                  <md-icon md-svg-src="{{choice.icon}}" style="font-size:100px;"></md-icon>
+                                  <div class="content">
+                                    <div class="header">{{choice.label}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="column">
+                          <h2 class="ui header">
+                            <i class="plug icon"></i>
+                            <div class="content">
+                              Uptime Guarantee
+                            </div>
+                          </h2>
+                          <hr class="featurette-divider" style="margin-top: 10px;margin-bottom: 10px;">
+                          <h2 class="ui middle aligned disabled header">
+                            <md-icon class="ui image" md-svg-src="../../img/svg/electronics.svg" style="color: #969798;"></md-icon>
+                            <div class="content">
+                              Electronics
+                            </div>
+                          </h2>
+                          <a href="" class="ui large button">Coming Soon!</a>
+                          <h2 class="ui disabled header">
+                            <md-icon class="ui image" md-svg-src="../../img/svg/decor.svg" style="color: #969798;"></md-icon>
+                            <div class="content">
+                              Interior Decor
+                            </div>
+                          </h2>
+                          <a href="" class="ui large button">Coming Soon!</a>
+                        </div>
+                        <div class="column">
+                          <div class="ui relaxed list">
+                            <div class="item">
+                              <img style="width:200px;height: auto;" class="img-thumbnail" src="http://www.w3schools.com/bootstrap/cinqueterre.jpg">
+                            </div>
+                            <div class="item">
+                              <img style="width:200px;height: auto;" class="img-thumbnail" src="http://www.w3schools.com/bootstrap/cinqueterre.jpg">
+                            </div>
+                            <div class="item">
+                              <img style="width:200px;height: auto;" class="img-thumbnail" src="http://www.w3schools.com/bootstrap/cinqueterre.jpg">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> 
+
+                </li>
+              </ul>
+            </li> -->
+<!--             <li ng-if="isAuthenticated()" class="dropdown navbar-left" style="border-right: 1px solid #dbdbdb;padding-left:10px;">
+              <a href ng-click="showListItem($event)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding-top:19px;padding-bottom:21.5px;">
+                <span style="
+                      margin-top:20px;
+                      background-color: #FF2D55;
+                      font-family: sans-serif;
+                      font-weight: bold;
+                      font-size: 13px;
+                      padding: 9px 14px;
+                      /*line-height: 24px;*/
+                      color: white;
+                      text-align: center;
+                      border-radius: 5px;
+                      ">
+                    List an Item
+                </span>
+              </a>
+            </li> -->
+            <li ng-if="isAuthenticated()" class="dropdown navbar-left" style="border-right: 1px solid #dbdbdb;padding-left:10px;">
+              <a href ng-click="chooseMacro($event)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding-top:19px;padding-bottom:21.5px;">
+                <span style="
+                      margin-top:20px;
+                      background-color: #FF2D55;
+                      font-family: sans-serif;
+                      font-weight: bold;
+                      font-size: 13px;
+                      padding: 9px 14px;
+                      /*line-height: 24px;*/
+                      color: white;
+                      text-align: center;
+                      border-radius: 5px;
+                      ">
+                    List an Item
+                </span>
+              </a>
+            </li>
+            <li class="dropdown navbar-left" style="border-right: 1px solid #dbdbdb;"></li>
+<!--             <li class="dropdown navbar-left" ng-if=" isBrowsePage()" style="margin-top: 10px;border-right: 1px solid #dbdbdb;">
+              <md-button ng-click="toggleLeft()" class="md-raised md-primary">
+                <i class="ion-funnel"></i> Filter
+              </md-button>
+            </li> -->
+            <li class="nav navbar-left" ng-if="isAuthenticated()">
+<!--               <div class="navbar-form navbar-left" ng-if="!isAuthenticated()">
+                <a href="#/"> 
+                  <img style="max-width:100px;margin-right:20px;margin-top:4px;" src="../../img/stylefnf3.png"> 
+                </a>
+              </div> -->
+              <div class="navbar-form navbar-left">
+                <div class="ui large transparent left icon input ng-class:{ 'loading': isLoadingSearch }" style="margin-top:8px;">
+                  <input  type="search"
+                          ng-minlength="3"
+                          ng-click="select()"  
+                          ng-change="change()"
+                          placeholder="Search Stylefnf..." 
+                          ng-model="searchData.searchText">
+                  <i ng-if="!isSearching" class="search icon"></i>
+                  <a href="" ng-class="{'do-not-show': ( searchData.searchText == undefined) || (searchData.searchText.length < 3) }" ng-click="closeSearch()">
+                    <i style="text-decoration:none;outline: none;" class="close icon link icon ng-class: { 'red' : search_posts.length == 0 }"></i>
+                  </a>
+                </div>
+              </div>
+            </li>
+
+            <li class="dropdown navbar-right" ng-if="isAuthenticated()">
+              <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="color: #FF2D55;">
+                <i class="chevron circle down icon" style="font-size: 25px;margin:0;"></i>
+              </a>
+              <ul class="dropdown-menu" role="menu" style="margin-top:-2px;">
+                <li><a href="#/account"></i>My Account</a></li>
+                <li><a href="" ng-click="logout()"></i>Logout</a></li>
+                <li class="divider"></li>
+                <li><a class="contact-support" href="#/help">Help</a></li>
+                <li><a class="contact-support" href="mailto:support@stylefnf.com">Contact Support</a></li>
+                <li><a class="contact-support" href="mailto:support@stylefnf.com">Report a Problem</a></li>
+              </ul>
+            </li>
+
+            <li ng-show="isAuthenticated()" class="dropdown navbar-right">
+              <a href="" class="dropdown-toggle" popover-placement="bottom" popover-template="notifPopover.templateUrl" role="button" ng-click="triggerNotifPopover()" ng-blur="closeNotifPopover()" popover-toggle="notifPopoverOpen" popover-append-to-body="false">
+                <i class="world icon" style="font-size: 22px;margin:1px"></i>
+
+                <!-- <span class="badge">3</span> -->
+                <span class="badge ng-class: { 'new-message-notification' : $root.currentUser.unseenNotifications.length > 0, 'do-not-show' : $root.currentUser.unseenNotifications.length == 0}">{{$root.currentUser.unseenNotifications.length}}</span>
+              </a>
+
+              <script type="text/ng-template" id="notifDropdown.html">
+                <div style="border-bottom:1px solid #ddd;">
+                  Notifications
+                </div>
+                <div class="notification-wrap">
+                    <div class="media notification ng-class: {'new-messages': (notif.seen == undefined) || (notif.seen.hasOwnProperty($root.currentUser._id) == false)}" ng-repeat="notif in $root.currentUser.notifications" ng-click="goToNotif(notif)">
+                        <div class="media-body">
+                            <img ng-if="notif.post" style="width: 90px; height: 50px;" class="media-object pull-left col-md-2 make-pic-fit" ng-src="{{notif.post.imageUrls[0]}}">
+                            <img ng-if="!notif.post" style="width: 90px; height: 50px;" class="media-object pull-left col-md-2 make-pic-fit" ng-src="{{notif.sender.profilePictures[0]}}">
+                          <small class="col-md-9">
+                            {{notif.notifBody}} 
+                            <span class="text-muted">{{ notif.updated | amCalendar }}</span>
+                          </small>
+                        </div>
+                    </div>
+                </div>
+              </script>
+
+
+            </li>
+
+            <li ng-show="isAuthenticated()" class="dropdown navbar-right">
+              <a ng-href="#/messages" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                <i class="mail outline icon" style="font-size: 22px;margin:0"></i>
+                <!-- <span class="badge ng-class: { 'new-message-notification' : new_msg_chats.length > 0, 'do-not-show' : new_msg_chats.length == 0 }">{{new_msg_chats.length}}</span> -->
+                <span class="badge ng-class: { 'new-message-notification' : new_msg_chats.length > 0, 'do-not-show' : (new_msg_chats == undefined) || (new_msg_chats.length == 0) }">{{new_msg_chats.length}}</span>
+              </a>
+            </li>
+
+            <li ng-show="isAuthenticated()" class="dropdown navbar-right">
+              <a ng-href="#/home" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                <i class="home outline icon" style="font-size: 22px;margin:0"></i>
+              </a>
+            </li>
+
+            <li ng-show="isAuthenticated()" class="dropdown navbar-right">
+              <a href="#/profile/{{currentUser._id}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="font-size: 12px;">
+                <img ng-src="{{currentUser.profilePictures[0]}}" class="media-object img-rounded make-pic-fit" style="max-width:45px; margin-top: -5px;">
+                &nbsp;
+                <span>{{currentUser.firstName}}</span>
+              </a>
+            </li>
+            
+            <li ng-hide="isAuthenticated()" class="navbar-right"><a href="#/help" style="padding-top:25px;"><span>Help</span></a></li>
+            <li ng-hide="isAuthenticated()" class="navbar-right"><a href="#/login" style="padding-top:25px;"><span>Log In</span></a></li>
+            <li ng-hide="isAuthenticated()" class="navbar-right"><a href="#/signup"><span class="header-button sin">Sign Up</span></a></li>
+
+          </ul>
+        </div>
+    </div>
+    </nav>
+
+  <!-- <div class="navbar navbar-default" id="subnav" ng-if="isAuthenticated() && isBrowsePage()">
+    <div class="container">
+      <div class="col-md-12">
+      Hello
+       </div> 
+    </div>
+  </div> -->
+  </div>
+
+<!-- <div style="margin-top:72px;position:relative;"></div> -->
+  
+  <div style="background-color:#F7FAFA;border-bottom: 1px solid #dbdbdb;" >
+    
+    <div collapse="isSearchResultsCollapsed" class="container search-carousel" ng-if="hasSearchResults">
+
+      <div class="container">
+        <ul class="list-inline">
+          <li>
+            <a href="" ng-click="closeSearch()">
+              <i class="close icon link icon large"></i>
+            </a>
+          </li>
+          <!-- <ul class="pager">
+            <li><a href="#">Previous</a></li>
+            <li><a href="#">Next</a></li>
+          </ul> -->
+          <li class="pull-right" ng-if="total_search_results">
+            <a ng-href="#/browse/{{searchData.searchQuery}}" class="ui right floated red button huge">
+              See all {{total_search_results}} results
+              <i class="right chevron icon"></i>
+            </a>
+            <!-- <a href="" class="ui blue button huge">See All Results</a> -->
+          </li>
+        </ul>
+<!--         <div style="margin-bottom:1px;margin-right:-25px;">
+                      <a href="" class="ui black basic button huge">See All Popular</a>
+                    
+        </div>  
+        <div style="margin-bottom:1px;margin-left:-25px;">
+          <a href="" ng-click="closeSearch()">
+            <i class="close icon link icon large"></i>
+          </a>
+        </div> -->
+      </div>
+      
+      <div ui-if="hasSearchResults">
+
+        <slick ng-if="!(hasUsers)" slides-to-show=3 slides-to-scroll=3 init-onload="true" data="search_posts" infinite="false" class="slider multiple-items" next-arrow=".slick-right-arrow" prev-arrow=".slick-left-arrow">
+
+          <a ng-if="search_posts.length > 3" href="" class="slick-left-arrow ng-class:{ 'red': myLike(post.likes) }">
+            <span class="fa fa-angle-left fa-5x"></span>
+          </a>
+
+          <a ng-if="search_posts.length > 3" href="" class="slick-right-arrow">
+            <span class="fa fa-angle-right fa-5x"></span>
+          </a>
+
+          <div ng-repeat="post in search_posts | orderBy: 'created':true" class="ui col-lg-3 browse-view-2">
+
+            <div class="ui product-card fluid link card ng-class:{ 'card-sold': post.status == 'Held' }"> <!-- Start of Product Card -->
+              <div class="content">
+                <span class="right floated">
+                  <button class="circular ui icon button large ng-class:{ 'red': myLike(post.likes) }">
+                    <i class="heart icon"></i>
+                  </button>
+                  <a class="like-label ng-class:{ 'red': myLike(post.likes) }" tooltip="{{usersLiked(post.likes)}}">
+                    {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                  </a>
+                </span>
+                <div class="right floated meta"></div>
+                <span class="left floated">
+                  <a href="#/profile/{{post.seller_id}}" class="ui big basic image label mylabel" style="font-weight:600;border:none;">
+                    <img class="avatar" ng-src="{{post.seller.profilePictures[0]}}">
+                    {{post.seller.firstName}}
+                  </a>
+                </span>
+              </div>
+              <div class="image">
+
+                <!-- Put for HOT items - those with a certain amount of views -->
+                <div ng-if="post.status == 'Available' && post.offers.length > 0" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                  <i class="star icon"></i> {{post.offers.length}} {{post.offers.length === 1? "offer" : "offers"}}
+                </div>
+
+                <div ng-if="post.status != 'Available'" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                    <i class="selected radio icon card-icon-space"></i> On Hold
+                </div>
+
+                <slick ng-if="post.imageUrls.length" dots="false" style="margin:0;">
+                  <div ng-repeat="image_link in post.imageUrls">
+                    <a ng-href="#/detail/{{post._id}}">
+                      <img class="browse-slick make-pic-fit" data-lazy="{{image_link}}">
+                    </a>
+                  </div>
+                  <!-- <a ng-if="posts[0].imageUrls.length > 1" href="">
+                    <span><i class="fa fa-angle-left"></i></span>
+                  </a>
+
+                  <a ng-if="posts[0].imageUrls.length > 1" href="">
+                    <span><i class="fa fa-angle-right"></i></span>
+                  </a> -->
+                </slick>
+
+                <div ng-if="!post.imageUrls.length">
+                  <a ng-href="#/detail/{{post._id}}">
+                    <img class="browse-slick" src="../img/pic-placeholder.png">
+                  </a>
+                </div>
+              </div>  
+              <div class="content card-content" ng-href="#/login" ng-click="goToLink(post._id, 'post')">
+                <a ng-show="post.price != 0" href="#/detail/{{post._id}}" class="right floated ui red basic massive label"><span style="color:#FF2D55">${{post.price}}</span></a>
+                <a ng-show="post.price == 0" href="#/detail/{{post._id}}" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                <div class="header"><a href="#/detail/{{post._id}}">{{post.brand | capitalize}}</a><span ng-if="post.status == 'Held'" style="color: red"> (On Hold)</span></div>
+                <div class="meta">
+                  <a href="#/detail/{{post._id}}">{{post.title | limitTo:18 | capitalize}}{{post.title.length > 18? "..." : ""}} </a>
+                </div>
+                <div class="description" style="min-height:46px;">
+                  <div style="margin-bottom:10px;">
+                    {{post.description | limitTo:35}}{{post.description.length > 25? "..." : ""}}
+                  </div>
+                  <div class="ui circular red button massive centered" style="cursor:pointer;font-size:14px;padding:10px;text-align: center;">
+                    Take a look
+                    <i class="right chevron icon"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="extra content">
+                <span class="right floated">
+                  <span am-time-ago="post.created"></span>
+                </span>
+                <div class="ui basic icon label large">
+                  {{showCondition(post.condition) | capitalize}}
+                </div>
+
+<!--                 <div class="ui basic icon label large">
+                  {{post.gender != "Any"? post.gender : "Men + Women" | capitalize}}
+                </div> -->
+
+<!--                 <div class="ui basic icon label large">
+                  Size: {{post.size}}
+                </div> -->
+              </div>
+            </div> <!-- End of Product Card -->
+            
+          </div>
+
+        </slick> 
+
+        <slick ng-if="hasUsers" slides-to-show=4 slides-to-scroll=3 init-onload="true" data="search_posts" infinite="false" class="slider multiple-items" next-arrow=".slick-right-arrow" prev-arrow=".slick-left-arrow">
+
+          <a ng-if="search_posts.length > 3" href="" class="slick-left-arrow ng-class:{ 'red': myLike(post.likes) }">
+            <span class="fa fa-angle-left fa-5x"></span>
+          </a>
+
+          <a ng-if="search_posts.length > 3" href="" class="slick-right-arrow">
+            <span class="fa fa-angle-right fa-5x"></span>
+          </a>
+
+          <div ng-repeat="user in search_posts | orderBy: 'created':true" class="ui col-lg-3 browse-view-2">
+
+            <div class="ui link card" style="min-height:0;" ng-click="goToLink(user._id, 'user')">
+              <div class="image">
+                <a href="#/profile/{{user._id}}">
+                  <img class="browse-slick" ng-src="{{user.profilePictures[0]}}">
+                </a>
+              </div>
+              <div class="content">
+                <div class="header"><a href="#/profile/{{user._id}}">{{user.firstName}} {{user.lastName}}</a></div>
+                <div class="meta">
+                  <a>{{user.education}}</a>
+                </div>
+                <div class="description">
+                  {{user.firstName}} {{user.lastName}} is a {{user.work}} and lives in {{user.location}}.
+                </div>
+              </div>
+              <div class="extra content">
+                <span class="right floated">
+                  Joined in {{user.joined | amDateFormat:'MMM YYYY' }}
+                </span>
+                <span>
+                  <i class="ion-tshirt red icon"></i>
+                  {{user.myPosts.length}} {{user.myPosts.length === 1? "listing" : "listings"}}
+                </span>
+              </div>
+            </div>
+            
+          </div>
+
+        </slick>       
+      </div>
+
+    </div>
+  </div>
+</div>

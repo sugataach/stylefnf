@@ -1,0 +1,25 @@
+<ion-view view-title="">
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      <button class="button ion-arrow-left-c" ng-click="goBack()"></button>
+      &nbsp; Likes
+      <!-- <i class="ion-arrow-left-c" ng-click="goBack()" ></i> -->
+    </div>
+  </ion-nav-title>
+  <ion-content ng-init="loadLikes()">
+
+    <ion-refresher on-refresh="loadLikes()" spinner="spiral" disable-pulling-rotation="true">
+    </ion-refresher>
+
+    <!-- <a ng-click="testurl()"> a </a> -->
+    <ion-list>
+      <ion-item class="item-avatar-left notif-item" ng-repeat="like in likes" type="item-text-wrap" ng-click="goToLike(like)">
+        <img class ="make-fit" ng-src="{{getProfileAvatar(like.user)}}" ng-click="setAvatar()">
+        <!-- <h1>{{notif.notifModel}}</h1> -->
+        <h2>{{like.user.firstName + ' ' + like.user.lastName}}</h2>
+        <p>{{like.user.education}}</p>
+
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

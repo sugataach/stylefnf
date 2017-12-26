@@ -1,0 +1,638 @@
+<div class="landing-pg">
+<!-- Header
+  ================================================== -->
+  <div id="header" class="animated fadeInDown">
+    <div class="black-background-overlay"></div>
+    <div class="container">
+      <div class="three columns">
+        <div class="logo">
+          <a href="#/"><img class="scale-with-grid" style="height:75px; width:auto; max-width:200px; max-height:200px;" src="img/stylefnf.png" alt="Stylefnf" /></a>
+        </div>
+      </div>
+      <div class="thirteen columns">
+        <nav>
+          <ul>
+            <!-- <li><a class="btn" href="#" onclick="document.getElementById('email_input').focus(); return false;">Login</a></li> -->
+            <li><a class="btn" href="#/login">Login</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="nine columns headertext animated fadeInDown">
+        <h1>The easier way to buy <!-- &amp; --> and sell on campus.</h1>
+
+        <h2>
+          <span style="font-weight:bold;color:#FF2D54"><i class="fa fa-fast-forward icon"></i> Fast: Sell quickly & safely</span><br> with U of T students near you.
+        </h2> 
+        <!-- <h1><span style="font-weight:bold;color:#FF2D54">Sell directly to U of T students!</span></h1>  -->
+        <!-- <h1>Too cheap to buy full price?</h1>  -->
+        <h2><span style="font-weight:bold;color:#FF2D54"><i class="fa fa-check-square icon"></i> Simple: Find amazing deals</span><br> and reserve them with a bid.</h2> 
+
+        <h2><span style="font-weight:bold;color:#FF2D54"><i class="fa fa-credit-card icon"></i> Convenient: Pay online</span><br> and get buyer protection.</h2> 
+        <!-- <h1><span class="padding-bottom"><span style="font-weight:bold;color:#FF2D54">Buy stuff up to 90% off.</span></span></h1>  -->
+        <!-- <h1>Do you want to avoid spam and sketchy meetups?</h1>  -->
+        <!-- <h1><span class="padding-bottom"><span style="font-weight:bold;color:#FF2D54">Avoid spam and sketchy meetups!</span></span></h1> -->
+        <p style="padding:7px;"></p>
+        <div class="ui three column relaxed stackable grid container" style="">
+          <div class="row">
+            <div class="column floated left">
+                <img src="img/appstore_soon.png" alt="OCAD" style="height:6vh;opacity:.3;display: block;margin-left: auto;margin-right: auto">
+            </div>
+            <div class="column floated right">
+                <img src="img/playstore_soon.png" alt="Ryerson University" style="height:6vh;opacity:.3;display: block;margin-left: auto;margin-right: auto">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="six columns animated fadeInDown floated right">
+        <div class="">
+          <div class="center-form panel pull-right" style="margin-top:15%;">
+            <div class="panel-body">
+              <h4 class="text-center"><i class="ion-person-add" style="color: red;"></i> Sign up <span class="free-class">(It's free yo!)</span></h4>
+              <form method="post" ng-submit="signup()" name="signupForm">
+
+                <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.firstName.$invalid && signupForm.firstName.$dirty }">
+                  <input autofocus="autofocus" class="form-control input-lg" type="text" id="firstName" name="firstName" ng-model="firstName" placeholder="First Name" required>
+                  <span class="ion-android-person form-control-feedback"></span>
+                </div>
+
+                <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.lastName.$invalid && signupForm.lastName.$dirty }">
+                  <input class="form-control input-lg" type="text" id="lastName" name="lastName" ng-model="lastName" placeholder="Last Name" required>
+                  <span class="ion-android-person form-control-feedback"></span>
+                </div>
+
+                <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.email.$invalid && signupForm.email.$dirty }">
+                  <input class="form-control input-lg" type="text" id="email" name="email" ng-change="checkEmail()" ng-model="email" placeholder="UToronto Email" required>
+                  <span class="ion-at form-control-feedback"></span>
+                  <div ng-messages="signupForm.email.$error" style="color:red" role="alert">
+                    <div ng-message="email">You must enter a valid email.</div>
+                  </div>
+                </div>
+
+                <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.password.$invalid && signupForm.password.$dirty }">
+                  <input class="form-control input-lg" type="password" id="password" name="password" ng-model="password" placeholder="Password" equals="{{confirmPassword}}" required>
+                  <span class="ion-key form-control-feedback"></span>
+                  <div ng-messages="signupForm.password.$error" style="color:red" role="alert">
+                  </div>
+                </div>
+
+               <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.confirmPassword.$invalid && signupForm.confirmPassword.$dirty }">
+                  <input class="form-control input-lg" type="password" id="confirmPassword" name="confirmPassword" ng-model="confirmPassword" placeholder="Confirm Password" equals="{{password}}" required>
+                  <span class="ion-key form-control-feedback"></span>
+                  <div ng-messages="signupForm.confirmPassword.$error" style="color:red" role="alert">
+                    <div ng-message="equals">Your passwords don't match.</div>
+                  </div>
+                </div>
+
+                <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.genderStatus.$error && signupForm.genderStatus.$dirty }">
+                  <select class="form-control" id="select" ng-model="genderStatuses.selectedOption" ng-options="option.label for option in genderStatuses.availableOptions track by option.val" required></select>
+                  <span class="ion-person-stalker form-control-feedback"></span>
+                </div>
+
+                <button ng-hide="isSending" ng-click="signUp()" type="submit" class="btn btn-block btn-primary" ng-disabled="signupForm.$invalid">Sign up</button>
+                <br/>
+
+                <div ng-show="isSending" class="ui active centered inline loader"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Benefits
+  ================================================== -->
+  <div id="benefits">
+    <div class="container">
+      <div class="fifteen columns">
+        <h2>What can I list?</h2>
+        <!-- <p>Stylefnf is a website and a mobile app for students to list, find and buy on campus. -->
+        <!-- <br>Buy what you love, sell what you own <i class="red heart icon"></i></p> -->
+        <br>
+      </div>
+    </div>
+    <br>
+    <div class="ui six column center aligned relaxed stackable grid container">
+      <div class="row">
+        <div class="column hover-help" onclick="document.getElementById('firstName').focus(); return false;">
+          <md-icon md-svg-src="../../img/svg/fashion.svg" style="height: 142px;width: 100%;color: #FF2D54;"></md-icon>
+          <h2 class="ui icon header help-title" style="display: block;">
+            Fashion
+          </h2>
+          <p>Beauty, Dresses, Jackets, etc.</p>
+        </div>
+        <div class="column hover-help" onclick="document.getElementById('firstName').focus(); return false;">
+          <md-icon md-svg-src="../../img/svg/duplex-house.svg" style="height: 142px;width: 100%;color: #FF2D54;"></md-icon>
+          <h2 class="ui icon header help-title" style="font-family: ;display: block;">
+            Home & Furniture
+          </h2>
+          <p>Bedroom, Bath, Cookware, etc.</p>
+        </div>
+        <div class="column hover-help" onclick="document.getElementById('firstName').focus(); return false;">
+          <md-icon md-svg-src="../../img/svg/smartphone.svg" style="height: 142px;width: 100%;color: #FF2D54;"></md-icon>
+          <h2 class="ui icon header help-title" style="font-family: ;display: block;">
+            Electronics
+          </h2>
+          <p>Phones, Monitors, Headphones, etc.</p>
+        </div>
+        <div class="column hover-help" onclick="document.getElementById('firstName').focus(); return false;">
+          <md-icon md-svg-src="../../img/svg/science-book.svg" style="height: 142px;width: 100%;color: #FF2D54;"></md-icon>
+          <h2 class="ui icon header help-title" style="font-family: ;display: block;">
+            Textbooks
+          </h2>
+          <p>Course guides, notes, & solutions</p>
+        </div>
+        <div class="column hover-help" onclick="document.getElementById('firstName').focus(); return false;">
+          <md-icon md-svg-src="../../img/svg/question-mark-cursor.svg" style="height: 142px;width: 100%;color: #FF2D54;"></md-icon>
+          <h2 class="ui icon header help-title" style="font-family: ;display: block;">
+            Other
+          </h2>
+          <p>Tickets, bikes, housing</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Benefits
+  ================================================== -->
+  <div id="pricing">
+    <div class="container">
+      <div class="sixteen columns">
+        <h2>How does it work?</h2>
+        <h2>Here's how easy it is to sell</h2>
+        <!-- <p>Stylefnf is a website and a mobile app for students to list, find and buy on campus. -->
+        <!-- <br>Buy what you love, sell what you own <i class="red heart icon"></i></p> -->
+        <br>
+      </div>
+      <div class="sixteen columns">
+        <div class="ui five column center aligned relaxed stackable grid container">
+          <div class="row">
+            <div class="column hover-help ng-class: {'hover-help-active' : howToStep==1}" ng-click="howToStep=1">
+              <h2 class="ui huge icon header" style="font-weight:bold;">
+                <i class="cloud upload red circular icon" style="margin-bottom: 25px;"></i>
+                1. List an item
+              </h2>
+              <p style="font-size: 14px;line-height: 1.6;flex: 1 0 auto;margin: 0.5em 0em 2.5em;">Add some pictures and plenty of details and you're set!</p>
+            </div>
+            <div class="column hover-help ng-class: {'hover-help-active' : howToStep==2}" ng-click="howToStep=2">
+              <h2 class="ui huge icon header" style="font-weight:bold;">
+                <i class="dollar red circular icon" style="margin-bottom: 25px;"></i>
+                2. Accept an offer
+              </h2>
+              <p style="font-size: 14px;line-height: 1.6;flex: 1 0 auto;margin: 0.5em 0em 2.5em;">Review your offers and potential payout, then hit accept.</p>
+            </div>
+            <div class="column hover-help ng-class: {'hover-help-active' : howToStep==3}" ng-click="howToStep=3">
+              <h2 class="ui huge icon header" style="font-weight:bold;">
+                <i class="marker red circular icon" style="margin-bottom: 25px;"></i>
+                3. Meetup
+              </h2>
+              <p style="font-size: 14px;line-height: 1.6;flex: 1 0 auto;margin: 0.5em 0em 2.5em;">Chat with the buyer and pick a mutually convenient time and place to meet up.</p>
+            </div>
+            <div class="column hover-help ng-class: {'hover-help-active' : howToStep==4}" ng-click="howToStep=4">
+              <h2 class="ui huge icon header" style="font-weight:bold;">
+                <i class="payment red circular icon" style="margin-bottom: 25px;"></i>
+                4. Get Paid
+              </h2>
+              <p style="font-size: 14px;line-height: 1.6;flex: 1 0 auto;margin: 0.5em 0em 2.5em;">Once the buyer hits Pay, you'll get a notification and the funds will be deposited in your account.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sixteen columns offset-by-one">
+        <img class="scale-with-grid animated fadeInDown ng-class: { 'hidden' : howToStep != 0 }" style="-webkit-box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);-moz-box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);" src="img/app7.png" alt="" />
+        <img class="scale-with-grid animated fadeInDown ng-class: { 'hidden' : howToStep != 1 }" style="-webkit-box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);-moz-box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);" src="img/howTo1.png" alt="" />
+        <img class="scale-with-grid animated fadeInDown ng-class: { 'hidden' : howToStep != 2 }" style="-webkit-box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);-moz-box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);" src="img/howTo2.png" alt="" />
+        <img class="scale-with-grid animated fadeInDown ng-class: { 'hidden' : howToStep != 3 }" style="-webkit-box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);-moz-box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);" src="img/howTo3.png" alt="" />
+        <img class="scale-with-grid animated fadeInDown ng-class: { 'hidden' : howToStep != 4 }" style="-webkit-box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);-moz-box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);box-shadow: -1px 1px 32px 1px rgba(0,0,0,0.75);" src="img/howTo4.png" alt="" />
+      </div>
+    </div>
+    <br>
+  </div>
+
+  <!-- Show Items
+  ================================================== -->
+  <div id="benefits">
+    <div class="container">
+      <div class="sixteen columns">
+        <h2>Some of our newest listings</h2>
+        <!-- <p>Take a look at some of the popular listings.</p>  -->
+        <br>
+      </div>
+
+      <div class="sixteen columns">
+        <div ng-if="popularPosts.length == 0">
+          <div class="col-lg-4"></div>
+          <div class="col-lg-4 centered ui massive message" style="box-shadow:none;margin-bottom:50px;">
+            <h1 class="ui header">
+              <i class="frown icon"></i>
+              <div class="content">
+                Sorry, no listings were found.
+              </div>
+            </h1>
+          </div>
+        </div>
+
+        <div ng-if="popularPosts.length > 0">
+          <div ng-repeat="post in popularPosts" class="ui col-lg-4 browse-view-2" style="">
+            <div class="ui fluid card ng-class:{ 'card-sold': post.status == 'Held' }">
+              <div class="content">
+                <span class="right floated">
+                  <div ng-if="isAuthenticated()">
+                    <button class="circular basic ui icon button large ng-class:{ 'red': myLike(post.likes) }" ng-click="likePost(post, 'popular')">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a class="like-label ng-class:{ 'red': myLike(post.likes) }" tooltip="{{usersLiked(post.likes)}}" ng-click="showLiked($event, post)">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                  <div ng-if="!isAuthenticated()">
+                    <button class="circular basic ui icon button large">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a href="#/login" class="like-label" tooltip="Login to continue">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                </span>
+                <div class="right floated meta"></div>
+                <hovercard 
+                  hover-tmpl-url="{{hovercardURL}}"
+                  placement="bottom"
+                  hover-bottom-amount="3.5em"
+                  ng-mouseover="hoverProfileIn(post.seller)"
+                  ng-mouseleave="hoverProfileOut(post.seller)"
+                  >
+                  <a href="#/profile/{{post.seller_id}}" class="ui big basic image label mylabel" style="font-weight:600;border:none;">
+                    <img class="avatar" ng-src="{{post.seller.profilePictures[0]}}">
+                    {{post.seller.firstName}}
+                  </a>
+                </hovercard>
+              </div>
+              <div class="image">
+
+                <!-- Put for HOT items - those with a certain amount of views -->
+                <div ng-if="post.status == 'Available' && post.offers.length > 0" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                    <i class="star icon"></i> {{post.offers.length}} {{post.offers.length === 1? "offer" : "offers"}}
+                </div>
+
+                <div ng-if="post.status != 'Available'" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                  <i class="selected radio icon card-icon-space"></i> On Hold
+                </div>
+
+                <slick ng-if="post.imageUrls.length" dots="false" style="margin:0;">
+                  <div ng-repeat="image_link in post.imageUrls">
+                    <a ng-click="goToDetail($event, post)" href="">
+                      <img class="browse-slick" data-lazy="{{image_link}}">
+                    </a>
+                  </div>
+                </slick>
+
+                <div ng-if="!post.imageUrls.length">
+                  <a ng-click="goToDetail($event, post)" href="">
+                    <img class="browse-slick" src="../img/pic-placeholder.png">
+                  </a>
+                </div>
+              </div>  
+              <div class="content card-content" ng-click="goToDetail($event, post)">
+                <a ng-show="post.price != 0" ng-click="goToDetail($event, post)" href="" class="right floated ui red basic massive label"><span style="color:#FF2D55">${{post.price}}</span></a>
+                <a ng-show="post.price == 0" ng-click="goToDetail($event, post)" href="" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                <div class="header"><a ng-click="goToDetail($event, post)" href="">{{post.brand | capitalize}}</a><span ng-if="post.status == 'Held'" style="color: red"> (On Hold)</span></div>
+                <div class="meta">
+                  <a ng-click="goToDetail($event, post)" href="">{{post.title | limitTo:18 | capitalize}}{{post.title.length > 18? "..." : ""}} </a>
+                </div>
+                <div class="description" style="min-height:46px;">
+                  <div style="margin-bottom:10px;">
+                    {{post.description | limitTo:25}}{{post.description.length > 25? "..." : ""}}
+                  </div>
+                  <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;text-align: center;">
+                    Quick Look
+                  </div>
+                </div>
+              </div>
+              <div class="extra content">
+                <span class="right floated">
+                  <span am-time-ago="post.created"></span>
+                </span>
+
+                <div class="ui basic icon label large">
+                  {{showCondition(post.condition) | capitalize}}
+                </div>
+<!--                 <div class="ui basic icon label large">
+                  Size: {{post.size | limitTo:6}}{{post.size.length > 6? "..." : ""}}
+                </div> -->
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+        <div ng-if="popularPosts2.length > 0 && showMorePopular">
+          <div ng-repeat="post in popularPosts2" class="ui col-lg-4 browse-view-2 animated fadeInDown" style="">
+            <div class="ui fluid card ng-class:{ 'card-sold': post.status == 'Held' }">
+              <div class="content">
+                <span class="right floated">
+                  <div ng-if="isAuthenticated()">
+                    <button class="circular basic ui icon button large ng-class:{ 'red': myLike(post.likes) }" ng-click="likePost(post, 'popular')">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a class="like-label ng-class:{ 'red': myLike(post.likes) }" tooltip="{{usersLiked(post.likes)}}" ng-click="showLiked($event, post)">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                  <div ng-if="!isAuthenticated()">
+                    <button class="circular basic ui icon button large">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a href="#/login" class="like-label" tooltip="Login to continue">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                </span>
+                <div class="right floated meta"></div>
+                <hovercard 
+                  hover-tmpl-url="{{hovercardURL}}"
+                  placement="bottom"
+                  hover-bottom-amount="3.5em"
+                  ng-mouseover="hoverProfileIn(post.seller)"
+                  ng-mouseleave="hoverProfileOut(post.seller)"
+                  >
+                  <a href="#/profile/{{post.seller_id}}" class="ui big basic image label mylabel" style="font-weight:600;border:none;">
+                    <img class="avatar" ng-src="{{post.seller.profilePictures[0]}}">
+                    {{post.seller.firstName}}
+                  </a>
+                </hovercard>
+              </div>
+              <div class="image">
+
+                <!-- Put for HOT items - those with a certain amount of views -->
+                <div ng-if="post.status == 'Available' && post.offers.length > 0" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                    <i class="star icon"></i> {{post.offers.length}} {{post.offers.length === 1? "offer" : "offers"}}
+                </div>
+
+                <div ng-if="post.status != 'Available'" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                  <i class="selected radio icon card-icon-space"></i> On Hold
+                </div>
+
+                <slick ng-if="post.imageUrls.length" dots="false" style="margin:0;">
+                  <div ng-repeat="image_link in post.imageUrls">
+                    <a ng-click="goToDetail($event, post)" href="">
+                      <img class="browse-slick" data-lazy="{{image_link}}">
+                    </a>
+                  </div>
+                </slick>
+
+                <div ng-if="!post.imageUrls.length">
+                  <a ng-click="goToDetail($event, post)" href="">
+                    <img class="browse-slick" src="../img/pic-placeholder.png">
+                  </a>
+                </div>
+              </div>  
+              <div class="content card-content" ng-click="goToDetail($event, post)">
+                <a ng-show="post.price != 0" ng-click="goToDetail($event, post)" href="" class="right floated ui red basic massive label"><span style="color:#FF2D55">${{post.price}}</span></a>
+                <a ng-show="post.price == 0" ng-click="goToDetail($event, post)" href="" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                <div class="header"><a ng-click="goToDetail($event, post)" href="">{{post.brand | capitalize}}</a><span ng-if="post.status == 'Held'" style="color: red"> (On Hold)</span></div>
+                <div class="meta">
+                  <a ng-click="goToDetail($event, post)" href="">{{post.title | limitTo:18 | capitalize}}{{post.title.length > 18? "..." : ""}} </a>
+                </div>
+                <div class="description" style="min-height:46px;">
+                  <div style="margin-bottom:10px;">
+                    {{post.description | limitTo:25}}{{post.description.length > 25? "..." : ""}}
+                  </div>
+                  <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;text-align: center;">
+                    Quick Look
+                  </div>
+                </div>
+              </div>
+              <div class="extra content">
+                <span class="right floated">
+                  <span am-time-ago="post.created"></span>
+                </span>
+
+                <div class="ui basic icon label large">
+                  {{showCondition(post.condition) | capitalize}}
+                </div>
+<!--                 <div class="ui basic icon label large">
+                  Size: {{post.size | limitTo:6}}{{post.size.length > 6? "..." : ""}}
+                </div> -->
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="ng-class: {'sixteen columns':!showMorePopular, 'sixteen columns offset-by-six': showMorePopular}">
+        <a href="" ng-click="loadMorePopular()" class="ui massive button ng-class: {'right floated fluid trigger-send': !showMorePopular, 'red circular':showMorePopular}" style="margin-top:26px;">
+          <span ng-if="!showMorePopular">See more of <span style="color: black;">what's new</span></span>
+          <span ng-if="showMorePopular" onclick="document.getElementById('firstName').focus(); return false;">Sign Up to See More</span>
+        </a>
+      </div>
+
+    </div>
+    <br>
+  </div>
+
+  <!-- Pricing
+  ================================================== -->
+  <div id="pricing">
+    <div class="container">
+      <div class="sixteen columns">
+        <h2>How much will it cost me?</h2>
+        <p>Zero, zip, zilch, nada. <span class="logo-font" style="color: #fff;font-size:20px;">stylefnf</span> is free and always will be.</p>
+      </div>
+
+<!--      <div class="one-third column">
+        <div class="pricebox">
+          <header>
+            <h3>Small Businesses</h3>
+          </header>
+          <section>
+            <h4><span>$</span>2</h4>
+            <p>per month<br/>/per user</p>
+            <ul>
+              <li>Unlimited notes</li>
+              <li>Unlimited members</li>
+              <li><strong>2GB</strong> of storage</li>
+            </ul>
+            <button href="#">Select this plan</button>
+          </section>
+        </div>
+      </div> -->
+
+      <div class="eleven columns offset-by-five">
+        <div class="header-pricebox deal">
+          <header>
+            <h3>Students</h3>
+          </header>
+          <section>
+            <!-- <h4><span>$</span>0</h4> -->
+            <h4>Free!</h4>
+            <!-- <p>per month<br/>/per user</p> -->
+            <ul style="padding-left:0;">
+              <li><strong>Autheniticated</strong> user profiles</li>
+              <li><strong>High Quality</strong> listings</li>
+              <li><strong>Cashless</strong> transactions</li>
+              <li><strong style="color: red">*Requires</strong> school email</li>
+            </ul>
+            <button class="button ui massive circular red" href="#" onclick="document.getElementById('firstName').focus(); return false;">Sign Up Now</button>
+          </section>
+        </div>
+      </div>
+
+      <!--<div class="one-third column">
+        <div class="pricebox">
+          <header>
+            <h3>Enterprise</h3>
+          </header>
+          <section>
+            <h4><span>$</span>8</h4>
+            <p>per month<br/>/per user</p>
+            <ul>
+              <li>Unlimited notes</li>
+              <li>Unlimited members</li>
+              <li><strong>Unlimited</strong> storage</li>
+              <li>Real-time collaboration</li>
+            </ul>
+            <button href="#" >Select this plan</button>
+          </section>
+        </div>
+      </div>-->
+
+    </div>
+  </div>
+
+
+  <!-- Testimonials
+  ================================================== -->
+  
+  <div id="testimonials">
+    <div class="container">
+      <div class="sixteen columns give-space">
+        <h2>Who's using it?</h2>
+        <p><span class="logo-font" style="font-size: 20px;">stylefnf</span> is launching at campuses across Ontario to make buying, selling and discovering fun.</p>
+      </div>
+
+        <div class="ui five column center aligned relaxed stackable grid container">
+          <div class="row">
+            <div class="column hover-help-active" ng-click="goToLink('signup')" style="border: 1px solid #dbd">
+              <div class="uni">
+                <img src="img/uoft_logo.png" alt="University of Toronto" style="height:100px;margin-bottom: 20px;display: block;margin-left: auto;margin-right: auto">
+                University of Toronto
+              </div>
+              <p style="text-align:center;font-size:14px;color:black;">Register using your <b>@mail.utoronto.ca</b> email.</p>
+            </div>
+            <div class="column hover-help" ng-click="goToLink('getting-started')">
+              <div class="uni">
+                <img src="img/OCAD_Logo.png" alt="OCAD" style="height:100px;opacity:.5;margin-bottom:20px;display: block;margin-left: auto;margin-right: auto">
+                OCAD
+              </div>
+              <p style="text-align:center;font-size:14px;color:#FF2D54;"><b>Launching soon!</b></p>
+            </div>
+            <div class="column hover-help" ng-click="goToLink('getting-started')">
+              <div class="uni">
+                <img src="img/ryerson_logo.png" alt="Ryerson University" style="height:100px;opacity:.5;margin-bottom:20px;display: block;margin-left: auto;margin-right: auto">
+                Ryerson University
+              </div>
+              <p style="text-align:center;font-size:14px;color:#FF2D54;"><b>Launching soon!</b></p>
+            </div>
+            <div class="column hover-help" ng-click="goToLink('getting-started')">
+              <div class="uni">
+                <img src="img/george-brown.png" alt="George Brown" style="height:100px;opacity:.5;margin-bottom:20px;display: block;margin-left: auto;margin-right: auto">
+                George Brown College
+              </div>
+              <p style="text-align:center;font-size:14px;color:#FF2D54;"><b>Launching soon!</b></p>
+            </div>
+          </div>
+        </div>
+
+      <div class="sixteen columns give-space">
+        <a href="http://goo.gl/forms/mGnyEG8tEu" target="_blank" class="massive circular inverted red ui button">
+          <i class="student icon"></i>
+          Not a student? Request an account
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing
+  ================================================== -->
+<!--   <div id="pricing">
+    <div class="container">
+      <div class="sixteen columns">
+        <h2>Who's running this joint?</h2>
+      </div>
+
+    </div>
+  </div>
+   -->
+
+  <!-- Call to Action
+  ================================================== -->
+<!--   <div id="action">
+    <div class="container">
+      <div class="sixteen columns">
+        <h2>Give it a try.</h2>
+        <p>You can test drive Stylefnf as it launches. Just enter your school email address below, and we'll point you in the right direction:</p>
+        <div class="container">
+          <form  method="post" ng-submit="sendSignup()" name="signupEmailForm">
+            <div class="row">
+              <div class="fourteen columns offset-by-three">
+                <div class="three columns alpha">
+                  <div class="ui right action left icon input">
+                    <i class="mail icon"></i>
+                    <input ng-model="emailName" id="email_input2" type="text" name="EMAIL" required="" data-validation-required-message="Please enter your email." placeholder="jane.doe"/>
+                    <div class="ui huge dropdown button">
+                        <div class="field" style="height: inherit;">
+                          <select style="background: inherit;" id="select" ng-model="schoolEmails.selectedOption" ng-options="option.label for option in schoolEmails.availableOptions track by option.val" required></select>
+                        </div>
+                        <i class="dropdown icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="seven columns omega"> -->
+                  <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+<!--                   <div style="position: absolute; left: -5000px;"><input type="text" name="b_517ad7211a2b278c1a9374385_31f0c86267" tabindex="-1" value=""></div>
+                  <button ng-disabled="signupEmailForm.$invalid" ng-click="sendSignup()" class="massive circular red ui button" type="submit" style="float: right">Sign Up Now</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Footer
+  ================================================== -->
+  <div id="footer">
+    <div class="container">
+      <div class="twelve columns">
+        <nav>
+          <ul>
+            <li><a href="#/help">Help</a></li>
+            <!-- <li><a href="#/about">About</a></li> -->
+            <li><a href="#/jobs">Jobs</a></li>
+            <li><a href="mailto:support@stylefnf.com">Contact</a></li>
+<!--             <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms</a></li> -->
+            <li><a href="https://twitter.com/stylefnf" target="_blank"><i class="ion-social-twitter" style="font-size: 20px;"></i></a></li>
+            <li><a href="https://www.instagram.com/stylefnf/" target="_blank"><i class="ion-social-instagram" style="font-size: 20px;"></i></a></li>
+            <li><a href="https://www.facebook.com/stylefnf" target="_blank"><i class="ion-social-facebook" style="font-size: 20px;"></i></a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="two columns">
+        <a href="#">&nbsp;</a>
+      </div>
+
+      <div class="two columns">
+        <p>&copy; 2016. Stylefnf. All Rights Reserved.</p>
+      </div>
+    </div>
+  </div>
+
+</div>

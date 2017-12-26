@@ -1,0 +1,64 @@
+<!-- code start -->
+<div class="twPc-div" ng-controller="CustomHoverProfileCtrl as ctrl">
+    <a class="twPc-bg twPc-block" href=""></a>
+    <a class="follow-button ui red large button ng-class: { 'hide-hover': isAuthenticated()}" style="" href="" ng-click="goToSignup()">
+      <i class="add user icon" style=""></i>
+      Follow
+    </a>
+  <div>
+    <div class="twPc-button ng-class: { 'hide-hover': !isAuthenticated()}">
+      <div class="twPc-button ng-class: { 'hide-hover': !isOtherProfile()}" ng-cloak>
+        <a class="follow-button ui red large button ng-class: { 'hide-hover': isFollowing()}" style="" href="" ng-click="followAction()">
+          <i class="add user icon" style=""></i>
+          Follow
+        </a> 
+        <div class=" ui labeled button ng-class: { 'hide-hover': !isFollowing()}" ng-click="followAction()">
+<!--           <a href="" class="ui red button" style="padding-top: 0.785714em; padding-right: 0.785714em;margin-left: 15%;">
+            <i class="check icon"></i>
+          </a> -->
+          <a href="" class="ui big basic red label" style="padding-top: 0.785714em; padding-right: 0.785714em;">
+            <i class="check icon"></i>
+            Following
+          </a>
+        </div> 
+      </div>
+    </div>
+
+    <a title="{{$root.hoverProfile.firstName}} {{$root.hoverProfile.lastName}}" ng-href="#/profile/{{$root.hoverProfile._id}}" class="twPc-avatarLink">
+      <img alt="{{ctrl.profile.firstName}} {{ctrl.profile.lastName}}" ng-src="{{$root.hoverProfile.profilePictures[0]}}" class="twPc-avatarImg">
+    </a>
+
+    <div class="twPc-divUser">
+      <div class="twPc-divName">
+        <a ng-href="#/profile/{{$root.hoverProfile._id}}">{{$root.hoverProfile.firstName}} {{$root.hoverProfile.lastName}}</a>
+      </div>
+      <span>
+        <a href="#/profile/{{$root.hoverProfile._id}}"><span>{{$root.hoverProfile.education}}</span></a>
+      </span>
+    </div>
+
+    <div class="twPc-divStats">
+      <ul class="twPc-Arrange">
+        <li class="twPc-ArrangeSizeFit">
+          <a href="#/profile/{{$root.hoverProfile._id}}" title="">
+            <span class="twPc-StatLabel twPc-block">Listings</span>
+            <span class="twPc-StatValue">{{$root.hoverProfile.myPosts.length}}</span>
+          </a>
+        </li>
+        <li class="twPc-ArrangeSizeFit">
+          <a href="#/profile/{{$root.hoverProfile._id}}" title="885 Following">
+            <span class="twPc-StatLabel twPc-block">Following</span>
+            <span class="twPc-StatValue">{{$root.hoverProfile.following.length}}</span>
+          </a>
+        </li>
+        <li class="twPc-ArrangeSizeFit">
+          <a href="#/profile/{{$root.hoverProfile._id}}" title="1.810 Followers">
+            <span class="twPc-StatLabel twPc-block">Followers</span>
+            <span class="twPc-StatValue">{{$root.hoverProfile.followers.length}}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- code end -->

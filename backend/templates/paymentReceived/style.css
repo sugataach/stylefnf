@@ -1,0 +1,20 @@
+.btn {
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  border:none;
+  background: #FF2D55;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  font: normal normal normal normal 18px / 25.6px Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif; 
+}
+
+.item {
+  color:#00a0ff;
+  text-decoration:none;
+  /* font-style: oblique; */
+  /* font-weight: bold; */
+}

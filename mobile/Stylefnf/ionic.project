@@ -1,0 +1,11 @@
+{
+  "name": "Stylefnf",
+  "app_id": "8ad6cd4f",
+  "browsers": [
+    {
+      "platform": "android",
+      "browser": "crosswalk",
+      "version": "12.41.296.5"
+    }
+  ]
+}

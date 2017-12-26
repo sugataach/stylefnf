@@ -1,0 +1,55 @@
+<md-dialog ng-controller="CustomMacroChoiceCtrl as ctrl">
+  <md-toolbar>
+    <div class="md-toolbar-tools" layout="row">
+      <h2 class="md-toolbar-tools">What would you like to list?</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="answer()">
+        <md-icon md-svg-src="../../img/ic_close_24px.svg"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content style="padding-top:15px;min-width:400px;">
+
+    <div class="ui five column center aligned relaxed stackable grid container">
+      <div class="row">
+        <div class="column hover-help" ng-click="clickMacro('fashion')">
+          <md-icon md-svg-src="../../img/svg/fashion.svg" style="height: 142px;width: 100%;color: #FF2D54;"></md-icon>
+          <h2 class="ui icon header help-title" style="display: block;">
+            Fashion
+          </h2>
+          <p>Cleaning out your closet?</p>
+        </div>
+        <div class="column hover-help" ng-click="clickMacro('homefurniture')">
+          <md-icon md-svg-src="../../img/svg/duplex-house.svg" style="height: 142px;width: 100%;color: #FF2D54;"></md-icon>
+          <h2 class="ui icon header help-title" style="font-family: ;display: block;">
+            Home & Furniture
+          </h2>
+          <p>Going for a new interior look?</p>
+        </div>
+        <div class="column hover-help" ng-click="clickMacro('electronics')">
+          <md-icon md-svg-src="../../img/svg/smartphone.svg" style="height: 142px;width: 100%;color: #FF2D54;"></md-icon>
+          <h2 class="ui icon header help-title" style="font-family: ;display: block;">
+            Electronics
+          </h2>
+          <p>Getting your tech on?</p>
+        </div>
+        <div class="column hover-help" ng-click="clickMacro('textbooks')">
+          <md-icon md-svg-src="../../img/svg/science-book.svg" style="height: 142px;width: 100%;color: #FF2D54;"></md-icon>
+          <h2 class="ui icon header help-title" style="font-family: ;display: block;">
+            Textbooks
+          </h2>
+          <p>Start of the semester?</p>
+        </div>
+        <div class="column hover-help" ng-click="clickMacro('other')">
+          <md-icon md-svg-src="../../img/svg/question-mark-cursor.svg" style="height: 142px;width: 100%;color: #FF2D54;"></md-icon>
+          <h2 class="ui icon header help-title" style="font-family: ;display: block;">
+            Other
+          </h2>
+          <p>Everything else!</p>
+        </div>
+      </div>
+      </div>
+    </div>
+
+  </md-dialog-content>
+</md-dialog>

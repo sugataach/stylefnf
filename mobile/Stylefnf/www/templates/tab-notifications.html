@@ -1,0 +1,61 @@
+<ion-view view-title="">
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      Notifications
+    </div>
+  </ion-nav-title>
+  <ion-content ng-init="loadNotifs()">
+
+    <ion-refresher on-refresh="loadNotifs()" spinner="spiral" disable-pulling-rotation="true">
+    </ion-refresher>
+
+    <!-- <a ng-click="testurl()"> a </a> -->
+    <ion-list>
+      <div ng-repeat="notif in notifs">
+        <ion-item class="item-avatar-left notif-item ng-class: {'unseen-notif' : isUnseenNotif(notif)}" type="item-text-wrap" ng-click="goTo('notification', notif)">
+          <img ng-src="{{getProfileAvatar(notif.sender)}}" ng-click="setAvatar()">
+          <!-- <h1>{{notif.notifModel}}</h1> -->
+          <h2>{{notif.notifModel}}</h2>
+          <div>
+            <p>{{notif.notifBody}}</p>
+            <span class="item-note" style="float:left;">
+              <span am-time-ago="notif.updated"></span> ago
+            </span>
+          </div>
+          <img ng-src="{{getMobileAvatar(notif.post)}}">
+          <ion-option-button class="button-assertive" ng-click="remove(chat)">
+            Delete
+          </ion-option-button>
+        </ion-item>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-view>
+
+
+
+
+
+
+<!-- <ion-view view-title="Chats">
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      Chats
+    </div>
+  </ion-nav-title>
+  <ion-content ng-init="loadChats()">
+    <ion-refresher on-refresh="loadChats()" spinner="spiral" disable-pulling-rotation="true"></ion-refresher>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chatThreads" type="item-text-wrap" style="padding: 5px 0px 0px 0px" ng-click="goToChat(chat)">
+        <img ng-src="{{getParticipantPic(chat.participants)}}">
+        <h2>{{getParticipantName(chat.participants)}}</h2>
+        <p>{{chat.lastMessage | limitTo:50}} {{chat.lastMessage.length > 50 ? "..." : ""}} </p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+
+        <ion-option-button class="button-assertive" ng-click="remove(chat)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view> -->

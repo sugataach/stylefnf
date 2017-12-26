@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html ng-app="Haberdashery" lang="en" class="no-js ng-cloak">
+<head>
+
+    <base href="/" />
+
+    <!-- Basic Page Needs
+    ==================================================== -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="fragment" content="!">
+
+    <meta name="google-site-verification" content="EAYGW2-wM29gJC8plwBfunoZ7vG_2_CKRU46_lAULc0" />
+
+    <title ng-bind="(viewTitle || viewNotifs()) ? viewNotifs() + viewTitle : 'Stylefnf'">Buy, Sell & Discover at U of T - Stylefnf</title>
+
+    <!-- SEO -->
+    <meta name="author" content="Stylefnf">
+    <meta name="description" content="Discover unique listings from local students in Toronto. Stylefnf is the easier way to buy and sell on campus.">
+    <link rel="canonical" href="http://stylefnf.com"> <!-- info: http://goo.gl/0ta7jy -->
+
+    <!-- Social: Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@stylefnf">
+    <meta name="twitter:creator" content="stylefnf">
+    <meta name="twitter:title" content="Buy, Sell & Discover at U of T - Stylefnf">
+    <meta name="twitter:description" content="Discover unique listings from local students in Toronto. Stylefnf is the easier way to buy and sell on campus.">
+    <meta name="twitter:image:src" content="https://s3-us-west-2.amazonaws.com/stylefnf.static/fb_thumb2.png">
+
+    <!-- Social: Facebook / Open Graph -->
+    <meta property="og:url" content="http://www.stylefnf.com">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Buy, Sell and Discover at U of T - Stylefnf">
+    <meta property="og:image" content="https://s3-us-west-2.amazonaws.com/stylefnf.static/fb_thumb2.png"/>
+    <meta property="og:description" content="Discover unique listings from local students in Toronto. Stylefnf is the easier way to buy and sell on campus.">
+
+    <!-- Social: Google+ / Schema.org  -->
+    <meta itemprop="name" content="Stylefnf">
+    <meta itemprop="description" content="Buy, Sell and Discover at U of T - Stylefnf">
+    <meta itemprop="image" content="https://s3-us-west-2.amazonaws.com/stylefnf.static/fb_thumb2.png">
+
+    <!-- Mobile Specific Metas
+    ==================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Fonts
+    ==================================================== -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:900,900italic,500,400italic,100,700italic,300,700,500italic,100italic,300italic,400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+
+    <!-- CSS
+    ==================================================== -->
+    <link rel="stylesheet" href="css/normalize.css" type="text/css" media="all">
+    <!-- <link rel="stylesheet" href="css/semantic.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.2/semantic.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/paper/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
+    <link rel="stylesheet" href="bower_components/slick-carousel/slick/slick.css">
+    <link rel="stylesheet" href="bower_components/slick-carousel/slick/slick-theme.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="bower_components/v-tabs/dist/v-tabs.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/0.4.10/toaster.css">
+    <link href="bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
+    <link href="bower_components/lightbox2/dist/css/lightbox.css" rel="stylesheet">
+    <link href="bower_components/ng-img-crop/compile/minified/ng-img-crop.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/ng-animation.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/sweetalert.css">
+    <link href="bower_components/zoom.js/css/zoom.css" rel="stylesheet">
+    <link href="bower_components/angular-hovercard/dist/angular-hovercard.css" rel="stylesheet">
+    
+    <!-- Favicon
+    ==================================================== -->
+    <link rel="shortcut icon" href="img/stylefnf_favicon.ico">
+
+</head>
+<body ng-class="{'stop-scrolling' : $root.scrollLock == true}">
+    
+    <!-- Toaster Definition -->
+    <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+    
+    <!-- Nav Bar -->
+    <div ng-include="'views/nav.html'" ng-if="!$root.isLanding()"></div>
+
+    <!-- Begin Page Content -->
+    <div class="ng-view ng-class: { 'main-content' : !$root.isLanding() }" autoscroll="true"></div>
+    <div style='clear: both;'></div>
+
+    <!-- Footer -->
+    <!-- <div ng-include="'views/footer.html'"></div> -->
+
+<!--     <div class="footer">
+        <div class="container">
+          <div class="row">
+            <footer>
+              &copy; 2015 Haberdashery - <a href="/about" target="_blank">About</a> - <a href="/" target="_blank">Help</a> - <a href="/privacy" target="_blank">Privacy</a> - <a href="/terms" target="_blank">Terms</a>
+            </footer>
+          </div>
+        </div>
+    </div> -->
+
+    <!-- Scripts
+    ==================================================== -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/slick-carousel/slick/slick.js"></script>
+    <script src="bower_components/lodash/lodash.min.js"></script>
+    <script src="bower_components/lodash/lodash.min.js"></script>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
+    <script src="bower_components/angular-mocks/angular-mocks.js"></script>
+    <script src="bower_components/v-tabs/dist/v-tabs.js"></script>
+    <script src="bower_components/angular-slick/dist/slick.js"></script>
+    <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+    <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
+    <script src="bower_components/angular-scroll-glue/src/scrollglue.js"></script>
+    <script src="bower_components/angular-toolbelt/dist/angular-toolbelt.min.js"></script>
+    <script src="bower_components/lightbox2/dist/js/lightbox.js"></script>
+    <script src="bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+    <script src="bower_components/zoom.js/dist/zoom.min.js"></script>
+    <script src="bower_components/zoom.js/dist/transition.js"></script>
+    <script src="bower_components/angularjs-viewhead/angularjs-viewhead.js"></script>
+    <script src="bower_components/angulartics/dist/angulartics.min.js"></script>
+    <script src="bower_components/angulartics-depen/dist/angulartics-depen.min.js"></script>
+    <script src="bower_components/angular-hovercard/dist/angular-hovercard.js"></script>
+    <script src="bower_components/angular-image-cropper/dist/angular-image-cropper.js"></script>
+    
+
+
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+    <script src="bower_components/ngmap/build/scripts/ng-map.min.js"></script>
+    <script src="bower_components/ngmap/services/navigator_geolocation.js"></script>
+    <script src="bower_components/ngmap/services/geo_coder.js"></script>
+    <script src="bower_components/ngmap/services/attr2_options.js"></script>
+    <script src="bower_components/ngmap/directives/places-auto-complete.js"></script>
+    <script src="bower_components/ngmap/directives/map_controller.js"></script>
+    
+    <script src="bower_components/ngmap/directives/map_controller.js"></script>
+
+
+
+    <!-- // <script src="js/vendor/angular.js"></script> -->
+    <!-- // <script src="js/vendor/angular-animate.js"></script> -->
+    <script src="js/vendor/angular-resource.js"></script>
+    <!-- // <script src="js/vendor/angular-route.js"></script> -->
+    <!-- // <script src="js/vendor/angular-messages.js"></script> -->
+    <script src="js/vendor/angular-cookies.js"></script>
+    <script src="js/vendor/route-styles.js"></script>
+    <script src="js/vendor/satellizer.min.js"></script>
+    <script src="js/vendor/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.4/socket.io.js"></script>
+    <script src="js/vendor/socket.js"></script>
+    <script src="js/vendor/s3upload.js"></script>
+    <script src="js/vendor/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.9.0/angular-moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/0.4.10/toaster.js"></script>
+
+    <script src="js/core.js"></script>
+    
+    <script src="js/services/postService.js"></script>
+    <script src="js/services/socketService.js"></script>
+    <script src="js/services/commentService.js"></script>
+    <script src="js/services/offerService.js"></script>
+    <script src="js/services/profileService.js"></script>
+    <script src="js/services/likeService.js"></script>
+    <script src="js/services/searchService.js"></script>
+    <script src="js/services/chatService.js"></script>
+    <script src="js/services/newListingService.js"></script>
+    <script src="js/services/hoverProfileService.js"></script>
+    
+    <script src="js/controllers/homeController.js"></script>
+    <script src="js/controllers/postController.js"></script>
+    <script src="js/controllers/loginController.js"></script>
+    <script src="js/controllers/signupController.js"></script>
+    <script src="js/controllers/profileController.js"></script>
+    <script src="js/controllers/browseController.js"></script>
+    <script src="js/controllers/navController.js"></script>
+    <script src="js/controllers/detailController.js"></script>
+    <script src="js/controllers/chatController.js"></script>
+    <script src="js/controllers/verifyController.js"></script>
+    <script src="js/controllers/aboutController.js"></script>
+    <script src="js/controllers/helpController.js"></script>
+    <script src="js/controllers/profilePicController.js"></script>
+    <script src="js/controllers/editPhotoController.js"></script>
+    <script src="js/controllers/chooseMacroController.js"></script>
+    <script src="js/controllers/createListingController.js"></script>
+    <script src="js/controllers/newMessageController.js"></script>
+    <script src="js/controllers/hoverProfileController.js"></script>
+    <script src="js/controllers/accountController.js"></script>
+    <script src="js/controllers/landingController.js"></script>
+    <script src="js/controllers/forgotPasswordController.js"></script>
+    <script src="js/controllers/forgotPasswordVerifyController.js"></script>
+    <script src="js/controllers/usersController.js"></script>
+    <script src="js/controllers/FAQsController.js"></script>
+    
+    <script src="js/directives/serverError.js"></script>
+    <script src="js/directives/passwordEquals.js"></script>
+    <script src="bower_components/angular-popover-toggle/popover-toggle.js"></script>
+
+    <script src="js/filters/capitalize.js"></script>
+    <script src="js/filters/slice.js"></script>
+
+    <script src="js/vendor/angular-seo.js"></script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-69548431-1', 'none');
+
+    </script>
+
+  </body>
+</html>

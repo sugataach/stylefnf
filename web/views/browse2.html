@@ -1,0 +1,530 @@
+<view-title>Browse Listings</view-title>
+
+<div class="container" style="padding-top:50px;">
+
+  <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+    
+    <md-toolbar>
+      <h1 class="md-toolbar-tools">Sidenav Left</h1>
+    </md-toolbar>
+
+<!--     <md-subheader>
+      Filter
+
+      <span ng-click="close()" class="pull-right">X</span>
+
+    </md-subheader> -->
+    
+    <md-content layout-padding>
+
+<!--       <md-input-container>
+        <label for="testInput">Search Results</label>
+        <input type="text" id="testInput"
+               ng-model="data" md-sidenav-focus>
+      </md-input-container> -->
+
+      <accordion close-others="oneAtATime">
+
+        <accordion-group is-open="status.category.open">
+            <accordion-heading>
+              <div>
+                Categories <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.category.open, 'glyphicon-chevron-right': !status.category.open}"></i>
+              </div>
+            </accordion-heading>
+            
+            <div>
+                <div layout="row">
+                  <div flex="100" flex-md="100" layout="column">
+                    <fieldset class="standard" flex>
+                      <div layout="row" layout-wrap>
+                        <div flex="50" ng-repeat="item in categories">
+                          <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
+                            {{ item }}
+                          </md-checkbox>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+            </div>
+
+        </accordion-group>
+
+        <accordion-group is-open="status.size.open">
+            <accordion-heading>
+              <div>
+                Size <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.size.open, 'glyphicon-chevron-right': !status.size.open}"></i>
+              </div>
+            </accordion-heading>
+
+            <div>
+                <div layout="row">
+                  <div flex="100" flex-md="100" layout="column">
+                    <fieldset class="standard" flex>
+                      <div layout="row" layout-wrap>
+                        <div flex="50" ng-repeat="item in sizes">
+                          <md-checkbox
+                              ng-click="toggle(item, selected)">
+                            {{ item }}
+                          </md-checkbox>
+                        </div>
+                      </div>
+                      <md-input-container>
+        <label for="testInput">Search For a Size</label>
+        <input type="text" id="testInput"
+               ng-model="data" md-sidenav-focus>
+      </md-input-container>
+                    </fieldset>
+                  </div>
+                </div>
+            </div>
+
+        </accordion-group>
+
+        <accordion-group is-open="status.price.open">
+            <accordion-heading>
+                <div>
+                  Price <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.price.open, 'glyphicon-chevron-right': !status.price.open}"></i>
+                </div>
+            </accordion-heading>
+            
+            <md-radio-group ng-model="data.group2" class="md-primary">
+              <md-radio-button ng-repeat="d in priceData"
+                               ng-value="d.value"
+                               ng-seleccted=""
+                               ng-click="toggle(d.value, selected)"
+                               ng-disabled=" d.isDisabled "
+                               ng-class="{'md-align-top-left': $index==1}" >
+                  {{ d.label }}<br/>
+              </md-radio-button>
+            </md-radio-group>
+
+        </accordion-group>
+
+        <accordion-group is-open="status.condition.open">
+            <accordion-heading>
+              <div>
+                Condition <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.condition.open, 'glyphicon-chevron-right': !status.condition.open}"></i>
+              </div>
+            </accordion-heading>
+
+            <md-radio-group ng-model="data.group2" class="md-primary">
+              <md-radio-button ng-repeat="d in conditionData"
+                               ng-value="d.value"
+                               ng-checked="exists(d.value, selected)"
+                               ng-disabled=" d.isDisabled "
+                               ng-class="{'md-align-top-left': $index==1}" >
+                  {{ d.label }}<br/>
+              </md-radio-button>
+            </md-radio-group>
+        </accordion-group>
+
+<!--         <accordion-group is-open="status.discount.open">
+            <accordion-heading>
+                Discount <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.discount.open, 'glyphicon-chevron-right': !status.discount.open}"></i>
+            </accordion-heading>
+            
+            <md-radio-group ng-model="data.group2" class="md-primary">
+              <md-radio-button ng-repeat="d in discountData"
+                               ng-value="d.value"
+                               ng-checked="exists(d.value, selected)"
+                               ng-disabled=" d.isDisabled "
+                               ng-class="{'md-align-top-left': $index==1}" >
+                  {{ d.label }}<br/>
+              </md-radio-button>
+            </md-radio-group>
+
+        </accordion-group> -->
+
+<!--         <accordion-group is-open="status.availability.open">
+            <accordion-heading>
+                Availability <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.availability.open, 'glyphicon-chevron-right': !status.availability.open}"></i>
+            </accordion-heading>
+            This is just some content to illustrate fancy headings.
+        </accordion-group> -->
+
+      </accordion>
+      
+      <md-button ng-click="close()" class="md-primary">
+        Close Filter
+      </md-button>
+    
+    </md-content>
+
+  </md-sidenav>
+
+  <div class="results">
+
+    <div class="search-listings">
+
+      <div class="search-terms-header">
+        <h4 style="line-height: 70px;">
+          Show me
+
+          <a ng-if="queryHasTerm()" class="ui inverted red button massive" style="cursor:default;font-size:20px;padding:15px;border-radius: 6px;">
+            {{currQuery['term']}}
+            <i ng-click="removeTerm('term')" class="icon remove link" style="padding-left:10px;"></i>
+          </a>
+
+          <span ng-if="queryHasTerm()"> in </span>
+
+          <button popover-placement="bottom" popover-template="macroPopover.templateUrl" type="button" class="ui inverted red button massive" style="font-size:20px;padding:15px;border-radius: 6px;" ng-click="macroPopoverOpen = !macroPopoverOpen" ng-blur="macroPopoverOpen = false" popover-toggle="macroPopoverOpen" popover-append-to-body="true">
+            {{ currMacro }}
+            <i class="chevron down icon" style="padding-left:10px;"></i>
+          </button>
+
+          <script type="text/ng-template" id="macroDropdown.html">
+            <div style="font-size: 18px;font-weight: 400;">
+                <ul class="ul-dropdown">
+                    <li ng-repeat="item in macro_dict">
+                         <a ng-class="{selected: item.label == currMacro}" ng-click="changeQuery('macro',item.link)" href="">{{item.label}}</a>
+                    </li>
+                </ul>
+            </div>
+          </script>
+          
+          listings 
+
+          <span ng-if="isFashion()">for</span>
+
+          <button ng-if="isFashion()" popover-placement="bottom" popover-template="genderPopover.templateUrl" type="button" class="ui inverted red button massive" style="font-size:20px;padding:15px;border-radius: 6px;" ng-click="genderPopoverOpen = !genderPopoverOpen" ng-blur="genderPopoverOpen = false" popover-toggle="genderPopoverOpen" popover-append-to-body="true">
+            {{ currGender }}
+            <i class="chevron down icon" style="padding-left:10px;"></i>
+          </button>
+
+          <script type="text/ng-template" id="genderDropdown.html">
+            <div style="font-size: 18px;font-weight: 400;">
+                <ul class="ul-dropdown categories">
+                    <li ng-repeat="item in gender_dict">
+                         <a ng-class="{selected: item.label == currGender}" ng-click="changeQuery('gender',item.link)" href="">{{item.label}}</a>
+                    </li>
+                </ul>
+            </div>
+          </script>
+
+          <span ng-if="isFashion() || isHomeFurniture() || isElectronics() || isTextbooks()">in</span>
+          
+          <button ng-if="isFashion()" popover-placement="bottom" popover-template="categoryPopover.templateUrl" type="button" class="ui inverted red button massive" style="font-size:20px;padding:15px;border-radius: 6px;" ng-click="categoryPopoverOpen = !categoryPopoverOpen" ng-blur="categoryPopoverOpen = false" popover-toggle="categoryPopoverOpen" popover-append-to-body="true">
+            {{ currCategory }}
+            <i class="chevron down icon" style="padding-left:10px;"></i>
+          </button>
+
+          <script type="text/ng-template" id="categoryDropdown.html">
+            <div style="font-size: 18px;font-weight: 400;">
+                <ul class="ul-dropdown categories">
+                    <li ng-repeat="item in category_dict">
+                         <a ng-class="{selected: item.label == currCategory}" ng-click="changeQuery('category',item.link)" href="">{{item.label}}</a>
+                    </li>
+                </ul>
+            </div>
+          </script>
+
+          <button ng-if="isHomeFurniture()" popover-placement="bottom" popover-template="homeFurnitureCategoryPopover.templateUrl" type="button" class="ui inverted red button massive" style="font-size:20px;padding:15px;border-radius: 6px;" ng-click="homeFurnitureCategoryPopoverOpen = !homeFurnitureCategoryPopoverOpen" ng-blur="homeFurnitureCategoryPopoverOpen = false" popover-toggle="homeFurnitureCategoryPopoverOpen" popover-append-to-body="true">
+            {{ currCategory }}
+            <i class="chevron down icon" style="padding-left:10px;"></i>
+          </button>
+
+          <script type="text/ng-template" id="homeFurnitureCategoryDropdown.html">
+            <div style="font-size: 18px;font-weight: 400;">
+                <ul class="ul-dropdown categories">
+                    <li ng-repeat="item in homeFurnitureCategory_dict">
+                         <a ng-class="{selected: item.label == currCategory}" ng-click="changeQuery('category',item.link)" href="">{{item.label}}</a>
+                    </li>
+                </ul>
+            </div>
+          </script>
+
+          <button ng-if="isElectronics()" popover-placement="bottom" popover-template="electronicsCategoryPopover.templateUrl" type="button" class="ui inverted red button massive" style="font-size:20px;padding:15px;border-radius: 6px;" ng-click="electronicsCategoryPopoverOpen = !electronicsCategoryPopoverOpen" ng-blur="electronicsCategoryPopoverOpen = false" popover-toggle="electronicsCategoryPopoverOpen" popover-append-to-body="true">
+            {{ currCategory }}
+            <i class="chevron down icon" style="padding-left:10px;"></i>
+          </button>
+
+          <script type="text/ng-template" id="electronicsCategoryDropdown.html">
+            <div style="font-size: 18px;font-weight: 400;">
+                <ul class="ul-dropdown categories">
+                    <li ng-repeat="item in electronicsCategory_dict">
+                         <a ng-class="{selected: item.label == currCategory}" ng-click="changeQuery('category',item.link)" href="">{{item.label}}</a>
+                    </li>
+                </ul>
+            </div>
+          </script>
+
+          from 
+          <a class="ui inverted red button massive" style="cursor:default;font-size:20px;padding:15px;border-radius: 6px;">
+            Toronto
+          </a>
+          sorted by
+          <button button popover-placement="bottom" popover-template="sortPopover.templateUrl" popover-trigger="focus" type="button" class="ui inverted red button massive" style="font-size:20px;padding:15px;border-radius: 6px;" ng-click="sortPopoverOpen = !sortPopoverOpen" ng-blur="sortPopoverOpen = false" popover-toggle="sortPopoverOpen" popover-append-to-body="true">
+            <!-- {{currQuery['sort'] | capitalize}} -->
+            {{ currSort }}
+            <i class="chevron down icon" style="padding-left:10px;"></i>
+          </button>
+
+          <script type="text/ng-template" id="sortDropdown.html">
+            <div style="font-size: 18px;font-weight: 400;">
+              <ul class="ul-dropdown">
+                  <li ng-repeat="item in sort_dict">
+                       <a ng-class="{selected: item.label == currSort}" ng-click="changeQuery('sort', item.link)" href="">{{item.label}}</a>
+                  </li>
+              </ul>
+            </div>
+          </script>
+        </h4>
+
+        <div class="advanced-button">
+<!--           <button ng-click="toggleLeft()" class="ui basic button huge">
+            Advanced
+          </button> -->
+          <button tooltip="Coming Soon" ng-click="" class="ui basic button huge">
+            Advanced
+          </button>
+        </div>
+      </div>
+
+      <hr class="featurette-divider" style="margin-top:20px;">
+
+      <h4 ng-if="posts.length > 0">Explore <span class="search-results">{{totalItems}} listings</span></h4>
+    
+      <div class="row">
+
+        <div ng-if="posts.length == 0">
+          <div class="col-lg-4"></div>
+          <div class="col-lg-4 centered ui massive message" style="box-shadow:none">
+            <h1 class="ui header">
+              <i class="frown icon"></i>
+              <div class="content">
+                Sorry, no listings were found.
+              </div>
+            </h1>
+          </div>
+        </div>
+          <div ng-if="posts.length > 0" ng-repeat="post in posts" class="ui col-lg-4 browse-view-3" infinite-scroll='clickedLoadMore()' infinite-scroll-distance='2'>
+            
+            <div class="ui product-card fluid card ng-class:{ 'card-sold': post.status == 'Held' }"> <!-- Start of Product Card -->
+              <div class="content">
+                <span class="right floated">
+                  <div ng-if="isAuthenticated()">
+                    <button class="circular ui icon button large ng-class:{ 'red': myLike(post.likes), 'basic': !myLike(post.likes) }" ng-click="likePost(post)">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a class="like-label ng-class:{ 'red': myLike(post.likes) }" tooltip="{{usersLiked(post.likes)}}" ng-click="showLiked($event, post)">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                  <div ng-if="!isAuthenticated()">
+                    <button class="circular ui icon button large">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a href="#/login" class="like-label" tooltip="Login to continue">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                </span>
+                <div class="right floated meta"></div>
+                <span class="left floated">
+                  <hovercard 
+                    hover-tmpl-url="{{hovercardURL}}"
+                    placement="bottom"
+                    hover-bottom-amount="3.5em"
+                    ng-mouseover="hoverProfileIn(post.seller)"
+                    ng-mouseleave="hoverProfileOut(post.seller)"
+                    >
+                    <a href="#/profile/{{post.seller_id}}" class="ui big basic image label mylabel" style="font-weight:600;border:none;">
+                      <img class="avatar" ng-src="{{post.seller.profilePictures[0]}}">
+                      {{post.seller.firstName}}
+                    </a>
+                  </hovercard>
+                </span>
+              </div>
+              <div class="image">
+
+                <!-- Put for HOT items - those with a certain amount of views -->
+                <div ng-if="post.status == 'Available' && post.offers.length > 0" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail($event, post)">
+                  <i class="star icon"></i> {{post.offers.length}} {{post.offers.length === 1? "offer" : "offers"}}
+                </div>
+
+                <div ng-if="post.status != 'Available'" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail($event, post)">
+                  <i class="selected radio icon card-icon-space"></i> On Hold
+                </div>
+
+                <slick ng-if="post.imageUrls.length" dots="false" style="margin:0;">
+                  <div ng-repeat="image_link in post.imageUrls">
+                    <a ng-click="goToDetail($event, post)" href="">
+                      <img class="browse-slick make-pic-fit" data-lazy="{{image_link}}">
+                    </a>
+                  </div>
+                  <!-- <a ng-if="posts[0].imageUrls.length > 1" href="">
+                    <span><i class="fa fa-angle-left"></i></span>
+                  </a>
+
+                  <a ng-if="posts[0].imageUrls.length > 1" href="">
+                    <span><i class="fa fa-angle-right"></i></span>
+                  </a> -->
+                </slick>
+
+                <div ng-if="!post.imageUrls.length">
+                  <a ng-click="goToDetail($event, post)" href="">
+                    <img class="browse-slick" src="../img/pic-placeholder.png">
+                  </a>
+                </div>
+              </div>  
+              <div class="content card-content" ng-href="#/login" ng-click="goToDetail($event, post)">
+                <a ng-show="post.price != 0" ng-click="goToDetail($event, post)" href="" class="right floated ui red basic massive label"><span style="color:#FF2D55">${{post.price}}</span></a>
+                <a ng-show="post.price == 0" ng-click="goToDetail($event, post)" href="" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                <div class="header"><a ng-click="goToDetail($event, post)" href="">{{post.title | limitTo:25 | capitalize}}{{post.title.length > 25? "..." : ""}}</a> <span ng-if="post.status == 'Held'" style="color: red">(On Hold)</span></div>
+                <div class="meta">
+                  <a ng-click="goToDetail($event, post)" href="">{{post.brand | limitTo:25 | capitalize}}{{post.brand.length > 25? "..." : ""}} </a>
+                </div>
+                <div class="description" style="min-height:46px;">
+                  <div style="margin-bottom:10px;">
+                    {{post.description | limitTo:35}}{{post.description.length > 25? "..." : ""}}
+                  </div>
+                  <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;text-align: center;">
+                    Quick Look
+                  </div>
+                </div>
+              </div>
+              <div class="extra content">
+                <span class="right floated">
+                  <span am-time-ago="post.created"></span>
+                </span>
+                <div class="ui basic icon label large">
+                  {{showCondition(post.condition) | capitalize}}
+                </div>
+
+<!--                 <div class="ui basic icon label large">
+                  Size: {{post.size}}
+                </div> -->
+              </div>
+            </div> <!-- End of Product Card -->
+            
+          </div>
+        </div>
+
+        <div class="row" style="">
+          <div ng-if="seeMore" infinite-scroll='loadMore()' infinite-scroll-distance='2' infinite-scroll-disabled='finishedLoadingAll'>
+            <div ng-if="displayMorePosts.length > 0" ng-repeat="morePost in displayMorePosts" class="ui col-lg-4 browse-view-3">
+              <div class="ui product-card fluid card ng-class:{ 'card-sold': morePost.status == 'Held' }">
+                <div class="content">
+                  <span class="right floated">
+                    <div ng-if="isAuthenticated()">
+                      <button class="circular ui icon button large ng-class:{ 'red': myLike(morePost.likes), 'basic': !myLike(morePost.likes) }" ng-click="likePost(morePost, true)">
+                        <i class="heart icon"></i>
+                      </button>
+                      <a class="like-label ng-class:{ 'red': myLike(morePost.likes) }" tooltip="{{usersLiked(morePost.likes)}}" ng-click="showLiked($event, morePost)">
+                        {{morePost.likes.length}} {{morePost.likes.length === 1? "like" : "likes"}}
+                      </a>
+                    </div>
+                    <div ng-if="!isAuthenticated()">
+                      <button class="circular ui icon button large">
+                        <i class="heart icon"></i>
+                      </button>
+                      <a href="#/login" class="like-label" tooltip="Login to continue">
+                        {{morePost.likes.length}} {{morePost.likes.length === 1? "like" : "likes"}}
+                      </a>
+                    </div>
+                  </span>
+                  <div class="right floated meta"></div>
+                  <span class="left floated">
+                    <hovercard 
+                      hover-tmpl-url="{{hovercardURL}}"
+                      placement="bottom"
+                      hover-bottom-amount="3.5em"
+                      ng-mouseover="hoverProfileIn(morePost.seller)"
+                      ng-mouseleave="hoverProfileOut(morePost.seller)"
+                      >
+                      <a href="#/profile/{{morePost.seller_id}}" class="ui big basic image label mylabel" style="font-weight:600;border:none;">
+                        <img class="avatar" ng-src="{{morePost.seller.profilePictures[0]}}">
+                        {{morePost.seller.firstName}}
+                      </a>
+                    </hovercard>
+                  </span>
+                </div>
+                <div class="image">
+
+                  <!-- Put for HOT items - those with a certain amount of views -->
+                  <!-- <div class="ui red big ribbon label" style="z-index:21">
+                    <i class="hotel icon"></i> Sponsored
+                  </div> -->
+
+                  <!-- Put for HOT items - those with a certain amount of views -->
+                  <div ng-if="morePost.status == 'Available' && morePost.offers.length > 0" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail($event, morePost)">
+                    <i class="star icon"></i> {{morePost.offers.length}} {{morePost.offers.length === 1? "offer" : "offers"}}
+                  </div>
+
+                  <div ng-if="morePost.status != 'Available'" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail($event, morePost)">
+                    <i class="selected radio icon"></i> On Hold
+                  </div>
+
+                  <slick ng-if="morePost.imageUrls.length" dots="false" style="margin:0;">
+                    <div ng-repeat="image_link in morePost.imageUrls">
+                      <a ng-click="goToDetail($event, morePost)" href="">
+                        <img class="browse-slick" data-lazy="{{image_link}}">
+                      </a>
+                    </div>
+                    <!-- <a ng-if="posts[0].imageUrls.length > 1" href="">
+                      <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+
+                    <a ng-if="posts[0].imageUrls.length > 1" href="">
+                      <span><i class="fa fa-angle-right"></i></span>
+                    </a> -->
+                  </slick>
+
+                  <div ng-if="!morePost.imageUrls.length">
+                    <a ng-click="goToDetail($event, morePost)" href="">
+                      <img class="browse-slick" src="../img/pic-placeholder.png">
+                    </a>
+                  </div>
+                </div>  
+                <div class="content card-content" ng-click="goToDetail($event, morePost)">
+                  <a ng-show="morePost.price != 0" class="right floated ui red basic massive label"><span style="color:#FF2D55">${{morePost.price}}</span></a>
+                  <a ng-show="morePost.price == 0" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                  <div class="header"><a ng-click="goToDetail($event, morePost)" href="">{{morePost.title | limitTo:25 | capitalize}}{{morePost.title.length > 25? "..." : ""}}</a> <span ng-if="morePost.status == 'Held'" style="color: red">(On Hold)</span></div>
+                  <div class="meta">
+                    <a ng-click="goToDetail($event, morePost)" href="">{{morePost.brand | limitTo:25 | capitalize}}{{morePost.brand.length > 25? "..." : ""}} </a>
+                  </div>
+                  <div class="description" style="min-height:46px;">
+                    <div style="margin-bottom:10px;">
+                      {{morePost.description | limitTo:35}}{{morePost.description.length > 25? "..." : ""}}
+                    </div>
+                    <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;text-align: center;">
+                      Quick Look
+                      <!-- <i class="right chevron icon"></i> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="extra content">
+                  <span class="right floated">
+                    <span am-time-ago="morePost.created"></span>
+                  </span>
+                  <div class="ui basic icon label large">
+                    {{showCondition(morePost.condition) | capitalize}}
+                  </div>
+
+<!--                   <div class="ui basic icon label large">
+                    Size: {{morePost.size}}
+                  </div> -->
+                </div>
+              </div>
+              
+            </div>
+            <div ng-show="!finishedLoadingAll && !isLoadingPosts" class="col-md-12 text-center load-more">
+              <button class="ui loading button massive">Loading</button>
+            </div>
+            <div style='clear: both;'></div>
+          </div>
+
+          <div class="col-md-12 text-center load-more ng-class: { 'do-not-show': (itemsOnScreen != totalItems) || (totalItems == 0) }">
+            <div class="ui message massive compact header" style="box-shadow:none">
+              <!-- <i class="checkered flag icon"></i> -->
+              That's everything...
+            </div>
+          </div>
+        </div>
+
+      <!-- </div> -->
+    </div>
+  </div>
+
+</div>

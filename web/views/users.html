@@ -1,0 +1,258 @@
+<view-title>Browse Users</view-title>
+
+<div class="container" style="padding-top:50px;">
+
+  
+
+  <div class="results">
+
+    <div class="search-listings">
+
+      <hr class="featurette-divider" style="margin-top:20px;">
+
+      <h4 ng-if="posts.length > 0">Explore <span class="search-results">{{totalUsers}} users</span></h4>
+    
+      <div class="row">
+
+        <div ng-if="posts.length == 0">
+          <div class="col-lg-4"></div>
+          <div class="col-lg-4 centered ui massive message" style="box-shadow:none">
+            <h1 class="ui header">
+              <i class="frown icon"></i>
+              <div class="content">
+                Sorry, no users were found.
+              </div>
+            </h1>
+          </div>
+        </div>
+
+        <div>
+          <div ng-if="posts.length > 0" ng-repeat="post in posts" class="ui col-lg-4 browse-view-3">
+            
+            <div class="ui fluid card ng-class:{ 'card-sold': post.status == 'Held' }"> <!-- Start of Product Card -->
+              <div class="content">
+                <span class="right floated">
+                  <div ng-if="isAuthenticated()">
+                    <button class="circular ui icon button large ng-class:{ 'red': myLike(post.likes) }" ng-click="likePost(post)">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a class="like-label ng-class:{ 'red': myLike(post.likes) }" tooltip="{{usersLiked(post.likes)}}" ng-click="showLiked($event, post)">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                  <div ng-if="!isAuthenticated()">
+                    <button class="circular ui icon button large">
+                      <i class="heart icon"></i>
+                    </button>
+                    <a href="#/login" class="like-label" tooltip="Login to continue">
+                      {{post.likes.length}} {{post.likes.length === 1? "like" : "likes"}}
+                    </a>
+                  </div>
+                </span>
+                <div class="right floated meta"></div>
+                <span class="left floated">
+                  <hovercard 
+                    hover-tmpl-url="{{hovercardURL}}"
+                    placement="bottom"
+                    hover-bottom-amount="3.5em"
+                    ng-mouseover="hoverProfileIn(post.seller)"
+                    ng-mouseleave="hoverProfileOut(post.seller)"
+                    >
+                    <a href="#/profile/{{post.seller_id}}" class="ui big basic image label mylabel" style="font-weight:600;border:none;">
+                      <img class="avatar" ng-src="{{post.seller.profilePictures[0]}}">
+                      {{post.seller.firstName}}
+                    </a>
+                  </hovercard>
+                </span>
+              </div>
+              <div class="image">
+
+                <!-- Put for HOT items - those with a certain amount of views -->
+                <div ng-if="post.status == 'Available' && post.offers.length > 0" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                  <i class="star icon"></i> {{post.offers.length}} {{post.offers.length === 1? "offer" : "offers"}}
+                </div>
+
+                <div ng-if="post.status != 'Available'" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(post._id)">
+                  <i class="selected radio icon card-icon-space"></i> Sold
+                </div>
+
+                <slick ng-if="post.imageUrls.length" dots="false" style="margin:0;">
+                  <div ng-repeat="image_link in post.imageUrls">
+                    <a ng-href="#/detail/{{post._id}}">
+                      <img class="browse-slick make-pic-fit" data-lazy="{{image_link}}">
+                    </a>
+                  </div>
+                  <!-- <a ng-if="posts[0].imageUrls.length > 1" href="">
+                    <span><i class="fa fa-angle-left"></i></span>
+                  </a>
+
+                  <a ng-if="posts[0].imageUrls.length > 1" href="">
+                    <span><i class="fa fa-angle-right"></i></span>
+                  </a> -->
+                </slick>
+              </div>  
+              <div class="content card-content" ng-href="#/login" ng-click="goToDetail(post._id)">
+                <a ng-show="post.price != 0" href="#/detail/{{post._id}}" class="right floated ui red basic massive label"><span style="color:#FF2D55">${{post.price}}</span></a>
+                <a ng-show="post.price == 0" href="#/detail/{{post._id}}" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                <div class="header"><a href="#/detail/{{post._id}}">{{post.brand | capitalize}}</a> <span ng-if="post.status == 'Held'" style="color: red">(Sold)</span></div>
+                <div class="meta">
+                  <a href="#/detail/{{post._id}}">{{post.title | limitTo:18 | capitalize}}{{post.title.length > 18? "..." : ""}} </a>
+                </div>
+                <div class="description" style="min-height:46px;">
+                  <div style="margin-bottom:10px;">
+                    {{post.description | limitTo:35}}{{post.description.length > 25? "..." : ""}}
+                  </div>
+                  <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;text-align: center;">
+                    Take a look
+                  </div>
+                </div>
+              </div>
+              <div class="extra content">
+                <span class="right floated">
+                  <span am-time-ago="post.created"></span>
+                </span>
+                <div class="ui basic icon label large">
+                  {{showCondition(post.condition) | capitalize}}
+                </div>
+
+                <div class="ui basic icon label large">
+                  Size: {{post.size}}
+                </div>
+              </div>
+            </div> <!-- End of Product Card -->
+            
+          </div>
+
+        </div>
+        </div>
+
+        <div class="row" style="">
+          <div>
+          <div ng-if="seeMore" infinite-scroll='loadMore()' infinite-scroll-distance='1' infinite-scroll-disabled='finishedLoadingAll'>
+            <div ng-if="morePosts.length == 0" class="col-md-12 text-center load-more">
+              <button class="ui loading button massive">Loading</button>
+            </div>
+            <div ng-if="displayMorePosts.length > 0" ng-repeat="morePost in displayMorePosts" class="ui col-lg-4 browse-view-3">
+              <div class="ui fluid card ng-class:{ 'card-sold': morePost.status == 'Held' }">
+                <div class="content">
+                  <span class="right floated">
+                    <div ng-if="isAuthenticated()">
+                      <button class="circular ui icon button large ng-class:{ 'red': myLike(morePost.likes) }" ng-click="likePost(morePost, true)">
+                        <i class="heart icon"></i>
+                      </button>
+                      <a class="like-label ng-class:{ 'red': myLike(morePost.likes) }" tooltip="{{usersLiked(morePost.likes)}}" ng-click="showLiked($event, morePost)">
+                        {{morePost.likes.length}} {{morePost.likes.length === 1? "like" : "likes"}}
+                      </a>
+                    </div>
+                    <div ng-if="!isAuthenticated()">
+                      <button class="circular ui icon button large">
+                        <i class="heart icon"></i>
+                      </button>
+                      <a href="#/login" class="like-label" tooltip="Login to continue">
+                        {{morePost.likes.length}} {{morePost.likes.length === 1? "like" : "likes"}}
+                      </a>
+                    </div>
+                  </span>
+                  <div class="right floated meta"></div>
+                  <span class="left floated">
+                    <hovercard 
+                      hover-tmpl-url="{{hovercardURL}}"
+                      placement="bottom"
+                      hover-bottom-amount="3.5em"
+                      ng-mouseover="hoverProfileIn(morePost.seller)"
+                      ng-mouseleave="hoverProfileOut(morePost.seller)"
+                      >
+                      <a href="#/profile/{{morePost.seller_id}}" class="ui big basic image label mylabel" style="font-weight:600;border:none;">
+                        <img class="avatar" ng-src="{{morePost.seller.profilePictures[0]}}">
+                        {{morePost.seller.firstName}}
+                      </a>
+                    </hovercard>
+                  </span>
+                </div>
+                <div class="image">
+
+                  <!-- Put for HOT items - those with a certain amount of views -->
+                  <!-- <div class="ui red big ribbon label" style="z-index:21">
+                    <i class="hotel icon"></i> Sponsored
+                  </div> -->
+
+                  <!-- Put for HOT items - those with a certain amount of views -->
+                  <div ng-if="morePost.status == 'Available' && morePost.offers.length > 0" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(morePost._id)">
+                    <i class="star icon"></i> {{morePost.offers.length}} {{morePost.offers.length === 1? "offer" : "offers"}}
+                  </div>
+
+                  <div ng-if="morePost.status != 'Available'" class="ui basic red big ribbon label" style="z-index:21;cursor:pointer;" ng-click="goToDetail(morePost._id)">
+                    <i class="selected radio icon"></i> Sold
+                  </div>
+
+                  <slick ng-if="morePost.imageUrls.length" dots="false" style="margin:0;">
+                    <div ng-repeat="image_link in morePost.imageUrls">
+                      <a ng-href="#/detail/{{morePost._id}}">
+                        <img class="browse-slick" data-lazy="{{image_link}}">
+                      </a>
+                    </div>
+                    <!-- <a ng-if="posts[0].imageUrls.length > 1" href="">
+                      <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+
+                    <a ng-if="posts[0].imageUrls.length > 1" href="">
+                      <span><i class="fa fa-angle-right"></i></span>
+                    </a> -->
+                  </slick>
+                </div>  
+                <div class="content card-content" ng-click="goToDetail(morePost._id)">
+                  <a ng-show="morePost.price != 0" class="right floated ui red basic massive label"><span style="color:#FF2D55">${{morePost.price}}</span></a>
+                  <a ng-show="morePost.price == 0" class="right floated ui red basic massive label"><span style="color:#FF2D55">Free!</span></a>
+                  <div class="header"><a ng-href="#/detail/{{morePost._id}}">{{morePost.brand | capitalize}}</a> <span ng-if="morePost.status == 'Held'" style="color: red">(Sold)</span></div>
+                  <div class="meta">
+                    <a ng-href="#/detail/{{morePost._id}}">{{morePost.title | limitTo:18 | capitalize}}{{morePost.title.length > 18? "..." : ""}} </a>
+                  </div>
+                  <div class="description" style="min-height:46px;">
+                    <div style="margin-bottom:10px;">
+                      {{morePost.description | limitTo:35}}{{morePost.description.length > 25? "..." : ""}}
+                    </div>
+                    <div class="ui red circular button massive centered" style="cursor:pointer;font-size:14px;padding:10px;text-align: center;">
+                      Take a look
+                      <!-- <i class="right chevron icon"></i> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="extra content">
+                  <span class="right floated">
+                    <span am-time-ago="morePost.created"></span>
+                  </span>
+                  <div class="ui basic icon label large">
+                    {{showCondition(morePost.condition) | capitalize}}
+                  </div>
+
+                  <div class="ui basic icon label large">
+                    Size: {{morePost.size}}
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+          </div>
+          </div>
+          <div style='clear: both;'></div>
+          <div ng-if="!seeMore && totalItems > 9" class="col-md-12 text-center load-more">
+            <button ng-click="clickedLoadMore()" class="ui button massive">
+              <i class="icon repeat"></i>
+              Load More
+            </button>
+          </div>
+
+          <div class="col-md-12 text-center load-more ng-class: { 'do-not-show': (itemsOnScreen != totalItems) || (totalItems == 0) }">
+            <div class="ui message massive compact header" style="box-shadow:none">
+              <!-- <i class="checkered flag icon"></i> -->
+              That's everything...
+            </div>
+          </div>
+        </div>
+
+      <!-- </div> -->
+    </div>
+  </div>
+
+</div>

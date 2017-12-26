@@ -1,0 +1,33 @@
+<ion-view view-title="">
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      <i class="icon ion-chevron-left assertive"  ng-click="goBack()" style="float:left;padding-right:25px;color:#FF2D54"></i> Purchased Items
+    </div>
+  </ion-nav-title>
+  
+  <ion-content ng-init="loadPurchasedListings()">
+    <ion-list ng-repeat="listing in purchasedListings">
+      <ion-item class="item-remove-animate item-thumbnail-left listing-search-item" type="item-text-wrap" ng-click="goTo('listing', listing._id)">
+        <img ng-src="{{listing.imageUrls[0]}}">
+        <div class="row">
+          <div class="col col-75">
+            <h2>{{listing.brand}}</h2>
+            <p>{{listing.title}}</p>
+            <p>{{listing.locations[0].name | limitTo:50}} {{listing.locations[0].name > 50 ? "..." : ""}} </p>
+          </div>
+          <div class="col col-33">
+            <span class="item A_1 assertive pull-right" href="">
+              <span class="SPAN_2">{{showPrice(listing.price)}}</span>
+            </span>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+    <div ng-show="purchasedListings.length === 0" class="col col-offset-33 message-padding-top">
+      <button class="button icon-left ion-image">No Purchased listings yet!</button>
+    </div>
+    <ion-infinite-scroll ng-if="!allPostsLoaded && isListings" on-infinite="loadMore()"
+      distance="1%" spinner="spiral">
+    </ion-infinite-scroll>
+  </ion-content>
+</ion-view>

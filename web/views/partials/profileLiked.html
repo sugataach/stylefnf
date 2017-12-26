@@ -1,0 +1,22 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools" layout="row">
+      <h2 class="md-toolbar-tools">People Who Like This </h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="answer()">
+        <md-icon md-svg-src="../../img/ic_close_24px.svg"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content style="padding-top:5px;min-width:400px;max-width:800px;max-height:400px; ">
+    <div>
+      <md-list>
+        <md-list-item ng-repeat="like in $root.selectedProfilePost.likes">
+          <img ng-src="{{like.user.profilePictures[0]}}" alt="{{like.user.firstName}}" class="md-avatar" />
+          <p><a ng-href="#/profile/{{like.user._id}}">{{like.user.firstName}} {{like.user.lastName}}</a></p>
+          <md-divider inset></md-divider>
+        </md-list-item>
+      </md-list>
+    </div>
+  </md-dialog-content>
+</md-dialog>

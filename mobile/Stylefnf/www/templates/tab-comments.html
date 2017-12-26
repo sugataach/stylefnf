@@ -1,0 +1,47 @@
+<ion-view view-title="Comments" hide-tabs ng-cloak>
+  <ion-nav-title style="border-color: transparent !important;">
+    <div class="row row-center feed-row thin-row delicious-font">
+      <i class="icon ion-chevron-left assertive" ng-click="goBack()" style="float:left;padding-right:25px;color:#FF2D54"></i>
+      <!-- <i class="ion-arrow-left-c" ng-click="goBack()" ></i> -->
+      &nbsp; Comments
+    </div>
+  </ion-nav-title>
+  <ion-content ng-init="loadComments()">
+    <ion-refresher on-refresh="loadComments()" spinner="spiral" disable-pulling-rotation="true"></ion-refresher>
+    <ion-list>
+      <ion-item ng-click="selectComment(comment)" class="item-avatar item-icon-right" ng-repeat="comment in comments" type="item-text-wrap" style="padding: 5px 0px 0px 0px">
+        <img ng-src="{{getParticipantPic(comment)}}">
+        <h2>{{getParticipantName(comment)}}</h2>
+        <p>{{getComment(comment) | limitTo:50}} {{chat.lastMessage.length > 50 ? "..." : ""}} </p>
+        <p>{{getDate(comment.created)}}</p>
+
+
+        <!-- <ion-option-button class="button-assertive" ng-click="remove(chat)">
+          Delete
+        </ion-option-button> -->
+      </ion-item>
+    </ion-list>
+  </ion-content>
+  <form name="addCommentForm" class="send-msg" ng-submit="addComment(input.message)" novalidate>
+    <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
+      <label class="item-input-wrapper">
+        <textarea id="chatField" ng-model="input.message" value="" placeholder="Send {{toUser.username}} a message..." required minlength="1" maxlength="1500" msd-elastic></textarea>
+        <div class="footer-btn-wrap">
+          <button ng-click="sendMessage(input.message)" class="button button-icon icon ion-android-send footer-btn" type="submit"
+              ng-disabled="!input.message || input.message === ''">
+          </button>
+        </div>
+      </label>
+
+    </ion-footer-bar>
+  </form>
+
+  <script id="edit-comment.html" type="text/ng-template">
+    <div class="list">
+      <a class="item icon-left popup-item-delete" ng-click="deleteComment()">
+        <i class="icon ion-trash-a"></i>
+        Delete Comment
+      </a>
+    </div>
+  </script>
+</ion-view>

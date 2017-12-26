@@ -1,0 +1,523 @@
+<ion-view view-title="">
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font listing-title">
+
+      <i class="icon ion-chevron-left assertive" ng-click="goBack()" style="float:left;padding-right:25px;color:#FF2D54"></i>
+      <!-- <i ng-click="goBack()" class="ion-arrow-left-c"></i> &nbsp; -->
+      <!-- {{selectedPost.title | limitTo: 15}} {{selectedPost.title.length > 15 ? "..." : ""}} -->
+      &nbsp; Detail
+
+      <span style="flex: auto;"></span>
+      <button class="button button-balanced icon-right ion-plus-circled hidden ng-class: { 'display' : showReserveButton(selectedPost) && selectedPost.status != 'Sold' && selectedPost.status != 'Paid'}" style="width:35%;float:right;" ng-click="showOfferPopup()">
+        PLACE BID
+      </button>
+
+      <button class="button button-assertive icon-right ion-close-circled hidden ng-class: { 'display' : showCancelButton(selectedPost) && selectedPost.status != 'Sold' && selectedPost.status != 'Paid'}" style="width:30%;float:right;" ng-click="cancelOffer(selectedPost)">
+        CANCEL
+      </button>
+
+      <!-- isPostCreator(selectedPost)  needs to go where "true" is -->
+      <button class="button button-balanced hidden ng-class: { 'display' : isPostCreator(selectedPost) } " style="width:25%" ng-click="edit($event)">
+
+        EDIT
+      </button>
+
+      <button class="button button-assertive" ng-show="selectedPost.status == 'Held' && isPostCreator(selectedPost) && selectedPost.status != 'Sold' && selectedPost.status != 'Paid'" ng-click="removeHold()">
+
+        REMOVE HOLD
+      </button>
+
+      <button class="button button-balanced hidden ng-class: { 'display' : showPayButton(selectedPost) && selectedPost.status != 'Sold' && selectedPost.status != 'Paid'}" style="width:25%" ng-click="goToPayDetails()">
+        PAY
+      </button>
+    </div>
+  </ion-nav-title>
+  <ion-content ng-init="loadListing()" overflow-scroll="true" lazy-scroll>
+
+<!--     <script id="edit-listing-template.html" type="text/ng-template">
+      <ion-popover-view>
+        <ion-content>
+          <div class="list">
+            <a class="item icon-left popup-item-update" ng-click="updateListing()">
+              <i class="icon ion-edit"></i>
+              Update Listing
+            </a>
+            <a class="item icon-left popup-item-delete" ng-show="isAvailable()" ng-click="markAsSold()">
+              <i class="icon ion-close-circled"></i>
+              Mark as Sold
+            </a>
+            <a class="item icon-left popup-item-sold" ng-show="!isAvailable()" ng-click="markAsAvailable()">
+              <i class="icon ion-checkmark-circled"></i>
+              Mark as Available
+            </a>
+            <a class="item icon-left popup-item-delete" ng-click="verify('Are you sure you want to remove this posting?')">
+              <i class="icon ion-trash-a"></i>
+              Delete Listing
+            </a>
+          </div>
+        </ion-content>
+      </ion-popover-view>
+    </script> -->
+
+    <script id="edit-listing-template.html" type="text/ng-template">
+      <div class="list">
+        <a class="item icon-left popup-item-update" ng-click="updateListing()">
+          <i class="icon ion-edit"></i>
+          <span>Update Listing</span>
+        </a>
+        <a class="item icon-left popup-item-delete" ng-show="isAvailable()" ng-click="markAsSold()">
+          <i class="icon ion-close-circled"></i>
+          Mark as Sold
+        </a>
+        <a class="item icon-left popup-item-sold" ng-show="!isAvailable()" ng-click="markAsAvailable()">
+          <i class="icon ion-checkmark-circled"></i>
+          Mark as Available
+        </a>
+        <a class="item icon-left popup-item-delete" ng-click="verify('Are you sure you want to remove this posting?')">
+          <i class="icon ion-trash-a"></i>
+          Delete Listing
+        </a>
+      </div>
+    </script>
+
+    <script id="offer-modal.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-assertive">
+          <h1 class="title">
+            <button class="button icon-left ion-chevron-left adjust-btn" ng-click="closeOfferModal()"></button>
+            Offer Details
+            <button class="button button-clear icon ion-help-circled adjust-btn" ng-click="goToAbout()" style="float:right;"></button>
+          </h1>
+        </ion-header-bar>
+        <ion-content scroll="true" class="checkout-has-header">
+          <div class="list">
+
+            <div class="item item-divider">
+              Product Details
+            </div>
+
+            <div class="item item-left" ng-show="ifSize(selectedPost.size)">
+              Size: {{selectedPost.size | capitalize}}
+            </div>
+            <div class="item item-left">
+              Condition: {{getDisplayCondition(selectedPost.condition)}}
+            </div>
+            <div class="item item-left">
+              Return Policy: {{convertReturn(selectedPost.return)}}
+            </div>
+
+            <div class="item item-divider">
+              Delivery Details
+            </div>
+
+            <div class="item item-icon-left" >
+              <i class="icon ion-android-person"></i>
+              Meet in person
+            </div>
+
+            <div class="item item-icon-left" href="#">
+              <i class="icon ion-ios-location"></i>
+              <p ng-repeat="location in selectedPost.locations">
+                {{location.name}}
+                <p>
+                {{location.address}}
+                </p>
+              </p>
+            </div>
+
+            <div class="item item-divider">
+              Total
+            </div>
+
+            <div class="item item-icon-left">
+              <p>
+                Offer price
+                <span class="item-note">
+                  ${{offerData.offerPrice.toFixed(2)}}
+                </span>
+              </p>
+              <p>
+                Service Fee
+                <span class="item-note">
+                  ${{serviceFee.toFixed(2)}}
+                </span>
+              </p>
+              <p class="checkout-total">
+                Total
+                <span class="item-note checkout-total">
+<!--                   ${{offerData.offerPrice + serviceFee}} -->
+                  ${{ getTotalOfferPrice().toFixed(2) }}
+                </span>
+              </p>
+            </div>
+
+            <div class="item">
+              <button class="button button-block button-positive" ng-click="placeOffer()">
+                PLACE OFFER
+              </button>
+            </div>
+
+          </div>
+        </ion-content>
+      </ion-modal-view>
+    </script>
+
+    <script id="pay-modal.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-balanced">
+          <h1 class="title">
+            <button class="button icon-left ion-chevron-left adjust-btn" ng-click="closePayModal()"></button>
+            Checkout
+            <button class="button button-clear icon ion-help-circled adjust-btn" ng-click="goToAbout()" style="float:right;"></button>
+          </h1>
+        </ion-header-bar>
+        <ion-content scroll="true" class="checkout-has-header">
+
+          <ion-slide-box ng-init="lockSlide()" show-pager="false" delegate-handle="pay-slidebox">
+
+            <ion-slide>
+              <div class="list">
+
+                <div class="item item-divider">
+                  Total
+                </div>
+
+                <div class="item item-icon-left">
+                  <p>
+                    Offer price
+                    <span class="item-note">
+                      ${{payingOffer.total.toFixed(2)}}
+                    </span>
+                  </p>
+                  <p>
+                    Service Fee
+                    <span class="item-note">
+                      ${{payingOffer.serviceFee.toFixed(2)}}
+                    </span>
+                  </p>
+                  <p class="checkout-total">
+                    Total
+                    <span class="item-note checkout-total">
+                      ${{ getTotal(payingOffer.total, payingOffer.serviceFee, 'offer').toFixed(2) }}
+                    </span>
+                  </p>
+                </div>
+
+                <div class="item">
+<!--                   <button class="button button-block button-positive">
+                    PAY WITH PAYPAL
+                  </button> -->
+
+                  <button class="button button-block button-positive" ng-click="payWithCreditCard()">
+                    PAY WITH CREDIT CARD
+                  </button>
+
+<!--                   <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                      <input type="hidden" name="cmd" value="_xclick" />
+                      <input type="hidden" name="business" value="{{ merchantID }}" />
+                      <input type="hidden" name="lc" value="CA" />
+                      <input type="hidden" name="item_name" value="{{ selectedPost.title }}" />
+                      <input type="hidden" name="item_number" value="{{ selectedPost._id }}" />
+                      <input type="hidden" name="amount" value="{{ getTotal(payingOffer.total, payingOffer.serviceFee, 'offer').toFixed(2) }}" />
+                      <input type="hidden" name="currency_code" value="{{ settings.paypal.currency_code }}" />
+                      <input type="hidden" name="button_subtype" value="services" />
+                      <input type="hidden" name="no_note" value="{{ selectedPost.description }}" />
+                      <input type="hidden" name="tax_rate" value="0" />
+                      <input type="hidden" name="shipping" value="0" />
+                      <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynowCC_LG.gif:NonHostedGuest" />
+                      <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
+                      <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+                  </form> -->
+
+                </div>
+
+              </div>
+            </ion-slide>
+
+            <ion-slide disable-scroll="false">
+              <ion-content class="">
+              <iframe
+                           ng-src="{{ trustSrc(paypalLink) }}"
+                           frameborder="0"
+                           style=" overflow:hidden;
+                                   overflow-x:hidden;
+                                   overflow-y:hidden;
+                                   height:100%;
+                                   width:100%;
+                                   position:absolute;
+                                   left:0px;right:0px;bottom:0px;
+                                   -ms-touch-action: none;"
+                                   height="100%" width="100%"
+                  ></iframe>
+              </ion-content>
+            </ion-slide>
+
+            <ion-slide>
+              fdsafdsa
+            </ion-slide>
+          </ion-slide-box>
+        </ion-content>
+      </ion-modal-view>
+    </script>
+
+    <script id="viewOffers-modal.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-assertive">
+          <h1 class="title" style="padding: 5px 0px 0px 0px">
+            <button class="button icon-left ion-chevron-left adjust-btn" ng-click="closeViewOffersModal()"></button>
+            Offers
+          </h1>
+        </ion-header-bar>
+        <ion-content scroll="true" class="checkout-has-header">
+          <ion-list>
+            <ion-item ng-repeat="offer in selectedPost.offers" class="item-avatar item-icon-right item-text-wrap">
+              <img class="make-fit" ng-src="{{getProfileAvatar(offer.poster)}}">
+
+              <div style="width:65%; display:inline-block">
+                <span style="font-weight:600;">
+                  {{offer.poster.firstName}}
+                </span>
+                <div style="padding-top: 2vh;">
+                  <p>
+                    Bid
+                    <span class="item-note">
+                      ${{offer.total.toFixed(2)}}
+                    </span>
+                  </p>
+                  <p class="hidden ng-class: { 'display' : isPostCreator(selectedPost) }">
+                    Service Fee
+                    <span class="item-note">
+                      ${{ offer.sellerFee.toFixed(2) }}
+                    </span>
+                  </p>
+                  <p class="hidden ng-class:{ 'display' : ifSeeFee(offer) }">
+                    Service Fee
+                    <span class="item-note">
+                      ${{offer.serviceFee.toFixed(2)}}
+                    </span>
+                  </p>
+                  <p class="checkout-total hidden ng-class: {  'display' : isPostCreator(selectedPost)}">
+                    Payout
+                    <span class="item-note checkout-total">
+                      ${{ getTotal(offer.total, offer.sellerFee, 'seller').toFixed(2) }}
+                    </span>
+                  </p>
+                  <br ng-show="ifPostCreator || ifSeeFee(offer)">
+                  <p class="checkout-total hidden ng-class:{'display' : ifSeeFee(offer) }" >
+                    Total
+                    <span class="item-note checkout-total">
+                      ${{ getTotal(offer.total, offer.serviceFee, 'service').toFixed(2) }}
+                    </span>
+                  </p>
+                </div>
+<!--                 <span class="item-note" style="position:relative; right: -36vw;bottom:9vh;">
+                  <span am-time-ago="offer.created"></span>
+                  ago
+                </span> -->
+              </div>
+
+              <button class="button button-balanced hidden ng-class: { 'display' : isAvailable() && isPostCreator(selectedPost) }" style="width:22%; position:absolute; right: 1vw;bottom:3vh;" ng-click="acceptOffer(offer._id, offer.poster._id)">
+                Accept
+              </button>
+            </ion-item>
+          <ion-list>
+        </ion-content>
+      </ion-modal-view>
+    </script>
+
+    <ion-item ng-show="selectedPost.offers.length > 0" class="item-avatar item-icon-right" type="item-text-wrap" style="padding: 5px 0px 0px 0px" ng-click="goToViewOffersModal()">
+
+      <img class="avatar-pic ng-class: { 'hidden' : notStatus('Available') }" ng-src="{{getProfileAvatar(selectedPost.offers[0].poster)}}">
+      <img class="avatar-pic ng-class: { 'hidden' : notStatus('Held') }" ng-src="{{getBuyer().poster.profilePictures[0]}}">
+      <img class="avatar-pic ng-class: { 'hidden' : notStatus('Paid') }" ng-src="img/redX.jpg">
+
+      <h2 class=" ng-class: { 'hidden' : notStatus('Available') } ">{{selectedPost.offers.length}} {{selectedPost.offers.length == 1 ? "offer" : "offers"}}</h2>
+      <h2 class=" ng-class: { 'hidden' : notStatus('Held') }">On Hold</h2>
+      <h2 class=" ng-class: { 'hidden' : notStatus('Paid') }">Unavailable</h2>
+
+      <p class="ng-class: { 'hidden' : notStatus('Available') }"> {{selectedPost.offers[0].poster.firstName}} {{offerText()}} </p>
+      <p class="ng-class: { 'hidden' : notStatus('Held') }"> {{getBuyer().poster.firstName}} is holding this listing </p>
+      <p class="ng-class: { 'hidden' : notStatus('Paid') }"> This listing has been purchased. </p>
+
+
+      <i class="icon ion-information-circled positive" style=""></i>
+
+      <!-- <ion-option-button class="button-assertive" ng-click="remove(chat)">
+        Delete
+      </ion-option-button> -->
+    </ion-item>
+
+    <ion-refresher on-refresh="loadListing()" spinner="spiral" disable-pulling-rotation="true">
+    </ion-refresher>
+    <ion-list class="feed-item" ng-cloak>
+      <div class="feed-card" type="item-text-wrap">
+        <div class="row row-center feed-row" style="" ng-hide="isPostCreator(selectedPost)">
+          <span class="col col-20 item-avatar" ng-click="goTo('profile', selectedPost.seller._id)">
+            <img ng-src="{{getProfileAvatar(selectedPost.seller)}}">
+          </span>
+          <span class="item-name" ng-click="goTo('profile', selectedPost.seller._id)">
+            <div>
+              {{selectedPost.seller.firstName}}
+            </div>
+            <div class="item-note" style="font-weight:normal;font-size:13px;">
+              {{selectedPost.seller.education}}
+            </div>
+          </span>
+          <div class="col">
+          </div>
+          <span class="make-right feed-time"><span am-time-ago="selectedPost.created"></span></span>
+        </div>
+
+        <div class="img-container-listing" style="">
+          <ion-slide-box style="width: inherit;" ng-click="goToSlide()" on-slide-changed="slideChanged($index)">
+              <ion-slide ng-repeat="image in selectedPost.imageUrls" style="width: 100% !important;">
+                  <img class="" image-lazy-src="{{image}}" image-lazy-loader="lines">
+              </ion-slide>
+          </ion-slide-box>
+        </div>
+
+        <script id="image-modal.html" type="text/ng-template">
+          <div class="modal image-modal black-bg" ng-click="closeModal()">
+            <ion-slide-box show-pager="false" >
+              <ion-slide ng-repeat="oImage in aImages">
+                <ion-scroll  zooming="true" style="width=100%; height:100%;" overflow-scroll="false" min-zoom="1" direction="xy" >
+                <div class="flexbox-container" style="height: {{getDeviceHeight()}}px">
+                  <img ng-src="{{oImage}}" class="fullscreen-image">
+                </div>
+                </ion-scroll>
+              </ion-slide>
+            </ion-slide-box>      
+          </div>
+        </script>
+
+        <div class="row row-center feed-row thin-row">
+          <a class="item item-icon-left assertive" href="" ng-click="likeListing()">
+            <i class="icon ng-class: { 'ion-ios-heart' : selectedPost.liked,  'ion-ios-heart-outline' : !selectedPost.liked }"></i>
+          </a>
+          <a class="item item-icon-left" ng-click="goTo('comments', selectedPost._id)">
+            <i class="icon ion-chatbubble-working positive"></i>
+          </a>
+<!--           <a class="item item-icon-left assertive" href="#">
+            <i class="icon ion-ios-redo"></i>
+          </a> -->
+          <!-- <a class="item item-icon-left" href="#">
+            <i class="icon ion-android-more-vertical comment-item"></i>
+          </a> -->
+          <span style="flex: auto;"></span>
+          <a class="item A_1 assertive pull-right" href="">
+            <span class="SPAN_2">{{showPrice(selectedPost.price)}}</span>
+          </a>
+        </div>
+
+        <div class="likes" style="flex: auto; font-size: 15px; padding: 20px 0px 10px 10px;">
+            <span ng-click="goTo('likes', selectedPost._id)" ng-show="selectedPost.likes.length != 0">
+              <i class="icon ion-heart"></i>
+              <span ng-show="selectedPost.likes.length != 1"> {{selectedPost.likes.length}} Likes</span>
+              <span ng-show="selectedPost.likes.length == 1"> {{selectedPost.likes.length}} Like</span>
+            </span>
+            <span>
+              <!-- <span style="padding-left:2vw;" ng-show="selectedPost.offers.length > 0"><i class="icon ion-ios-circle-filled"></i> {{selectedPost.offers.length}} {{selectedPost.offers.length == 1 ? "Offer" : "Offers"}}</span> -->
+              <span style="padding-left:2vw;color:#33cd5f" ng-show="(selectedPost.offers.length == 0 || selectedPost.status == 'Available') && selectedPost.status != 'Sold'"><i class="icon ion-checkmark-circled balanced"></i> Available</span>
+<!--               <span style="padding-left:2vw;color:red;" ng-show="selectedPost.status == 'Held'"><i class="icon ion-close-circled"></i> On Hold
+              </span> -->
+            </span>
+            <span ng-show="selectedPost.status == 'Sold'">
+
+              <!-- <i class="icon ion-social-usd"></i> -->
+              <span style="color:white;margin-left:3%;border:1px solid red;padding:1%;background-color:red;border-radius:2px;">
+                <!-- <i class="icon ion-social-usd"></i> -->
+                SOLD
+              </span>
+            </span>
+        </div>
+      </div>
+
+      <ion-list>
+        <ion-item class="item-stable"
+                  ng-click="toggleAbout()"
+                  ng-class="{active: showAbout}">
+            <i class="icon" ng-class="showAbout ? 'ion-chevron-up' : 'ion-chevron-down'"></i>
+          &nbsp;
+          About
+        </ion-item>
+        <ion-item class="item-accordion item-text-wrap"
+                  ng-show="showAbout">
+                  <p>
+                  <span style="font-weight:bold;color:black;">{{selectedPost.title}}</span>
+                  <br>
+                  {{selectedPost.description}}
+                  <br>
+                  {{selectedPost.tags}}
+                </p>
+        </ion-item>
+
+        <ion-item class="item-stable"
+                  ng-click="toggleMeetup()"
+                  ng-class="showMeetup">
+            <i class="icon" ng-class="showMeetup ? 'ion-chevron-up' : 'ion-chevron-down'"></i>
+          &nbsp;
+          Location
+        </ion-item>
+        <ion-item class="item-accordion"
+                  ng-show="showMeetup">
+        <p ng-repeat="location in selectedPost.locations">
+          {{location.name}}
+        </p>
+        </ion-item>
+
+        <ion-item class="item-stable"
+                  ng-click="toggleSpec()"
+                  ng-class="{active: showSpec}">
+            <i class="icon" ng-class="showSpec ? 'ion-chevron-up' : 'ion-chevron-down'"></i>
+          &nbsp;
+          Details
+        </ion-item>
+        <ion-item class="item-accordion"
+                  ng-show="showSpec">
+          <div class = "row">
+             <div class = "col col-40">Return Option:</div>
+             <div class = "col">{{convertReturn(selectedPost.return)}}</div>
+          </div>
+          <div class = "row">
+             <div class = "col col-40">Type:</div>
+             <div class = "col">{{convertType(selectedPost.macro)}}</div>
+          </div>
+          <div class = "row" ng-hide="isCategory('textbooks', selectedPost.macro)">
+             <div class = "col col-40">Brand:</div>
+             <div class = "col">{{selectedPost.brand}}</div>
+          </div>
+          <div class = "row">
+             <div class = "col col-40">Condition:</div>
+             <div class = "col">{{seeCondition(selectedPost.condition)}}</div>
+          </div>
+          <div class = "row" ng-hide="isCategory('textbooks', selectedPost.macro)">
+             <div class = "col col-40">Color:</div>
+             <div class = "col">{{selectedPost.colour}}</div>
+          </div>
+          <div class = "row">
+             <div class = "col col-40">Spec Category:</div>
+             <div class = "col">{{selectedPost.category}}</div>
+          </div>
+          <div class = "row" ng-hide="isCategory('textbooks', selectedPost.macro)">
+             <div class = "col col-40">Size:</div>
+             <div class = "col">{{selectedPost.size}}</div>
+          </div>
+          <div class = "row" ng-show="isCategory('homeFurniture', selectedPost.macro)">
+             <div class = "col col-40">Room:</div>
+             <div class = "col">{{selectedPost.room}}</div>
+          </div>
+          <div class = "row" ng-show="isCategory('fashion', selectedPost.macro)">
+             <div class = "col col-40">Gender:</div>
+             <div class = "col">{{selectedPost.gender}}</div>
+          </div>
+          <div class = "row" ng-show="isCategory('fashion', selectedPost.macro)">
+             <div class = "col col-40">Allows TryOn?</div>
+             <div class = "col">{{convertBoolean(selectedPost.ifTryOn)}}</div>
+          </div>
+        </ion-item>
+      </ion-list>
+
+
+    </ion-list>
+  </ion-content>
+</ion-view>

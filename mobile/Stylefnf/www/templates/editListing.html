@@ -1,0 +1,239 @@
+<ion-view hide-tabs>
+
+  <ion-nav-title ng-init="loadListing()">
+    <div class="row row-center feed-row thin-row delicious-font-more newListingTitle">
+      <i class="icon ion-chevron-left assertive" ng-click="previousStep()" style="float:left;padding-right:25px;" ng-show="isFirst()"></i>
+      <i class="icon ion-chevron-left assertive" ng-click="previousStep()" style="float:left;padding-right:25px;" ng-hide="isFirst()"></i>
+      {{currentTitle}}
+      <i class="ion-checkmark-circled balanced" ng-click="nextStep()" style="float:right;padding-left:25px;" ng-hide="isLast()"></i>
+      <i class="ion-checkmark-circled balanced" ng-click="editPost()" ng-show="isLast()" style="float:right;padding-left:25px;"></i>
+    </div>
+  </ion-nav-title>
+
+    <ion-content>
+
+      <ion-slide-box ng-init="lockSlide()" show-pager="false">
+
+        <ion-slide disable-scroll="false">
+          <ion-item class="newListingTab" >
+
+            <div class="button-bar" style="padding-top:10%" ng-show="!isWeb">
+              <a class="button button-assertive" ng-click="takePicture()" style="border-right:1px solid white;">
+                <i class="ion-camera" style="font-size:50px;"></i>
+                <p class="button-camera-newlisting">Take a picture</p>
+              </a>
+              <a class="button button-outline button-assertive" ng-click="getPictures()">
+                <i class="ion-images" style="font-size:50px;"></i>
+                <p class="button-gallery-newlisting">From gallery</p>
+              </a>
+            </div>
+
+            <div style="padding-top:10%" ng-show="isWeb">
+              <div class="fileUpload button button-block button-assertive">
+                <i class="ion-upload" style="font-size:20px;"></i>
+                <span>Upload Photos</span>
+                <input multiple type="file" class="upload" onchange="angular.element(this).scope().s3UploadWeb(this.files)" accept="image/*"/>
+              </div>
+            </div>
+
+
+            <div style="padding-bottom:10%;"></div>
+
+            <div class="row product-gallery" ng-repeat="photo in localPictures" ng-if="$index % 3 === 0">
+                <div class="col col-33 product-gallery" ng-if="$index < localPictures.length" ng-click="showActionsheet($index)">
+                    <img src="{{ localPictures[$index] }}" width="100%" />
+                </div>
+                <div class="col col-33 product-gallery" ng-if="$index + 1 < localPictures.length" ng-click="showActionsheet($index + 1)">
+                    <img src="{{ localPictures[$index + 1] }}" width="100%" />
+                </div>
+                <div class="col col-33 product-gallery" ng-if="$index + 2 < localPictures.length" ng-click="showActionsheet($index + 2)">
+                    <img src="{{ localPictures[$index + 2] }}" width="100%" />
+              </div>
+            </div>
+
+          </ion-item>
+        </ion-slide>
+
+        <ion-slide disable-scroll="false">
+
+          <form>
+            <ion-content>
+
+              <label class="item item-input item-stacked-label newListingFirst">
+                <span class="input-label">Title</span>
+                <input type="text" placeholder="What are you selling?" ng-model="listingTitle.text"
+                   required ng-trim="false">
+              </label>
+
+              <label class="item item-input item-stacked-label newListingFirst">
+                <span class="input-label">Price</span>
+                <input type="number"  ng-model="listingPrice.value" placeholder="How much do you want?"
+                   min="0" max="100000" required>
+              </label>
+
+              <label for="singleSelect" class="item item-input item-select">
+                <div class="input-label">
+                  Return Option
+                </div>
+                <select
+                  ng-options="option.name for option in returnOptions.availableOptions track by option.value"
+                  ng-model="returnOptions.selected"></select>
+              </label>
+
+              <label for="singleSelect" class="item item-input item-select newListingFirst">
+                <div class="input-label">
+                  Which category?
+                </div>
+                <select
+                  ng-options="option.name for option in listingCategories.availableOptions track by option.value"
+                  ng-model="listingCategories.selected"></select>
+              </label>
+
+              <label class="item item-input item-select newListingFirst" for="singleSelect">
+                <div class="input-label">
+                  How new is it?
+                </div>
+                <select
+                  ng-options="option.name for option in listingCondition.availableOptions track by option.value"
+                  ng-model="listingCondition.selected"></select>
+              </label>
+
+              <div class="list list-inset">
+                  <div class="item-input" ng-repeat="input in inputs" style="padding-left:0px;">
+                  <label class="item-input-wrapper">
+                      <input type="text" placeholder="I can meet up at..." ng-model="input.name" />
+                  </label>
+                  <button class="button button-small button-balanced" ng-if="$index == inputs.length - 1" ng-click="addInput()">
+                      <i class="icon ion-plus"></i>
+                  </button>
+                  <button class="button button-small button-assertive" ng-if="$index != inputs.length - 1" ng-click="removeInput($index)">
+                  <i class="icon ion-minus"></i>
+                  </button>
+                  </div>
+              </div>
+
+              <label class="item item-input item-stacked-label newListingFirst" ng-if="ifCategory('fashion') || ifCategory('homeFurniture')">
+                <span class="input-label">Size</span>
+                <input type="text" placeholder="What size is it?" ng-model="listingSize.text"
+                   required ng-trim="false">
+              </label>
+
+            </ion-content>
+          </form>
+        </ion-slide>
+
+        <ion-slide disable-scroll="false">
+
+          <form>
+
+            <ion-content>
+
+              <div class="list list-inset">
+
+                <div class="item item-text-wrap item-msg">
+                  <span style="font-weight:bold;">Optional</span> - but complete items will have higher priority on the news feed & search!
+                </div>
+
+              </div>
+
+              <label class="item item-input item-stacked-label newListingFirst" ng-hide="ifCategory('textbooks')">
+                <span class="input-label">Brand</span>
+                <input type="text" placeholder="What is the brand of this item?" ng-model="listingBrand.text"
+                   required ng-trim="false">
+              </label>
+
+              <label class="item item-input item-stacked-label newListingFirst" ng-hide="ifCategory('textbooks')">
+                <span class="input-label">Color</span>
+                <input type="text" placeholder="What is the color of your item?" ng-model="listingColor.text"
+                   required ng-trim="false">
+              </label>
+
+              <label class="item item-input item-stacked-label newListingFirst" ng-if="ifCategory('electronics')">
+                <span class="input-label">Size</span>
+                <input type="text" placeholder="What size is it?" ng-model="listingSize.text"
+                   required ng-trim="false">
+              </label>
+
+              <label class="item item-input item-stacked-label newListingFirst">
+                <span class="input-label">Tags</span>
+                <input type="text" ng-model="listingTags.text"
+                   required ng-trim="false">
+              </label>
+
+              <label class="item item-input item-stacked-label newListingFirst">
+                <span class="input-label">Description</span>
+                <textarea type="text" placeholder="Please give a description for your item." ng-model="listingDescription.text"
+                   required ng-trim="false" rows="5" style="background-color:white !important;width:96%;">
+                </textarea>
+              </label>
+
+              <label for="singleSelect" class="item item-input item-select newListingFirst" ng-if="ifCategory('fashion')">
+                <div class="input-label">
+                  Gender
+                </div>
+                <select
+                  ng-options="option.name for option in listingGender.availableOptions track by option.value"
+                  ng-model="listingGender.selected"></select>
+              </label>
+
+              <label for="singleSelect" class="item item-input item-select newListingFirst" ng-if="ifCategory('fashion')">
+                <div class="input-label">
+                  Specific Category
+                </div>
+                <select
+                  ng-options="option.text for option in fashionCategory.availableOptions track by option.value"
+                  ng-model="fashionCategory.selected"></select>
+              </label>
+
+              <label for="singleSelect" class="item item-input item-select newListingFirst" ng-if="ifCategory('fashion')">
+                <div class="input-label">Allow try on?</div>
+                <select
+                  ng-options="option.name for option in fashionTryOn.availableOptions track by option.value"
+                  ng-model="fashionTryOn.selected"></select>
+              </label>
+
+              <label class="item item-input item-stacked-label newListingFirst" ng-if="ifCategory('homeFurniture')">
+                <span class="input-label">Room</span>
+                <input type="text" placeholder="What is the size of your cloth?" ng-model="furnitureRoom.text"
+                   required ng-trim="false">
+              </label>
+
+              <label for="singleSelect" class="item item-input item-select newListingFirst" ng-if="ifCategory('homeFurniture')">
+                <div class="input-label">
+                  Specific Category
+                </div>
+                <select
+                  ng-options="option.text for option in homeFurnitureCategory.availableOptions track by option.value"
+                  ng-model="homeFurnitureCategory.selected"></select>
+              </label>
+
+              <label for="singleSelect" class="item item-input item-select newListingFirst" ng-if="ifCategory('electronics')">
+                <div class="input-label">
+                  Specific Category
+                </div>
+                <select
+                  ng-options="option.text for option in electronicsCategory.availableOptions track by option.value"
+                  ng-model="electronicsCategory.selected"></select>
+              </label>
+
+              <label for="singleSelect" class="item item-input item-select newListingFirst" ng-if="ifCategory('textbooks')">
+                <div class="input-label">
+                  Specific Category
+                </div>
+                <select
+                  ng-options="option.text for option in textbooksCategory.availableOptions track by option.value"
+                  ng-model="textbooksCategory.selected"></select>
+              </label>
+
+
+            </ion-content>
+
+          </form>
+
+        </ion-slide>
+
+      </ion-slide-box>
+
+    </ion-content>
+
+</ion-view>

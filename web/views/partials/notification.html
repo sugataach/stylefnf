@@ -1,0 +1,11 @@
+<md-toast ng-click="goToMsg()" style="position:fixed;cursor:pointer;">
+  <md-list>
+    <md-list-item>
+      <img ng-src="{{notifPic}}" class="md-avatar make-pic-fit" />
+      <p>{{notifBody}}</p>
+      <md-button ng-click="closeNotif()">
+        Close
+      </md-button>
+    </md-list-item>
+  </md-list>
+</md-toast>

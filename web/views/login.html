@@ -1,0 +1,117 @@
+<view-title>Login - Stylefnf</view-title>
+
+<div class="container pad-top">
+
+  <div class="ui two column grid">
+
+    <div class="column" style="">
+      <div class="container detail-form">
+        <div class="detail-form panel login-container panel-default">
+          <div class="panel-body">
+            
+            <h5 style="font-weight:bold">
+              <img class="img-rounded" src="../../img/stylefnf_icon.png" style="height:50px;margin-right:10px;">
+              <span style="color:#FF2D54">Buy, Sell, Discover </span> on campus.
+            </h5>
+
+            <div class="row h6 signup-reasons reasons" style="text-align:left;margin-left:20px;margin-bottom:40px;font-size:15px;margin-top:40px;">
+              <p>
+                Stylefnf is an online marketplace that connects students through social networks at colleges.
+              </p>
+              <p>
+                You <span style="font-weight:bold">NEED</span> to login to:
+
+                <div class="ui list">
+                  <a class="item">
+                    <i class="dollar red icon"></i>
+                    <div class="content">
+                      <div class="header">Make an Offer</div>
+                      <div class="description">Wanna get your hands on one of our unique listings?</div>
+                    </div>
+                  </a>
+                  <a class="item">
+                    <i class="ion-tshirt red icon"></i>
+                    <div class="content">
+                      <div class="header">List an Item</div>
+                      <div class="description">Think you have an awesome item?</div>
+                    </div>
+                  </a>
+                  <a class="item">
+                    <i class="heart red icon"></i>
+                    <div class="content">
+                      <div class="header">Like an Item</div>
+                      <div class="description">Let others know that you dig their products!</div>
+                    </div>
+                  </a>
+                </div>
+              </p>
+              <p>
+                To get started, enter your credentials in the login box to your right.
+              </p>
+            </div>
+            
+            <div class="row" style="margin-top:40px;">
+              <div class="ui massive buttons">
+                <button class="ui positive button" ng-click="goToLink('signup')"><i class="left arrow icon"></i> I don't have an account</button>
+                <div class="or"></div>
+                <button class="ui red button" ng-click="goToLink('help')">Help Me!</button>
+              </div>
+            </div>
+
+          </div>    
+        </div>
+      </div>
+    </div>
+
+
+    <div class="column">
+      <div class="center-form panel login-form">
+        <div class="panel-body">
+          <h4 class="text-center"><i class="ion-log-in" style="color:red;"></i> Log in</h4>
+          <p>To login, enter your school email and password you used to signup.</p>
+
+          <form name="loginForm" ng-submit="emailLogin()" novalidate>
+            <div class="form-group has-feedback" ng-class="{ 'has-error': loginForm.email.$invalid && loginForm.email.$dirty }">
+              <input server-error class="form-control input-lg" type="text" name="email" ng-model="email" placeholder="Email" required autofocus>
+              <span class="ion-at form-control-feedback"></span>
+              <div class="help-block" ng-if="loginForm.email.$dirty" ng-messages="loginForm.email.$error">
+                <div ng-message="required">Please enter your email</div>
+                <div ng-message="server">{{errorMessage.email}}</div>
+              </div>
+            </div>
+
+            <div class="form-group has-feedback" ng-class="{ 'has-error': loginForm.password.$invalid && loginForm.password.$dirty }">
+              <input server-error class="form-control input-lg" type="password" name="password" ng-model="password" placeholder="Password" required>
+              <span class="ion-key form-control-feedback"></span>
+              <div class="help-block" ng-if="loginForm.password.$dirty" ng-messages="loginForm.password.$error">
+                <div ng-message="required">Please enter your password</div>
+                <div ng-message="server">{{errorMessage.password}}</div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-block btn-success" ng-disabled="loginForm.$invalid">Log in</button>
+
+<!--             <div class="signup-or-separator">
+              <h6 class="text">or</h6>
+              <hr>
+            </div> -->
+          </form>
+          <!-- <p>To login with Facebook, link your Facebook account, via "My Account" page.</p> -->
+<!--           <button class="btn btn-block btn-facebook" ng-click="facebookLogin()" tooltip-html="'<p>To log in with Facebook,<br> please link your Facebook account.</p>'" tooltip-placement="top">
+            <i class="facebook square icon medium"></i> Log in with Facebook
+          </button> -->
+          <br/>
+
+          <p class="text-center text-muted">
+            <small><a href="#/forgot-password">Forgot your password?</a></small>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- <div ng-include="'views/footer.html'"></div> -->
+
+

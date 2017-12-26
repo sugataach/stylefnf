@@ -1,0 +1,60 @@
+<style>
+  .tabs-top > .tabs, .tabs.tabs-top{
+    top:0px;
+    position: relative;
+  }
+
+  .pane, .view{
+    position: inherit;
+  }
+</style>
+<ion-view>
+
+  <ion-nav-title>
+
+      <label class="item item-input" style="border-color: white; ">
+        <i class="icon ion-search placeholder-icon" style="font-size: 26px;"></i>
+        <input ng-change="change(input.filterUser)" type="text"  ng-model="input.filterUser" placeholder="Search" style="font-size: 18px;padding-top: 5px;">
+      </label>
+
+  </ion-nav-title>
+
+  <ion-content>
+    <ion-tabs class="tabs-icon-only tabs-top a" overflow-scroll="true" lazy-scroll>
+      <ion-tab title="Fashion" on-select="isFashion=true" on-deselect="isFashion=false">
+        <div ng-show="isFashion">
+          <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" ng-click="goToChat(chat)">
+              <img ng-src="{{getParticipantPic(chat.participants)}}">
+              <h2>fdsa{{getParticipantName(chat.participants)}}</h2>
+              <p>fdas{{chat.lastMessage | limitTo:50}} {{chat.lastMessage.length > 50 ? "..." : ""}} </p>
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-tab>
+      <ion-tab title="Furniture" on-select="isFurniture=true" on-deselect="isFurniture=false">
+        <ion-list ng-show="isFurniture">
+          <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" ng-click="goToChat(chat)">
+              <img ng-src="{{getParticipantPic(chat.participants)}}">
+              <h2>sdfgassa{{getParticipantName(chat.participants)}}</h2>
+              <p>fdas{{chat.lastMessage | limitTo:50}} {{chat.lastMessage.length > 50 ? "..." : ""}} </p>
+            </ion-item>
+          </ion-list>
+        </ion-list>
+
+      </ion-tab>
+      <ion-tab title="Home&amp;Kitchen" on-select="isHome=true" on-deselect="isHome=false">
+        <div ng-show="isHome">
+          <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" ng-click="goToChat(chat)">
+              <img ng-src="{{getParticipantPic(chat.participants)}}">
+              <h2>ppppsa{{getParticipantName(chat.participants)}}</h2>
+              <p>fdas{{chat.lastMessage | limitTo:50}} {{chat.lastMessage.length > 50 ? "..." : ""}} </p>
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-tab>
+    </ion-tabs>
+  </ion-content>
+</ion-view>

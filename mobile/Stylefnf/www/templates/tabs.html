@@ -1,0 +1,107 @@
+<!--
+Create tabs with an icon and label, using the tabs-positive style.
+Each tab's child <ion-nav-view> directive will have its own
+navigation history that also transitions its views in and out.
+-->
+
+<ion-tabs class="tabs-striped tabs-color-assertive tabs-icon-only">
+
+  <!-- Feed Tab -->
+  <ion-tab title="Feed" icon-off="ion-home" icon-on="ion-home" href="#/feed">
+    <ion-nav-view name="tab-feed"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Search Tab -->
+  <ion-tab title="Search" icon-off="ion-search" icon-on="ion-search" ng-click="" href="#/search" class="">
+    <ion-nav-view name="tab-search"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Search Results Tab -->
+  <ion-tab title="Search Results" hidden="true" style="display:hidden;" ng-click="" href="#/search-results" class="">
+    <ion-nav-view name="search-results"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="Search Results" hidden="true" style="display:hidden;" ng-click="" href="#/testurl" class="">
+    <ion-nav-view name="testurl"></ion-nav-view>
+  </ion-tab>
+
+  <!-- newListing Tab -->
+  <ion-tab title="Camera" icon-on="ion-camera" icon-off="ion-camera" class="" href="#/newListing">
+    <ion-nav-view name="tab-newListing"></ion-nav-view>
+  </ion-tab>
+
+  <!-- editListing Tab -->
+  <ion-tab hidden="true" title="editListing" href="#/editListing" style="display: hidden;">
+    <ion-nav-view name="tab-editListing"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Chats Tab -->
+  <ion-tab hidden="true" title="Chats" href="#/chats" style="display: hidden;">
+    <ion-nav-view name="tab-chats"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Options Tab -->
+  <ion-tab hidden="true" title="Options" href="#/options" style="display: hidden;">
+    <ion-nav-view name="tab-options"></ion-nav-view>
+  </ion-tab>
+
+  <!-- purchased listings -->
+  <ion-tab hidden="true" title="Purchased Listings" href="#/purchased-listings" style="display: hidden;">
+    <ion-nav-view name="tab-purchased-listings"></ion-nav-view>
+  </ion-tab>
+
+  <!--sold listings-->
+ <ion-tab hidden="true" title="Sold Listings" href="#/sold-listings" style="display: hidden;">
+    <ion-nav-view name="tab-sold-listings"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Listing Detail Tab -->
+  <ion-tab hidden="true" title="Listings" href="#/listings" style="display: hidden;">
+    <ion-nav-view name="tab-listings"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Likes Tab -->
+  <ion-tab hidden="true" title="Likes" href="#/likes" style="display: hidden;">
+    <ion-nav-view name="tab-likes"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Comments Tab -->
+  <ion-tab hidden="true" title="Comments" href="#/comments" style="display: hidden;">
+    <ion-nav-view name="tab-comments"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Profile Detail Tab -->
+  <ion-tab hidden="true" title="Profiles" href="#/profiles" style="display: hidden;">
+    <ion-nav-view name="tab-profiles"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Profile Detail Tab -->
+  <ion-tab hidden="true" title="Following" href="#/following" style="display: hidden;">
+    <ion-nav-view name="tab-following"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Profile Detail Tab -->
+  <ion-tab hidden="true" title="Follower" href="#/follower" style="display: hidden;">
+    <ion-nav-view name="tab-follower"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Notifications Tab -->
+  <ion-tab title="Notifications" badge="$root.unseenNotifications.length" badge-style="badge-positive" icon-off="ion-android-notifications" icon-on="ion-android-notifications" class="" href="#/notifications">
+    <ion-nav-view name="tab-notifications"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Account Tab -->
+  <ion-tab title="Account" icon-off="ion-android-person" icon-on="ion-android-person" class="" href="#/account">
+    <ion-nav-view name="tab-account"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="Edit Account" hidden="true" style="display: hidden;" href="#/edit-account">
+    <ion-nav-view name="tab-edit-account"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab hidden="true" title="Change Password" href="#/change-password" style="display: hidden;">
+    <ion-nav-view name="tab-change-password"></ion-nav-view>
+  </ion-tab>
+
+
+</ion-tabs>

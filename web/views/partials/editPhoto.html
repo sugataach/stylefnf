@@ -1,0 +1,40 @@
+<md-dialog ng-controller="CustomPhotoCtrl as ctrl">
+  <md-toolbar>
+    <div class="md-toolbar-tools" layout="row">
+      <h2 class="md-toolbar-tools">Edit Photo</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="answer()">
+        <md-icon md-svg-src="../../img/ic_close_24px.svg"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content style="padding-top:15px;min-width:400px;background-color:#F7F7F7;">
+
+    <div>
+        <image-cropper image-url="{{ctrl.imageUrl}}"
+                       width="{{ctrl.windowWidth}}"
+                       height="{{ctrl.windowHeight}}"
+                       check-cross-origin="true" 
+                       show-controls="{{ctrl.showControls}}"
+                       fit-on-init="true"
+                       center-on-init="true"
+                       api="ctrl.cropperApi"
+                       crop-callback="ctrl.updateResultImage"
+        ></image-cropper>
+        <div ng-show="isLoadingPhoto()" class="ui segment">
+          <div class="ui active dimmer">
+            <div class="ui indeterminate text loader">Preparing Files</div>
+          </div>
+          <p></p>
+        </div>
+    </div>
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+    <md-button ng-click="fit()" style="margin-right: 20px;"><i class="compress icon"></i></md-button>
+    <md-button ng-click="picZoomIn(1.1)" style="margin-right: 20px;"><i class="zoom icon"></i></md-button>
+    <md-button ng-click="picZoomIn(0.1)" style="margin-right: 20px;"><i class="zoom out icon"></i></md-button>
+    <md-button ng-click="rotate()" style="margin-right: 20px;"><i class="repeat icon"></i></md-button>
+    <span flex></span>
+    <md-button ng-click="crop()" ng-disabled="hasData(newListing)" class="md-raised md-warn" layout layout-align="center end">Save</md-button>
+  </div>
+</md-dialog>

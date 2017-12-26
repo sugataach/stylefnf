@@ -1,0 +1,50 @@
+<!-- code start -->
+<div class="twPc-div" ng-controller="CustomHoverProfileCtrl as ctrl">
+    <a class="twPc-bg twPc-block"></a>
+
+  <div>
+    <div class="twPc-button">
+            <button class="ui twitter button">
+              <i class="twitter icon"></i>
+              Twitter
+            </button>  
+    </div>
+
+    <a title="{{ctrl.profile.firstName}} {{ctrl.profile.lastName}}" ng-href="#/profile/{{ctrl.profile._id}}" class="twPc-avatarLink">
+      <img alt="{{ctrl.profile.firstName}} {{ctrl.profile.lastName}}" ng-src="{{ctrl.profile.profilePictures[0]}}" class="twPc-avatarImg">
+    </a>
+
+    <div class="twPc-divUser">
+      <div class="twPc-divName">
+        <a ng-href="#/profile/{{ctrl.profile._id}}">{{ctrl.profile.firstName}} {{ctrl.profile.lastName}}</a>
+      </div>
+      <span>
+        <a href="#/profile/{{ctrl.profile._id}}">@<span>{{ctrl.profile.education}}</span></a>
+      </span>
+    </div>
+
+    <div class="twPc-divStats">
+      <ul class="twPc-Arrange">
+        <li class="twPc-ArrangeSizeFit">
+          <a href="#/profile/{{ctrl.profile._id}}" title="9.840 Tweet">
+            <span class="twPc-StatLabel twPc-block">Listings</span>
+            <span class="twPc-StatValue">9.840</span>
+          </a>
+        </li>
+        <li class="twPc-ArrangeSizeFit">
+          <a href="#/profile/{{ctrl.profile._id}}" title="885 Following">
+            <span class="twPc-StatLabel twPc-block">Following</span>
+            <span class="twPc-StatValue">885</span>
+          </a>
+        </li>
+        <li class="twPc-ArrangeSizeFit">
+          <a href="#/profile/{{ctrl.profile._id}}" title="1.810 Followers">
+            <span class="twPc-StatLabel twPc-block">Followers</span>
+            <span class="twPc-StatValue">1.810</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- code end -->

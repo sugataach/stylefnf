@@ -1,0 +1,85 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view>
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      Hello {{$root.currentUser.firstName}}!
+    </div>
+  </ion-nav-title>
+  <ion-content scroll="true" class="verifyForm">
+
+    <script id="uploadPic-template.html" type="text/ng-template">
+      <div class="list">
+        <a class="item icon-left popup-item" ng-click="takePicture()">
+          <i class="icon ion-camera"></i>
+          <span>Take a Photo</span>
+        </a>
+        <a class="item icon-left popup-item" ng-click="getPictures()">
+          <i class="icon ion-images"></i>
+          Choose from Gallery
+        </a>
+      </div>
+    </script>
+
+    <form class="verifyForm" name="verifyForm" ng-submit="updateProfile()" novalidate>
+      
+      <div class="col col-centered hidden ng-class: { 'display': !newPicture }" ng-click="addProfilePic()" ng-show="!isWeb">
+        <div class="add-profile-picture" style="margin:auto;">
+          <img ng-src="/img/add-photo.png">
+        </div>
+        <div class="text-center">
+        	<button>[ Add Profile Pic ]</button>
+        </div>
+      </div>
+
+      <div class="col input-col hidden ng-class: { 'display': !newPicture }" ng-show="isWeb">
+        <div class="item item-input-inset form-input">
+          <div class="fileUpload button button-assertive button-block" style="width:100%;">
+            <i class="ion-upload"></i>
+            <span>Add Profile Photo</span>
+            <input type="file" class="upload" onchange="angular.element(this).scope().s3UploadWeb(this.files)" accept="image/*"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="col input-col hidden ng-class: { 'display': newPicture }">
+        <div class="add-profile-picture" style="margin:auto;">
+          <img ng-src="{{$root.currentUser.profilePictures[0]}}">
+        </div>
+      </div>
+
+      <hr class="soften">
+
+      <div class="col">
+      	<span> Current City </span>
+      	<div class="item item-input-inset form-input">
+      		<label class="item-input-wrapper">
+            <input type="text" server-error name="location" ng-model="currentUser.location" placeholder="Current City">
+          </label>
+      	</div>
+      </div>
+
+      <div class="col input-col">
+      	<span> About </span>
+      	<div class="item item-input-inset" style="padding:10px 35px 0 35px; border:none;">
+      		<label class="item-input-wrapper">
+            <textarea type="text" server-error name="email" ng-model="currentUser.about" placeholder="School Email"></textarea>
+          </label>
+      	</div>
+      </div>
+     
+
+      <div class="col input-col">
+        <div class="item item-input-inset form-input">
+          <button type="submit" ng-disabled="verifyForm.$invalid" class="button button-assertive">
+            Get in there!
+          </button>
+        </div>
+      </div>
+	  </form>
+  </ion-content>
+</ion-view>

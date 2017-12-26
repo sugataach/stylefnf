@@ -1,0 +1,25 @@
+<ion-view view-title="">
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      <i class="icon ion-chevron-left assertive"  ng-click="goBack()" style="float:left;padding-right:25px;color:#FF2D54"></i>
+
+    	Following
+    </div>
+  </ion-nav-title>
+  <ion-content ng-init="loadProfile()">
+
+    <ion-refresher on-refresh="loadProfile()" spinner="spiral" disable-pulling-rotation="true">
+    </ion-refresher>
+
+    <!-- <a ng-click="testurl()"> a </a> -->
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar-left" ng-click="goToFollowing(follow._id)" ng-repeat="follow in following" type="item-text-wrap">
+        <img class="make-fit" ng-src="{{getProfileAvatar(follow)}}" ng-click="setAvatar()">
+        <!-- <h1>{{notif.notifModel}}</h1> -->
+        <h2>{{follow.firstName + ' ' +  follow.lastName}}</h2>
+        <p>{{follow.education}}</p>
+
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

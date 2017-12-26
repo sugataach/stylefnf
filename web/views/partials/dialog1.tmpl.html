@@ -1,0 +1,223 @@
+<!-- Dialog Iniitalization -->
+<md-dialog aria-label="List an Item" ng-controller="CustomInputDemoCtrl as ctrl" layout="column" style="z-index:1030;overflow:hidden;">
+
+  <form name="newListingForm" class="newListingForm-all">
+
+    <!-- Toolbar contains the Brand, Name and Exit icon -->
+    <div layout="row" layout-sm="column" class="md-tall md-toolbar-tools">
+      <div layout layout-sm="column" class="title-brand" style="margin-right:50px;">  
+        <md-input-container flex md-no-float style="margin-bottom:20px;"> 
+          <md-icon md-svg-src="../../img/svg/brand.svg"></md-icon>
+          <input ng-model="newListing.brand" placeholder="Brand" type="text">
+        </md-input-container>  
+        <md-input-container md-no-float style="margin-left: 20%;margin-bottom:20px;"> 
+          <md-icon md-svg-src="../../img/svg/title.svg"></md-icon>
+          <input class="underline-required" required name="title" type="text" ng-model="newListing.title" placeholder="Title">
+          <div ng-messages="newListingForm.title.$error">
+            <div style="margin-left:17%;"ng-message="required">What is the name?</div>
+          </div>
+        </md-input-container>
+      </div>
+      <md-checkbox 
+        ng-repeat="possibleGender in possibleGenders" 
+        value="{{possibleGender}}"  
+        ng-click="toggleSelection(possibleGender)" required> 
+        {{possibleGender}}
+      </md-checkbox>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="answer('Cancelled Post')" style="margin-bottom:20px;">
+        <md-icon md-svg-src="../../img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+
+    <!-- Actual Content -->
+
+    <div class="listing-detail" layout="row" layout-sm="column">
+      <div class="newListingForm-dialog-content" flex>
+        <!-- Picture Upload -->
+        <md-dialog-content layout-padding>
+          <md-content class="md-padding drop" flex> 
+            <div class="image-upload" flex>
+              <label for="images">
+                <img src="img/add_photo.png"/>
+              </label>
+              <div ng-show="newListing.imageUrls.length == 0" style="color:red">You must provide at least 1 picture!</div>
+              <div id="status"></div>
+
+              <input multiple type="file" id="images" onchange="angular.element(this).scope().s3Upload(this.files)" accept="image/*"/>
+            </div>
+
+            <div class="row" id="preview"></div>
+          </md-content>
+        </md-dialog-content>
+      </div>
+
+      <div class="listing-form" flex>
+
+        <!-- Listing Details -->
+        <md-dialog-content layout-padding class="listing-detail" style="padding:5">
+          <md-content class="md-padding" style="padding-top:8px;">
+
+<!--               <md-chips 
+                ng-model="ctrl.newListing.tags" 
+                readonly="ctrl.newListing.readonly"
+                placeholder="+Tag your listing"
+                delete-button-label="Remove Tag"
+                secondary-placeholder="+Tag your listing">
+                <md-chip-template>
+                  <em>#</em>
+                  <strong>{{$chip}}</strong>
+                </md-chip-template>
+              </md-chips> -->
+
+<!--               <md-chips 
+                ng-model="ctrl.newListing.selectedLocations" 
+                md-autocomplete-snap
+              >
+                <md-autocomplete
+                    md-selected-item="ctrl.selectedItem"
+                    md-search-text="ctrl.searchText"
+                    md-items="item in ctrl.querySearch(ctrl.searchText)"
+                    md-item-text="item"
+                    placeholder="Where can you meet up?">
+                  <span md-highlight-text="ctrl.searchText">{{item}}</span>
+                </md-autocomplete>
+                <md-chip-template>
+                  <span>
+                    <strong>{{$chip}}</strong>
+                  </span>
+                </md-chip-template>
+              </md-chips> -->
+
+              <md-chips 
+                ng-model="ctrl.newListing.selectedLocations" 
+                md-on-append="ctrl.newLocation($chip)"
+                md-autocomplete-snap>
+                <md-autocomplete
+                    md-selected-item="ctrl.newListing.selectedItem"
+                    md-search-text="ctrl.newListing.searchText"
+                    md-items="item in ctrl.newListing.querySearch(ctrl.newListing.searchText)"
+                    md-item-text="item.name"
+                    placeholder="Where can you meet up?">
+                  <span md-highlight-text="ctrl.newListing.searchText">{{item.name}}</span>
+                </md-autocomplete>
+                <md-chip-template>
+                  <span>
+                    <strong>{{$chip.name === undefined? $chip : $chip.name}}</strong>
+                    <em>({{$chip.type === undefined? $chip.type = "Location" : $chip.type}})</em>
+                  </span>
+<!--                   <span ng-hide="fromList(ctrl.newListing.selectedItem)">
+                    <strong>{{$chip}}</strong>
+                    <em>(Location)</em>
+                  </span> -->
+                </md-chip-template>
+              </md-chips>
+              <div ng-show="ctrl.newListing.selectedLocations.length === 0" style="color:red">You must provide at least 1 meetup location.</div>
+
+              <div layout layout-sm="column">   
+                <md-input-container flex> 
+                  <label>Your Price</label> 
+                  <input class="underline-required" required type="number" step="any" name="price" ng-model="newListing.price" min="5" max="500">
+                  <div ng-messages="newListingForm.price.$error">
+                    <div ng-message="required">How much do you want for it?</div>
+                    <div ng-message="min">Price must be more than $0.</div>
+                    <div ng-message="max">Price must be less than $500.</div>
+                  </div>
+                </md-input-container> 
+                <md-input-container flex> 
+                  <label>Retail Price</label> 
+                  <input ng-model="newListing.retail" type="number"> 
+                </md-input-container> 
+              </div>
+
+              <div layout layout-sm="column">
+                <!-- Category Dropdown -->
+                <md-input-container flex> 
+                  <md-select class="underline-required" required name="category" placeholder="Category" ng-model="newListing.category" flex>
+
+                    <md-option value="tops"><md-icon md-svg-src="../../img/svg/tops.svg" aria-label="Tops"></md-icon>&nbsp;&nbsp;Tops</md-option>
+
+                    <md-option value="dresses"><md-icon md-svg-src="../../img/svg/dresses.svg" aria-label="Dresses"></md-icon>&nbsp;&nbsp;Dresses</md-option>
+
+                    <md-option value="jeans"><md-icon md-svg-src="../../img/svg/jeans.svg" aria-label="Jeans"></md-icon>&nbsp;&nbsp;Jeans</md-option>
+
+                    <md-option value="outerwear"><md-icon md-svg-src="../../img/svg/outerwear.svg" aria-label="Outerwear"></md-icon>&nbsp;&nbsp;Outerwear</md-option>
+
+                    <md-option value="bottoms"><md-icon md-svg-src="../../img/svg/bottoms.svg" aria-label="Bottoms"></md-icon>&nbsp;&nbsp;Bottoms</md-option>
+
+                    <md-option value="sports"><md-icon md-svg-src="../../img/svg/sports.svg" aria-label="Sports"></md-icon>&nbsp;&nbsp;Sports</md-option>
+
+                    <md-option value="formal"><md-icon md-svg-src="../../img/svg/formal.svg" aria-label="Formal"></md-icon>&nbsp;&nbsp;Formal</md-option>
+
+                    <md-option value="bags"><md-icon md-svg-src="../../img/svg/bags.svg" aria-label="Bags"></md-icon>&nbsp;&nbsp;Bags</md-option>
+
+                    <md-option value="shoes"><md-icon md-svg-src="../../img/svg/shoes.svg" aria-label="Shoes"></md-icon>&nbsp;&nbsp;Shoes</md-option>
+
+                    <md-option value="jewelry"><md-icon md-svg-src="../../img/svg/jewelry.svg" aria-label="Jewelry"></md-icon>&nbsp;&nbsp;Jewelry</md-option>
+
+                    <md-option value="wallets"><md-icon md-svg-src="../../img/svg/wallets.svg" aria-label="Wallets"></md-icon>&nbsp;&nbsp;Wallets</md-option>
+
+                    <md-option value="hats"><md-icon md-svg-src="../../img/svg/hats.svg" aria-label="Hats"></md-icon>&nbsp;&nbsp;Hats</md-option>
+
+                    <md-option value="accessories"><md-icon md-svg-src="../../img/svg/accessories.svg" aria-label="Accessories"></md-icon>&nbsp;&nbsp;Accessories</md-option>
+
+                    <md-option value="miscellaneous"><md-icon md-svg-src="../../img/svg/miscellaneous.svg" aria-label="Miscellaneous"></md-icon>&nbsp;&nbsp;Miscellaneous</md-option>
+                    
+                  </md-select>
+                  <div ng-messages="newListingForm.category.$error">
+                    <div style="margin-top:-20px;" ng-message="required">Scroll and choose a category.</div>
+                  </div>
+                </md-input-container>
+
+                <!-- Condition Dropdown -->
+                <md-input-container flex> 
+                  <md-select class="underline-required" required name="condition" placeholder="Condition" ng-model="newListing.condition" flex>
+                    <md-option value="used"><md-icon md-svg-src="../../img/svg/used.svg" aria-label="Lightly Used"></md-icon> Gently Used</md-option>
+                    <md-option value="new"><md-icon md-svg-src="../../img/svg/has_tag.svg" aria-label="New with Tags"></md-icon> New (with tags)</md-option>
+                    <md-option value="likenew"><md-icon md-svg-src="../../img/svg/no_tag.svg" aria-label="New with Tags"></md-icon> Like New (without tags)</md-option>
+                    <!-- <md-option value="tiny flaw"><md-icon md-svg-src="../../img/svg/blemish.svg" aria-label="Tiny Flaw"></md-icon>Tiny Flaw</md-option>
+ -->                  </md-select>
+                  <div ng-messages="newListingForm.condition.$error">
+                    <div style="margin-top:-20px;" ng-message="required">How long have you had it?</div>
+                  </div>
+                </md-input-container>
+              </div>
+
+              <div layout layout-sm="column">
+                <md-input-container flex> 
+                  <label>Colour</label> 
+                  <input class="underline-required" required name="colour" type="text" ng-model="newListing.colour">
+                  <div ng-messages="newListingForm.colour.$error">
+                    <div ng-message="required">What colour is the listing?</div>
+                  </div> 
+                </md-input-container> 
+                <md-input-container flex> 
+                  <label>Size</label>
+                  <input class="underline-required" required name="size" type="text" ng-model="newListing.size">
+                  <div ng-messages="newListingForm.size.$error">
+                    <div ng-message="required">What's the size of the listing?</div>
+                  </div>
+              </md-input-container> 
+            </div> 
+            <md-input-container flex> 
+              <label>Description</label> 
+              <textarea ng-model="newListing.description" rows="3" columns="1" md-maxlength="350"></textarea> 
+            </md-input-container> 
+          </md-content> 
+        </md-dialog-content>
+      </div>
+    </div>
+    </form>
+
+    <!-- Cancel and Post Buttons -->
+    <div class="md-actions" layout="row">
+      <md-button href="#/about" target="_blank">
+        <a href="#/about"><i class="ion-information-circled"></i> </a>
+        HELP
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="clearValue()" ng-disabled="!ctrl.newListing" style="margin-right: 20px;">Clear</md-button>
+      <md-button ng-click="createPost()" ng-disabled="hasData(newListing)" class="md-raised md-primary" layout layout-align="center end">Post</md-button>
+    </div>
+
+</md-dialog>

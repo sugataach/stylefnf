@@ -1,0 +1,124 @@
+<view-title>Welcome - Stylefnf</view-title>
+
+
+<div class="container detail-form">
+
+  <div class="detail-form panel panel-default margin-top">
+
+    <div class="module top" style="height:140px;">
+      <h2>Welcome to <span style="-webkit-text-stroke: 1px #FF2D54;
+   color: white;
+   text-shadow:
+       3px 3px 0 #FF2D54,
+     -1px -1px 0 #FF2D54,  
+      1px -1px 0 #FF2D54,
+      -1px 1px 0 #FF2D54,
+       1px 1px 0 #FF2D54;">stylefnf</span>, {{$root.currentUser.firstName}}</h2>
+    </div>
+
+    <div class="ui stackable centered grid container" style="padding-top:40px;padding-bottom:15px;">
+
+      <div class="six wide center aligned column">
+        <div class="ui centered link card" style="border:none;">
+          <a class="image" href="">
+            <img src="{{$root.currentUser.profilePictures[0]}}">
+          </a>
+          <div class="content">
+            <div class="fileUpload ui red fluid button huge" style="cursor: pointer;">
+                <span style="cursor: pointer;"><i class="photo link icon"></i> Add Photo<input type="file" class="upload" onchange="angular.element(this).scope().grabImage(this.files)" accept="image/*"/ style="cursor: pointer;"></span>
+            </div>
+            <a class="meta" href="">Add a photo to make your profile pop!</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="eight wide column">
+        <div class="account-container">
+          <h1 class="ui dividing header">
+            Review Profile
+          </h1>
+
+          <form name="userForm" class="ui center aligned form">
+            <div class="sixteen wide field ng-class: { 'disabled' : !isEditing, 'error' : currentUser.firstName.$dirty && currentUser.firstName.$invalid } " style="padding-top: 10px;">
+              <label style="font-size:16px;line-height: 1.4285em;font-weight: 600;">First Name</label>
+              <div class="ui left icon input massive account-info">
+                <input required ng-model="currentUser.firstName" type="text" name="first-name" placeholder="First Name" ng-change="isUpdated()">
+                <i class="user icon"></i>
+              </div>
+            </div>
+            <div class="sixteen wide field ng-class: { 'disabled' : !isEditing, 'error' : currentUser.lastName.$dirty && currentUser.lastName.$invalid }">
+              <label style="font-size:16px;line-height: 1.4285em;font-weight: 600;">Last Name</label>
+              <div class="ui left icon input massive account-info">
+                <input required ng-change="isUpdated()" ng-model="currentUser.lastName" type="text" name="last-name" placeholder="Last Name">
+                <i class="user icon"></i>
+              </div>
+            </div>
+            <div class="sixteen wide field ng-class: { 'disabled' : !isEditing, 'error' : currentUser.location.$dirty && currentUser.location.$invalid }">
+              <label style="font-size:16px;line-height: 1.4285em;font-weight: 600;">Current City</label>
+              <div class="ui left icon input massive account-info">
+                <input required ng-change="isUpdated()" ng-model="currentUser.location" type="text" name="location" placeholder="Current City">
+                <i class="marker icon"></i>
+              </div>
+            </div>
+            <div class="sixteen wide field">
+                <label style="font-size:16px;line-height: 1.4285em;font-weight: 600;">About <span class="label-meta">(Tell us a little about your style...)</span></label>
+                <textarea style="font-size: 15px;" rows="6" ng-model="currentUser.about"></textarea>
+            </div>
+            <div class="sixteen wide field">
+              <md-radio-group layout="row" ng-change="isUpdated()" ng-model="currentUser.gender" class="md-primary" style="font-size: 20px;">
+                  <md-radio-button ng-repeat="d in genderOptions"
+                                   ng-value="d.value"
+                                   ng-disabled="!isEditing" >
+                      {{ d.label }}<br/>
+                  </md-radio-button>
+              </md-radio-group>
+            </div>
+            <div class="centered column">
+              <button ng-disabled="!profileIsComplete()" ng-show="clickSave" ng-click="updateProfile()" class="ui green left icon button massive">
+                <i class="check icon"></i>
+                Looks good! Let's get on with it.
+              </button>
+            </div>
+          </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- <div class="container">
+  <div ng-show="tokenVerified" class="center-form panel">
+    <div class="ui attached info icon message"style="box-shadow:none">
+      <i class="linkify icon"></i>
+      <div class="content">
+        <div class="header">
+          Welcome to Stylefnf!
+        </div>
+        <p>One last step...</p>
+      </div>
+    </div>
+    <div class="panel-body">
+      <p class="text-center">To complete the registration process you must link your Facebook account.</p>
+
+      <p class="text-center text-muted"><small>Stylefnf will never post anything to your Facebook account without your permission.<br><br> See our <a href="#">terms & conditions</a> and <a href="#">privacy policy</a>.</small></p>
+
+      <button class="ui facebook button fluid huge" ng-click="facebookLogin()">
+        <i class="facebook icon"></i>
+        Sign in with Facebook
+      </button>
+    </div>
+  </div>
+  <div ng-show="!tokenVerified" class="center-form panel">
+    <div class="ui attached info error message"style="box-shadow:none">
+      <i class="remove circle icon icon"></i>
+      <div class="content">
+        <div class="header">
+          Error
+        </div>
+        <p>Invalid token</p>
+      </div>
+    </div>
+    <div class="panel-body">
+      <p class="text-center">Your token is invalid or has expired.</p>
+    </div>
+  </div>
+</div> -->

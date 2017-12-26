@@ -1,0 +1,43 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="Options">
+  <ion-nav-title>
+    <div class="row row-center feed-row thin-row delicious-font">
+      <i class="icon ion-chevron-left assertive"  ng-click="goBack()" style="float:left;padding-right:25px;color:#FF2D54"></i>
+        <!-- <i class="" ></i> -->
+      &nbsp; Options
+    </div>
+  </ion-nav-title>
+  <ion-content class="padding message-padding-top">
+    <div class="list">
+      <a class="item item-icon-left" ng-click="goTo('changePwd', '') ">
+        <i class="icon ion-ios-gear"></i>
+        Change Password
+      </a>
+      <a class="item item-icon-left" ng-click="goTo('purchased-listings', '') ">
+        <i class="icon ion-social-usd"></i>
+        Your Purchased Items
+      </a>
+      <a class="item item-icon-left" ng-click="goTo('sold-listings', '') ">
+        <i class="icon ion-social-usd"></i>
+        Your Sold Items
+      </a>
+<!--       <a class="item item-icon-left" href="">
+        <i class="icon ion-person-stalker"></i>
+        Friends
+        <span class="badge badge-assertive">0</span>
+      </a> -->
+      <a class="item item-icon-left" href="" ng-click="logout()">
+        <i class="icon ion-log-out"></i>
+        Logout
+        <span class="item-note">
+          {{$root.currentUser.firstName}}
+        </span>
+      </a>
+    </div>
+  </ion-content>
+</ion-view>
