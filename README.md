@@ -1,10 +1,8 @@
-<div style="text-align:center"><img src ="title.png" /></div>
-
-<br>
+![](title.png)
 
 Stylefnf is Canada’s online classifieds platform for students. We provide college students with a smarter, simpler and safer way to buy and sell locally.
 
-## Summer 2016 Incubator Timeline
+## The Hatchery Startup Incubator (Summer 2016)
 
 Stylefnf participated in the [The UofT Entrepreneurship Hatchery](https://hatchery.engineering.utoronto.ca/) Summer 2016 cohort and was selected to compete in Demo Day in Sept 2016.
 
